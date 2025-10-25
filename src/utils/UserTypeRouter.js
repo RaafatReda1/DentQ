@@ -2,7 +2,8 @@ import { supabase } from "./SupabaseClient";
 
 const UserTypeRouter = async (user, setUser) => {
   try {
-    setUser({ ...user, loadingState: false });
+    // set loading state
+    setUser({ ...user, loadingState: true });
     // 1️⃣ Get current session
     const { data, error } = await supabase.auth.getSession();
     
@@ -153,6 +154,7 @@ const UserTypeRouter = async (user, setUser) => {
       session: false 
     }));
   }finally{
+    // 8️⃣ Set loading state to false
     setUser((prev)=>({...prev, loadingState: false}));
   }
 };
