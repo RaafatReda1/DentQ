@@ -2,6 +2,7 @@ import { supabase } from "./SupabaseClient";
 
 const UserTypeRouter = async (user, setUser) => {
   try {
+    setUser({ ...user, loadingState: false });
     // 1️⃣ Get current session
     const { data, error } = await supabase.auth.getSession();
     
@@ -23,13 +24,14 @@ const UserTypeRouter = async (user, setUser) => {
     const email = session.user.email;
     if (!email) {
       console.error("No email found in session");
-      setUser({ 
+      setUser((prev)=>({
+        ...prev,
         type: "guest", 
         fullName: session.user.user_metadata?.name || "",
         email: "", 
         session,
         avatarUrl: session.user.user_metadata?.avatarUrl || ""
-      });
+      }));
       return;
     }
 
@@ -55,13 +57,14 @@ const UserTypeRouter = async (user, setUser) => {
     
     if (adminData) {
       console.log("✅ Admin found:", adminData);
-      setUser({
+      setUser((prev)=>({
+        ...prev,
         type: "admin",
         fullName: adminData.fullName || fullName,
         email: adminData.email,
         session,
         avatarUrl: adminData.avatarUrl || avatarUrl,
-      });
+      }));
       return;
     }
 
@@ -78,13 +81,14 @@ const UserTypeRouter = async (user, setUser) => {
     
     if (clientData) {
       console.log("✅ Client found:", clientData);
-      setUser({
+      setUser((prev)=>({
+        ...prev,
         type: "client",
         fullName: clientData.fullName || fullName,
         email: clientData.email,
         session,
         avatarUrl: clientData.avatarUrl || avatarUrl,
-      });
+      }));
       return;
     }
 
@@ -105,45 +109,51 @@ const UserTypeRouter = async (user, setUser) => {
       console.error("❌ Client registration error:", insertError);
       
       // Fallback to guest if registration fails
-      setUser({
+      setUser((prev)=>({
+        ...prev,
         type: "guest",
         fullName: fullName,
         email: email,
         session,
         avatarUrl: avatarUrl,
-      });
+      }));
       return;
     }
     
     if (newClient) {
       console.log("✅ New client registered:", newClient);
-      setUser({
+      setUser((prev)=>({
+        ...prev,
         type: "client",
         fullName: newClient.fullName || fullName,
         email: newClient.email,
         session,
         avatarUrl: newClient.avatarUrl || avatarUrl,
-      });
+      }));
       return;
     }
 
     // 7️⃣ Final fallback (should rarely reach here)
     console.log("⚠️ Fallback: Setting as guest");
-    setUser({
+    setUser((prev)=>({
+      ...prev,
       type: "guest",
       fullName: fullName,
       email: email,
       session,
       avatarUrl: avatarUrl,
-    });
+    }));
 
   } catch (unexpectedError) {
     console.error("💥 Unexpected error in UserTypeRouter:", unexpectedError);
-    setUser({ 
+    setUser((prev)=>({ 
+      ...prev,
       type: "error", 
       error: unexpectedError.message,
       session: false 
-    });
+    }));
+  }finally{
+    setUser((prev)=>({...prev, loadingState: false}));
   }
 };
 

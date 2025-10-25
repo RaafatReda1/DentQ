@@ -16,13 +16,19 @@ function App() {
     email: '',
     avatarUrl: '',
     phone: '',
+    address: '',
+    loadingState: true
   })
+
   useEffect(() => {
     UserTypeRouter(user, setUser);
+  console.log("userData is:",user);
+
   }, []);//this function cheks auth state changes
   return (
     <userContext.Provider value={[user, setUser]}>
-      <h1 color='black'>Hello {user.fullName}</h1>
+      {user.loadingState && <h2>Loading...</h2>}
+      {!user.loadingState && <h1 color='black'>Hello {user.fullName}</h1>}
       <SignInForm />
       <SignOutBtn />
     </userContext.Provider>
