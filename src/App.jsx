@@ -1,38 +1,41 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from 'react'
-import './App.css'
-import UserTypeRouter from './utils/UserTypeRouter'
+import { useEffect, useState } from "react";
+import "./App.css";
+import UserTypeRouter from "./utils/UserTypeRouter";
 // eslint-disable-next-line no-unused-vars
-import { userContext } from './utils/AppContexts'
-import { SignInForm } from './components/Auth/SignInForm/SignInForm'
-import SignOutBtn from './components/Auth/SignOutBtn/SignOutBtn'
+import { userContext } from "./utils/AppContexts";
+import Client from "./components/Client/Client";
+import Admin from "./components/Admin/Admin";
+import { Route, Routes } from "react-router-dom";
 function App() {
-  
   const [user, setUser] = useState({
-    type: '',
-    fullName: '',
-    nickName: '',
+    type: "",
+    fullName: "",
+    nickName: "",
     session: false,
-    email: '',
-    avatarUrl: '',
-    phone: '',
-    address: '',
-    loadingState: true
-  })
+    email: "",
+    avatarUrl: "",
+    phone: "",
+    address: "",
+    loadingState: true,
+  });
 
   useEffect(() => {
     UserTypeRouter(user, setUser);
-  console.log("userData is:",user);
-
-  }, []);//this function cheks auth state changes
+    console.log("userData is:", user);
+  }, []); //this function cheks auth state changes
   return (
     <userContext.Provider value={[user, setUser]}>
-      {user.loadingState && <h2>Loading...</h2>}
-      {!user.loadingState && <h1 color='black'>Hello {user.fullName}</h1>}
-      <SignInForm />
-      <SignOutBtn />
+      <Routes>
+        {(user.type === "client" || user.type === "guest") && (
+          <Route path="/" element={<Client />} />
+        )}
+        {user.type === "admin" && (
+          <Route path="/" element={<Admin />} />
+        )}
+      </Routes>
     </userContext.Provider>
-  )
+  );
 }
 
-export default App
+export default App;
