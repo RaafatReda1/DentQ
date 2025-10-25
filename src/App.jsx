@@ -27,11 +27,14 @@ function App() {
   return (
     <userContext.Provider value={[user, setUser]}>
       <Routes>
-        {(user.type === "client" || user.type === "guest") && (
-          <Route path="/" element={<Client />} />
-        )}
-        {user.type === "admin" && (
-          <Route path="/" element={<Admin />} />
+        {!user.loadingState && (
+          <>
+            {(user.type === "client" || user.type === "guest") && (
+              <Route path="/" element={<Client />} />
+            )}
+
+            {user.type === "admin" && <Route path="/" element={<Admin />} />}
+          </>
         )}
       </Routes>
     </userContext.Provider>
