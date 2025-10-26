@@ -4,7 +4,7 @@
   --primary-hover: #0096c7;      /* أزرق أفتح */
   --secondary-color: #90e0ef;    /* سماوي فاتح - إحساس نضافة */
   --accent-color: #00b4d8;       /* لون مميز للأزرار أو الأيقونات */
-  --highlight-color: #caf0f8;    /* خلفيات ناعمة */
+  --highlight-color: #00b7a8;    /* خلفيات ناعمة */
 
   /* ⚪ Neutral Palette */
   --background-light: #f9f9fb;   /* خلفية عامة فاتحة */
@@ -13,7 +13,7 @@
   --border-color: #e0e0e0;       /* حدود ناعمة */
 
   /* 🧠 Text */
-  --text-main: #222222;          /* نص أساسي */
+  --text-main: #303030;          /* نص أساسي */
   --text-secondary: #555555;     /* نص خفيف */
   --text-muted: #888888;         /* نص باهت */
   --text-light: #ffffff;         /* نص على خلفية غامقة */
@@ -49,4 +49,5 @@
 }
 body{
     background: var(--background-light);
+    font-family:  'Open Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
 }
