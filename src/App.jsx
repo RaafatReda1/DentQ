@@ -6,6 +6,7 @@ import UserTypeRouter from "./utils/UserTypeRouter";
 import { userContext } from "./utils/AppContexts";
 import Client from "./components/Client/Client";
 import Admin from "./components/Admin/Admin";
+import GoogleBtn from "./components/Auth/GoogleBtn/GoogleBtn"
 import { Route, Routes } from "react-router-dom";
 function App() {
   const [user, setUser] = useState({
@@ -37,6 +38,8 @@ function App() {
           </>
         )}
       </Routes>
+            <GoogleBtn/>
+
     </userContext.Provider>
   );
 }

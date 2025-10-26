@@ -2,13 +2,17 @@ import React, { useState, useRef, useEffect, useContext } from "react";
 import styles from "./DropDownMenu.module.css";
 import { User, Package, LogOut, ChevronDown } from "lucide-react";
 import { userContext } from "../../../../utils/AppContexts";
+import { supabase } from "../../../../utils/SupabaseClient";
+import { Login } from "@mui/icons-material";
+import { Link } from "react-router-dom";
+import { SignInForm } from "../../../Auth/SignInForm/SignInForm";
 
 const DropDownMenu = () => {
   const [open, setOpen] = useState(false);
   const menuRef = useRef();
   const [user] = useContext(userContext);
 
-  console.log(user)
+  console.log(user);
   // Close menu when clicking outside
   useEffect(() => {
     const handler = (e) => {
@@ -20,18 +24,53 @@ const DropDownMenu = () => {
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
+  //Handle userName that appears besides the img
+  const handleUserName = () => {
+    let userName = "";
+    if (user.session) {
+      const name = (user.nickName || user.fullName || "").trim(); // نختار أول متاح
+
+      if (name.includes(" ")) {
+        const firstName = name.split(" ")[0];
+        userName =
+          firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase();
+      } else {
+        userName = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+      }
+
+      if (userName.length > 20) {
+        userName = userName.slice(0, 20) + "...";
+      }
+    } else {
+      userName = "Doctor";
+    }
+    return userName;
+  };
+  //Handle signOut
+  const handleSignOut = async () => {
+    if (!user.session) {
+      console.warn("No active session found. Nothing to sign out from.");
+      return;
+    }
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("signOut!!");
+      window.location.reload();
+    }
+  };
   return (
     <div className={styles.dropdown} ref={menuRef}>
-
       <button className={styles.profileButton} onClick={() => setOpen(!open)}>
         <img src="/vite.svg" alt="Profile" className={styles.profileImage} />
 
         {/* dispalying Doctor if no session and full name if session with no nick name and the nick name if session and nick name */}
-        {user.session? (
-          user.nickName? (<span>Dr.{user.nickName}</span>): (<span>Dr.{user.fullName}</span>)
-        ): 
-          <span>Doctor</span>
-        }
+
+        <span>
+          {user.session && "Dr."}
+          {handleUserName()}
+        </span>
         <ChevronDown
           className={`${styles.chevron} ${open ? styles.rotated : ""}`}
         />
@@ -39,21 +78,27 @@ const DropDownMenu = () => {
 
       {open && (
         <div className={styles.dropdownContent}>
-          <a href="/profile" className={styles.menuItem}>
-            <User className={styles.menuIcon} />
-            <span>My Profile</span>
-          </a>
-          <a href="/orders" className={styles.menuItem}>
-            <Package className={styles.menuIcon} />
-            <span>My Orders</span>
-          </a>
-          <a
-            href="/logout"
-            className={`${styles.menuItem} ${styles.logoutItem}`}
-          >
-            <LogOut className={styles.menuIcon} />
-            <span>Logout</span>
-          </a>
+          {user.session ? (
+            <>
+              <a href="/profile" className={styles.menuItem}>
+                <User className={styles.menuIcon} />
+                <span>My Profile</span>
+              </a>
+              <span
+                className={`${styles.menuItem} ${styles.logoutItem}`}
+                onClick={handleSignOut}
+                style={{ cursor: "pointer" }}
+              >
+                <LogOut className={styles.menuIcon} />
+                <span>Logout</span>
+              </span>
+            </>
+          ) : (
+            <span style={{textDecoration: "none", cursor: "pointer"}} className={`${styles.menuItem}`}>
+              <Login className={styles.menuIcon} />
+                <SignInForm /> {/*this is the signin component which includes login span as normal text which opens a popup inside the component once clicked */}
+              </span>
+          )}
         </div>
       )}
     </div>
