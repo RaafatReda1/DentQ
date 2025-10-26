@@ -1,0 +1,133 @@
+.wrapper {
+  width: 100%;
+  max-width: 600px;
+}
+
+.form {
+  width: 100%;
+}
+
+.searchContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border: 2px solid #e0e7ff;
+  border-radius: 50px;
+  box-shadow: 0 2px 8px rgba(0, 74, 128, 0.08);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.searchContainer:focus-within {
+  border-color: #00b7a8;
+  box-shadow: 0 4px 16px rgba(0, 183, 168, 0.15);
+  transform: translateY(-1px);
+}
+
+.searchIcon {
+  position: absolute;
+  left: 16px;
+  width: 20px;
+  height: 20px;
+  color: #00b7a8;
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+.input {
+  flex: 1;
+  padding: 12px 48px 12px 48px;
+  border: none;
+  outline: none;
+  font-size: 0.95rem;
+  color: #004a80;
+  background: transparent;
+  font-weight: 500;
+  font-family: "Poppins", "Montserrat", -apple-system, BlinkMacSystemFont,
+    sans-serif;
+}
+
+.input::placeholder {
+  color: #94a3b8;
+  font-weight: 400;
+}
+
+.clearButton {
+  position: absolute;
+  right: 8px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f1f5f9;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  color: #64748b;
+}
+
+.clearButton:hover {
+  background: #e2e8f0;
+  color: #004a80;
+  transform: scale(1.05);
+}
+
+.clearButton svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Focus state */
+.searchContainer:focus-within .searchIcon {
+  color: #00b7a8;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .wrapper {
+    max-width: 100%;
+  }
+
+  .searchContainer {
+    border-radius: 40px;
+  }
+
+  .input {
+    padding: 10px 44px 10px 44px;
+    font-size: 0.9rem;
+  }
+
+  .searchIcon {
+    left: 14px;
+    width: 18px;
+    height: 18px;
+  }
+
+  .clearButton {
+    width: 28px;
+    height: 28px;
+    right: 6px;
+  }
+
+  .clearButton svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .input {
+    padding: 8px 40px 8px 38px;
+    font-size: 0.85rem;
+  }
+
+  .searchIcon {
+    left: 12px;
+    width: 16px;
+    height: 16px;
+  }
+}
