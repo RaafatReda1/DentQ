@@ -62,6 +62,7 @@ const UserTypeRouter = async (user, setUser) => {
         ...prev,
         type: "admin",
         fullName: adminData.fullName || fullName,
+        nickName:adminData.nickName,
         email: adminData.email,
         session,
         avatarUrl: adminData.avatarUrl || avatarUrl,
@@ -72,7 +73,7 @@ const UserTypeRouter = async (user, setUser) => {
     // 5️⃣ Check if Client exists
     const { data: clientData, error: clientError } = await supabase
       .from("Clients")
-      .select("fullName, email, avatarUrl")
+      .select("*")
       .eq("email", email)
       .maybeSingle();
 
@@ -86,6 +87,7 @@ const UserTypeRouter = async (user, setUser) => {
         ...prev,
         type: "client",
         fullName: clientData.fullName || fullName,
+        nickName:clientData.nickName,
         email: clientData.email,
         session,
         avatarUrl: clientData.avatarUrl || avatarUrl,
