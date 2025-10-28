@@ -130,3 +130,8 @@
     height: 16px;
   }
 }
+@media(max-width: 295px){
+  .dropdown{
+    display: none;
+  }
+}

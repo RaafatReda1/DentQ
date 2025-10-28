@@ -22,7 +22,17 @@
 }
 
 @media (max-width: 1100px)   {
+    .linkTxt{
+        display: none;
+    }
+}
+@media (max-width: 515px){
     .linksWraper{
         display: none;
+    }
+}
+@media (max-width: 515px){
+    .linkTxt{
+        display: block;
     }
 }

@@ -23,27 +23,27 @@ const Links = ({menuIsOpened}) => {
           }}
         >
           <ShoppingCart />
-          <span>Cart</span>
+          <span className= {styles.linkTxt}>Cart</span>
         </Badge>
       </Link>
 
       <Link to="/notifications" className={styles.link}>
         <Badge badgeContent={5} color="error">
           <NotificationsIcon />
-          <span>Notifications</span>
+          <span className= {styles.linkTxt}>Notifications</span>
         </Badge>
       </Link>
 
       <Link to="/myorders" className={styles.link}>
         <Badge badgeContent={2} color="primary">
           <Boxes />
-          <span>MyOrders</span>
+          <span className= {styles.linkTxt}>MyOrders</span>
         </Badge>
       </Link>
 
       <Link to="/ourproducts" className={styles.link}>
         <BriefcaseMedical />
-        <span>OurProducts</span>
+        <span className= {styles.linkTxt}>OurProducts</span>
       </Link>
     </div>
   );

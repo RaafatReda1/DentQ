@@ -6,13 +6,15 @@ import { supabase } from "../../../../utils/SupabaseClient";
 import { Login } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { SignInForm } from "../../../Auth/SignInForm/SignInForm";
-
-const DropDownMenu = () => {
+import menuStyles from "../MobileMenu/MobileMenu.module.css";
+const DropDownMenu = ({menuIsOpened}) => {
   const [open, setOpen] = useState(false);
   const menuRef = useRef();
   const [user] = useContext(userContext);
-
-  console.log(user);
+  useEffect(() => {
+  if (menuIsOpened) setOpen(true);
+  else setOpen(false);
+}, [menuIsOpened]);
   // Close menu when clicking outside
   useEffect(() => {
     const handler = (e) => {
@@ -61,8 +63,11 @@ const DropDownMenu = () => {
     }
   };
   return (
-    <div className={styles.dropdown} ref={menuRef}>
-      <button className={styles.profileButton} onClick={() => setOpen(!open)}>
+    <div className={menuIsOpened ? menuStyles.dropdown : styles.dropdown} ref={menuRef}>
+      <button className={styles.profileButton} onClick={() => {
+          if(menuIsOpened) return;
+          setOpen(!open)
+        }}>
         <img src="/vite.svg" alt="Profile" className={styles.profileImage} />
 
         {/* dispalying Doctor if no session and full name if session with no nick name and the nick name if session and nick name */}

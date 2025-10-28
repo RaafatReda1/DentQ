@@ -6,6 +6,7 @@ import Links from "../Links/Links";
 import { Directions } from "@mui/icons-material";
 import SearchBar from "../SearchBar/SearchBar";
 import LangDropDown from "../LangDropDown/LangDropDown";
+import DropDownMenu from "../DropDownMenu/DropDownMenu";
 const MobileMenu = ({ menuIsOpened, setMenuIsOpened }) => {
   return (
     <div className={styles.mobileMenu}>
@@ -14,10 +15,22 @@ const MobileMenu = ({ menuIsOpened, setMenuIsOpened }) => {
           <MenuIcon />
         </IconButton>
       </div>
-      <Drawer open={menuIsOpened} onClose={() => setMenuIsOpened(false)}>
-        <Links menuIsOpened={menuIsOpened} />
-        <SearchBar menuIsOpened={menuIsOpened} />
-        <LangDropDown menuIsOpened={menuIsOpened}/>
+      <Drawer
+        open={menuIsOpened}
+        onClose={() => setMenuIsOpened(false)}
+        anchor="left"
+        PaperProps={{
+          sx: {
+            width: "80%",
+          },
+        }}
+      >
+        <div className={styles.mobileMenu}>
+          <DropDownMenu menuIsOpened={menuIsOpened} />
+          <SearchBar menuIsOpened={menuIsOpened} />
+          <Links menuIsOpened={menuIsOpened} />
+          <LangDropDown menuIsOpened={menuIsOpened} />
+        </div>
       </Drawer>
     </div>
   );
