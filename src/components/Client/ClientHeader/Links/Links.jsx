@@ -5,10 +5,12 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
 import Tooltip from "@mui/material/Tooltip";
 import styles from "./Links.module.css";
+import menuStyles from "../MobileMenu/MobileMenu.module.css";
+
 import { Bell, Boxes, BriefcaseMedical, ShoppingCart } from "lucide-react";
-const Links = () => {
+const Links = ({menuIsOpened}) => {
   return (
-    <div className={styles.linksWraper}>
+    <div className={menuIsOpened ? menuStyles.linksWraper : styles.linksWraper}>
       <Link to="/cart" className={styles.link}>
         <Badge
           badgeContent={3}

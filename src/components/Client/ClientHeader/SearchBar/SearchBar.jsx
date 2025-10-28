@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import styles from "./SearchBar.module.css";
 import { Search, X } from "lucide-react";
-
-const SearchBar = () => {
+import menuStyles from "../MobileMenu/MobileMenu.module.css";
+const SearchBar = ({menuIsOpened}) => {
   const [searchValue, setSearchValue] = useState("");
 
   const handleSubmit = (e) => {
@@ -19,7 +19,7 @@ const SearchBar = () => {
   };
 
   return (
-    <div className={styles.wrapper}>
+    <div className={menuIsOpened ? menuStyles.Searchwrapper : styles.Searchwrapper}>
       <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.searchContainer}>
           <Search className={styles.searchIcon} />

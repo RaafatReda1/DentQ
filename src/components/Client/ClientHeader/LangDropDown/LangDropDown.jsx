@@ -1,9 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-
-const LangDropDown = () => {
+import menuStyles from "../MobileMenu/MobileMenu.module.css";
+import styles from "./LangDropDown.module.css";
+const LangDropDown = ({menuIsOpened}) => {
   return (
-    <StyledWrapper>
+    <StyledWrapper className= {menuIsOpened? menuStyles.mobileLangDropDown : styles.desktopLangDropDown}>
       <div className="menu">
         <div className="item">
           <a href="#" className="link">

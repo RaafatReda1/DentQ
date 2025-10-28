@@ -1,4 +1,4 @@
-.wrapper {
+.Searchwrapper {
   max-width: 50%;
   min-width: 300px;
 }
@@ -88,8 +88,8 @@
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .wrapper {
-    max-width: 100%;
+  .Searchwrapper {
+    display: none;
   }
 
   .searchContainer {
