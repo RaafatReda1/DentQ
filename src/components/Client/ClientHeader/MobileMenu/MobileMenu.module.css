@@ -1,56 +1,93 @@
-.mobileMenu{
-    padding: 20px;
-    height: 80%;
-}
-
-.linksWraper{
+/* Mobile Menu Container in Drawer */
+.mobileMenu {
     display: flex;
     flex-direction: column;
-    padding: 20px;
-    font-size: 1.2rem;
-    gap: 30px;
-    height: 50%;
-    padding: 10px;
-    align-items:flex-start;
-    justify-content: space-evenly;
+    height: 100%;
+    background: #ffffff;
+    padding-top: 10px;
 }
 
-.Searchwrapper{
-    display: block;
+/* Header inside drawer (optional close button area) */
+.drawerHeader {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px 16px;
+    border-bottom: 1px solid #f1f5f9;
 }
-.mobileLangDropDown{
-    display: block;
+
+/* Mobile Only Trigger Button (Hamburger) */
+.mobileTrigger {
+    display: none;
+}
+
+@media (max-width: 950px) {
+    .mobileTrigger {
+        display: block;
+        color: white;
+        /* Assuming header is primary color */
+    }
+}
+
+/* 
+  Re-using existing components inside mobile menu requires adapting their specific classes via props or hierarchy. 
+  Here we define overrides or layout containers.
+*/
+
+.section {
+    padding: 16px;
+    border-bottom: 1px solid #f1f5f9;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.linksSection {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Styling links inside mobile menu */
+.linksSection a {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #334155;
+    text-decoration: none;
+    padding: 12px;
+    border-radius: 8px;
+    transition: background 0.2s ease;
+}
+
+.linksSection a:hover {
+    background-color: #f8fafc;
+    color: #0f172a;
+}
+
+/* User Profile Section at bottom */
+.profileSection {
+    margin-top: auto;
+    padding: 16px;
+    background-color: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+}
+
+/* Utilities */
+.divider {
+    height: 1px;
+    background-color: #f1f5f9;
+    margin: 0 16px;
+}
+
+/* Overrides for specific components when inside mobile */
+/* Note: These classes are applied to wrappers in JSX */
+
+.mobileSearchWrapper {
     width: 100%;
 }
-.dropdown{
-    margin-bottom: 10px;
-}
-@media (min-width: 950px)   {
-    .mobileMenu{
-        display: none;
-    }
-    .mobileOnly{
-        display: none;
-    }
-}
-@media (min-width: 950px) {
-    .mobileLangDropDown{
-        display: none;
-    }
-}
-@media (min-width: 768px) {
-  .Searchwrapper {
-    display: none;
-  }
-}
 
-@media (min-width: 515px){
-    .linksWraper{
-        display: none;
-    }
-}
-@media(min-width: 295px){
-  .dropdown{
-    display: none;
-  }
+.mobileLangWrapper {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
 }
