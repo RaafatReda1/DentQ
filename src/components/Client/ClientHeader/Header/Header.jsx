@@ -13,10 +13,14 @@ const Header = () => {
     <div className={styles.Header}>
       <Logo />
       <SearchBar />
-      <Links /> {/*this is another component located in this dir and not a react router tag*/}
-      <LangDropDown/>
+      <Links />{" "}
+      {/*this is another component located in this dir and not a react router tag*/}
+      <LangDropDown />
       <DropDownMenu />
-      <MobileMenu menuIsOpened={menuIsOpened} setMenuIsOpened={setMenuIsOpened}/>
+      <MobileMenu
+        menuIsOpened={menuIsOpened}
+        setMenuIsOpened={setMenuIsOpened}
+      />
     </div>
   );
 };

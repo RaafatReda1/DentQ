@@ -21,7 +21,7 @@ const MobileMenu = ({ menuIsOpened, setMenuIsOpened }) => {
         anchor="left"
         PaperProps={{
           sx: {
-            width: "80%",
+            width: "70%",
           },
         }}
       >

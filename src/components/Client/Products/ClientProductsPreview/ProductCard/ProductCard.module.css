@@ -1,0 +1,179 @@
+.card {
+  --white: hsl(0, 0%, 83%);
+  --black: hsl(240, 15%, 9%);
+  --stone-300: hsl(24, 6%, 83%);
+  --pink-500: hsl(299, 100%, 83%);
+
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.subCard {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem;
+  min-width: 11.5rem;
+  height: 2.25rem;
+  background-color: var(--stone-300);
+}
+
+.subCard.category {
+  justify-content: space-between;
+  border-radius: 0.5rem 0.5rem 0rem 0rem;
+  transition: all 0.5s cubic-bezier(1, 0, 0, 1);
+}
+
+.subCard.named {
+  justify-content: center;
+  border-radius: 0rem 0rem 0.5rem 0.5rem;
+  transition: all 0.5s cubic-bezier(1, 0, 0, 1);
+}
+
+.card:hover .subCard.category {
+  transform: translateY(100%);
+}
+
+.card:hover .subCard.named {
+  transform: translateY(-100%);
+}
+
+.subCard .textSpan {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--black);
+  text-transform: capitalize;
+}
+
+.subCard .iconSvg {
+  width: 1rem;
+  fill: var(--black);
+}
+
+.cardContainer {
+  overflow: hidden;
+  position: relative;
+  z-index: 5;
+  width: 17rem;
+  height: 14rem;
+  background-color: var(--pink-500);
+  border-radius: 0.5rem;
+}
+
+.cardContainer::before {
+  content: "";
+  position: absolute;
+  z-index: 10;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 0rem;
+  aspect-ratio: 1;
+  background-color: hsl(240, 15%, 9%, 0.2);
+  border-radius: 50%;
+  transform-origin: center;
+  transition: all 1s cubic-bezier(1, 0, 0, 1) 0.2s;
+}
+
+.cardContainer::after {
+  content: "View Details";
+  position: absolute;
+  z-index: 10;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0rem;
+  box-sizing: border-box;
+  width: 0rem;
+  aspect-ratio: 1;
+  background-color: hsl(240, 15%, 9%, 0.5);
+  font-size: 0rem;
+  font-weight: bold;
+  color: var(--white);
+  text-align: center;
+  border-radius: 50%;
+  transform-origin: center;
+  transition: all 1s cubic-bezier(1, 0, 0, 1) 0s;
+}
+
+.card:hover .cardContainer::before {
+  width: 22.5rem;
+  transition: all 1s cubic-bezier(1, 0, 0, 1) 0s;
+}
+
+.card:hover .cardContainer::after {
+  padding: 1rem;
+  width: 5rem;
+  font-size: 0.75rem;
+  transition: all 0.3s ease-in-out 0.4s;
+}
+
+.image {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 3rem;
+  fill: var(--black);
+  transition: opacity 0.3s ease;
+}
+
+.card:hover .image {
+  opacity: 0.3;
+}
+
+.productImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.3s ease;
+}
+
+.card:hover .productImage {
+  opacity: 0.3;
+}
+
+.productInfo {
+  position: absolute;
+  z-index: 15;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.3s ease 0.5s;
+  pointer-events: none;
+}
+
+.card:hover .productInfo {
+  opacity: 1;
+}
+
+.productTitle {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: var(--white);
+  margin: 0 0 0.5rem 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.productDescription {
+  font-size: 0.875rem;
+  color: var(--white);
+  margin: 0 0 0.75rem 0;
+  line-height: 1.4;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.productPrice {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--white);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
