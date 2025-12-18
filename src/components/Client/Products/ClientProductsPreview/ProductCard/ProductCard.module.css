@@ -1,179 +1,304 @@
+/* Main Card Wrapper */
 .card {
-  --white: hsl(0, 0%, 83%);
-  --black: hsl(240, 15%, 9%);
-  --stone-300: hsl(24, 6%, 83%);
-  --pink-500: hsl(299, 100%, 83%);
+  --primary: #2563eb;
+  --primary-dark: #1e40af;
+  --secondary: #64748b;
+  --bg-card: #ffffff;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --accent: #f43f5e;
 
-  cursor: pointer;
   position: relative;
+  width: 280px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 0;
+  transition: transform 0.3s ease;
+  font-family: 'Inter', system-ui, sans-serif;
 }
 
+.card:hover {
+  transform: translateY(-5px);
+}
+
+/* Sub-Cards (Top and Bottom Bars) */
 .subCard {
+  width: 90%;
+  height: 36px;
+  background-color: #f1f5f9;
   display: flex;
   align-items: center;
-  padding: 0.75rem;
-  min-width: 11.5rem;
-  height: 2.25rem;
-  background-color: var(--stone-300);
-}
-
-.subCard.category {
   justify-content: space-between;
-  border-radius: 0.5rem 0.5rem 0rem 0rem;
-  transition: all 0.5s cubic-bezier(1, 0, 0, 1);
-}
-
-.subCard.named {
-  justify-content: center;
-  border-radius: 0rem 0rem 0.5rem 0.5rem;
-  transition: all 0.5s cubic-bezier(1, 0, 0, 1);
-}
-
-.card:hover .subCard.category {
-  transform: translateY(100%);
-}
-
-.card:hover .subCard.named {
-  transform: translateY(-100%);
-}
-
-.subCard .textSpan {
+  padding: 0 1rem;
+  box-sizing: border-box;
   font-size: 0.75rem;
   font-weight: 600;
-  color: var(--black);
-  text-transform: capitalize;
+  color: var(--text-muted);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1;
 }
 
-.subCard .iconSvg {
-  width: 1rem;
-  fill: var(--black);
+.topBar {
+  border-radius: 12px 12px 0 0;
+  background: white;
+  box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.05);
+  transform: translateY(10px);
+  opacity: 0;
 }
 
+.bottomBar {
+  border-radius: 0 0 12px 12px;
+  background: var(--text-main);
+  color: white;
+  transform: translateY(-10px);
+  opacity: 0;
+  cursor: pointer;
+}
+
+.card:hover .topBar {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.card:hover .bottomBar {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Card Container (Main visual area) */
 .cardContainer {
-  overflow: hidden;
   position: relative;
-  z-index: 5;
-  width: 17rem;
-  height: 14rem;
-  background-color: var(--pink-500);
-  border-radius: 0.5rem;
+  width: 100%;
+  height: 360px;
+  background-color: var(--bg-card);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
 }
 
-.cardContainer::before {
-  content: "";
-  position: absolute;
-  z-index: 10;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 0rem;
-  aspect-ratio: 1;
-  background-color: hsl(240, 15%, 9%, 0.2);
-  border-radius: 50%;
-  transform-origin: center;
-  transition: all 1s cubic-bezier(1, 0, 0, 1) 0.2s;
-}
-
-.cardContainer::after {
-  content: "View Details";
-  position: absolute;
-  z-index: 10;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+.imageWrapper {
+  width: 100%;
+  height: 65%;
+  background-color: #f8fafc;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0rem;
-  box-sizing: border-box;
-  width: 0rem;
-  aspect-ratio: 1;
-  background-color: hsl(240, 15%, 9%, 0.5);
-  font-size: 0rem;
-  font-weight: bold;
-  color: var(--white);
-  text-align: center;
-  border-radius: 50%;
-  transform-origin: center;
-  transition: all 1s cubic-bezier(1, 0, 0, 1) 0s;
-}
-
-.card:hover .cardContainer::before {
-  width: 22.5rem;
-  transition: all 1s cubic-bezier(1, 0, 0, 1) 0s;
-}
-
-.card:hover .cardContainer::after {
-  padding: 1rem;
-  width: 5rem;
-  font-size: 0.75rem;
-  transition: all 0.3s ease-in-out 0.4s;
-}
-
-.image {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 3rem;
-  fill: var(--black);
-  transition: opacity 0.3s ease;
-}
-
-.card:hover .image {
-  opacity: 0.3;
+  overflow: hidden;
+  position: relative;
 }
 
 .productImage {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: opacity 0.3s ease;
+  transition: transform 0.5s ease;
 }
 
 .card:hover .productImage {
-  opacity: 0.3;
+  transform: scale(1.05);
 }
 
-.productInfo {
+.placeholderImage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  color: #cbd5e1;
+  background-color: #f1f5f9;
+}
+
+/* Overlay Actions */
+.overlay {
   position: absolute;
-  z-index: 15;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 90%;
-  text-align: center;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
   opacity: 0;
-  transition: opacity 0.3s ease 0.5s;
-  pointer-events: none;
+  transform: translateX(20px);
+  transition: all 0.3s ease 0.1s;
+  z-index: 10;
 }
 
-.card:hover .productInfo {
+.card:hover .overlay {
   opacity: 1;
+  transform: translateX(0);
+}
+
+.actionButton {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: white;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  color: var(--text-main);
+  transition: all 0.2s ease;
+}
+
+.actionButton:hover {
+  background: var(--text-main);
+  color: white;
+  transform: scale(1.1);
+}
+
+/* Product Info Section */
+.productInfo {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  height: 35%;
+  background: white;
+  position: relative;
 }
 
 .productTitle {
-  font-size: 1.25rem;
-  font-weight: bold;
-  color: var(--white);
-  margin: 0 0 0.5rem 0;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0;
+  line-height: 1.4;
+  display: -webkit-box;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .productDescription {
-  font-size: 0.875rem;
-  color: var(--white);
-  margin: 0 0 0.75rem 0;
-  line-height: 1.4;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.productPrice {
-  font-size: 1.5rem;
+/* Rating */
+.ratingRow {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.starFilled {
+  color: #fbbf24;
+}
+
+.starEmpty {
+  color: #e2e8f0;
+}
+
+.ratingValue {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-left: 4px;
+}
+
+/* Price */
+.priceRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.currentPrice {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.originalPrice {
+  font-size: 0.9rem;
+  text-decoration: line-through;
+  color: #94a3b8;
+}
+
+/* Tags and Badges */
+.categoryTag {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.7rem;
+  color: var(--primary);
+}
+
+.discountBadge {
+  background: var(--accent);
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.7rem;
   font-weight: bold;
-  color: var(--white);
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+
+.addToCartText {
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.actionButton.added {
+  background: #22c55e;
+  color: white;
+  border-color: #22c55e;
+  animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.bottomBar.added {
+  background: #22c55e;
+  color: white;
+  animation: slideUpColors 0.4s ease forwards;
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(0.9);
+  }
+
+  70% {
+    transform: scale(1.1);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes slideUpColors {
+  0% {
+    transform: translateY(-10px);
+    background: var(--text-main);
+  }
+
+  50% {
+    transform: translateY(0);
+  }
+
+  100% {
+    transform: translateY(0);
+    background: #22c55e;
+  }
+}
+
+/* Ensure hover doesn't break the added state style if mouse is still over it */
+.actionButton.added:hover {
+  background: #16a34a;
+  transform: scale(1);
 }

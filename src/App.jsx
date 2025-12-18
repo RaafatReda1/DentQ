@@ -5,6 +5,7 @@ import GoogleBtn from "./components/Auth/GoogleBtn/GoogleBtn";
 import { Route, Routes } from "react-router-dom";
 import UserDataStorage from "./components/Storage/UserDataStorage.jsx";
 import ProductsDataStorage from "./components/Storage/ProductsDataStorage.jsx";
+// eslint-disable-next-line no-unused-vars
 import { userContext, productsContext } from "./utils/AppContexts";
 function App() {
   const { user, setUser } = UserDataStorage(); //I've stored the User state into UserDataStorag.jsx to arrange the code and not to make the code in app.jsx more complex and all states will compelete as this

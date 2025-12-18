@@ -1,12 +1,19 @@
-import React from 'react'
-import ProductCard from '../ProductCard/ProductCard'
+import React, { useContext } from "react";
+import ProductCard from "../ProductCard/ProductCard";
+import { productsContext } from "../../../../../utils/AppContexts";
+import styles from "./ProdcutsParent.module.css";
 
 const ProdcutsParent = () => {
-  return (
-    <>
-        <ProductCard />
-    </>
-  )
-}
+  // eslint-disable-next-line no-unused-vars
+  const [products, setProducts] = useContext(productsContext);
 
-export default ProdcutsParent
+  return (
+    <div className={styles.productsParent}>
+      {products.productsList.map((product) => (
+        <ProductCard key={product.id} product={product} />
+      ))}
+    </div>
+  );
+};
+
+export default ProdcutsParent;
