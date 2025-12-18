@@ -7,14 +7,18 @@ import { Login } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { SignInForm } from "../../../Auth/SignInForm/SignInForm";
 import menuStyles from "../MobileMenu/MobileMenu.module.css";
-const DropDownMenu = ({menuIsOpened}) => {
+import { useTranslation } from "react-i18next";
+
+const DropDownMenu = ({ menuIsOpened }) => {
   const [open, setOpen] = useState(false);
   const menuRef = useRef();
   const [user] = useContext(userContext);
+  const { t } = useTranslation();
+
   useEffect(() => {
-  if (menuIsOpened) setOpen(true);
-  else setOpen(false);
-}, [menuIsOpened]);
+    if (menuIsOpened) setOpen(true);
+    else setOpen(false);
+  }, [menuIsOpened]);
   // Close menu when clicking outside
   useEffect(() => {
     const handler = (e) => {
@@ -44,7 +48,7 @@ const DropDownMenu = ({menuIsOpened}) => {
         userName = userName.slice(0, 20) + "...";
       }
     } else {
-      userName = "Doctor";
+      userName = t('menu.doctor');
     }
     return userName;
   };
@@ -65,15 +69,15 @@ const DropDownMenu = ({menuIsOpened}) => {
   return (
     <div className={menuIsOpened ? menuStyles.dropdown : styles.dropdown} ref={menuRef}>
       <button className={styles.profileButton} onClick={() => {
-          if(menuIsOpened) return;
-          setOpen(!open)
-        }}>
+        if (menuIsOpened) return;
+        setOpen(!open)
+      }}>
         <img src="/vite.svg" alt="Profile" className={styles.profileImage} />
 
         {/* dispalying Doctor if no session and full name if session with no nick name and the nick name if session and nick name */}
 
         <span>
-          {user.session && "Dr."}
+          {user.session && t('menu.dr')}
           {handleUserName()}
         </span>
         <ChevronDown
@@ -87,7 +91,7 @@ const DropDownMenu = ({menuIsOpened}) => {
             <>
               <a href="/profile" className={styles.menuItem}>
                 <User className={styles.menuIcon} />
-                <span>My Profile</span>
+                <span>{t('menu.my_profile')}</span>
               </a>
               <span
                 className={`${styles.menuItem} ${styles.logoutItem}`}
@@ -95,14 +99,14 @@ const DropDownMenu = ({menuIsOpened}) => {
                 style={{ cursor: "pointer" }}
               >
                 <LogOut className={styles.menuIcon} />
-                <span>Logout</span>
+                <span>{t('menu.logout')}</span>
               </span>
             </>
           ) : (
-            <span style={{textDecoration: "none", cursor: "pointer"}} className={`${styles.menuItem}`}>
+            <span style={{ textDecoration: "none", cursor: "pointer" }} className={`${styles.menuItem}`}>
               <Login className={styles.menuIcon} />
-                <SignInForm /> {/*this is the signin component which includes login span as normal text which opens a popup inside the component once clicked */}
-              </span>
+              <SignInForm /> {/*this is the signin component which includes login span as normal text which opens a popup inside the component once clicked */}
+            </span>
           )}
         </div>
       )}

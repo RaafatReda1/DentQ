@@ -2,14 +2,16 @@ import React, { useState } from "react";
 import styles from "./SearchBar.module.css";
 import { Search, X } from "lucide-react";
 import menuStyles from "../MobileMenu/MobileMenu.module.css";
-const SearchBar = ({menuIsOpened}) => {
+import { useTranslation } from "react-i18next";
+
+const SearchBar = ({ menuIsOpened }) => {
   const [searchValue, setSearchValue] = useState("");
+  const { t } = useTranslation();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (searchValue.trim()) {
       console.log("Searching for:", searchValue);
-      // Add your search logic here
     }
   };
 
@@ -26,7 +28,7 @@ const SearchBar = ({menuIsOpened}) => {
           <input
             type="text"
             className={styles.input}
-            placeholder="Search medical products..."
+            placeholder={t('navbar.search_placeholder')}
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
           />

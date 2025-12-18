@@ -12,7 +12,6 @@ import { useTranslation } from "react-i18next";
 
 const ProductCard = ({ product }) => {
   const [isAdded, setIsAdded] = useState(false);
-  // eslint-disable-next-line no-unused-vars
   const { t, i18n } = useTranslation();
 
   // Destructure product data structure based on the schema
@@ -47,39 +46,27 @@ const ProductCard = ({ product }) => {
     }, 2000);
   };
 
-  // Format price 
-//   حته كده يصحبي بن detect اللغه بيها عن طريق ال I18n وبنعمل ال Currency علي اساسها
-const formatPrice = (amount) => {
+  // Format price
+  const formatPrice = (amount) => {
     const num = Number(amount);
-    if (i18n.language === "ar") {
-      return new Intl.NumberFormat("ar-EG", {
-        style: "currency",
-        currency: "EGP",
-      }).format(isNaN(num) ? 0 : num);
-    } else {
-      return new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "EGP",
-      }).format(isNaN(num) ? 0 : num);
-    }
+    const locale = i18n.language === "ar" ? "ar-EG" : "en-US";
+    return new Intl.NumberFormat(locale, {
+      style: "currency",
+      currency: "EGP", // Assuming EGP based on your previous code
+    }).format(isNaN(num) ? 0 : num);
   };
-  const handleDescription = () => {
-    if (i18n.language === "ar") {
-      return descriptionAr;
-    } else {
-      return descriptionEn;
-    }
-  }
+
+  const currentName = i18n.language === "ar" ? (nameAr || nameEn) : (nameEn || nameAr);
+  const currentDescription = i18n.language === "ar" ? (descriptionAr || descriptionEn) : (descriptionEn || descriptionAr);
+
   return (
     <div className={styles.card}>
       {/* Top Banner (Category/Status) */}
       <div className={`${styles.subCard} ${styles.topBar}`}>
         <span className={styles.categoryTag}>
-          {is_trending ? "Trending" : is_featured ? "Featured" : "New Arrival"}
+          {is_trending ? t('product.trending') : is_featured ? t('product.featured') : t('product.new_arrival')}
         </span>
-        {discount > 0 && (
-          <span className={styles.discountBadge}>Discount -{discount}%</span>
-        )}
+        {discount > 0 && <span className={styles.discountBadge}>{t('product.discount')} -{discount}%</span>}
       </div>
 
       {/* Main Card Content */}
@@ -89,7 +76,7 @@ const formatPrice = (amount) => {
           {mainImage ? (
             <img
               src={mainImage}
-              alt={nameEn}
+              alt={currentName}
               className={styles.productImage}
               loading="lazy"
             />
@@ -103,31 +90,27 @@ const formatPrice = (amount) => {
         {/* Overlay Actions (Revealed on Hover) */}
         <div className={styles.overlay}>
           <button
-            className={`${styles.actionButton} ${isAdded ? styles.added : ""}`}
-            aria-label="Add to Cart"
+            className={`${styles.actionButton} ${isAdded ? styles.added : ''}`}
+            aria-label={t('product.add_to_cart')}
             onClick={handleAddToCart}
           >
             {isAdded ? <Check size={20} /> : <ShoppingCart size={20} />}
           </button>
-          <button className={styles.actionButton} aria-label="View Details">
+          <button className={styles.actionButton} aria-label={t('product.view_details')}>
             <Eye size={20} />
           </button>
         </div>
 
         {/* Product Details (Always visible but styled) */}
         <div className={styles.productInfo}>
-          <h3 className={styles.productTitle}>{i18n.language === "ar" ? nameAr : nameEn}</h3> 
+          <h3 className={styles.productTitle}>{currentName}</h3>
 
           <div className={styles.ratingRow}>
             {[...Array(5)].map((_, i) => (
               <Star
                 key={i}
                 size={14}
-                className={
-                  i < Math.round(rating || 0)
-                    ? styles.starFilled
-                    : styles.starEmpty
-                }
+                className={i < Math.round(rating || 0) ? styles.starFilled : styles.starEmpty}
                 fill={i < Math.round(rating || 0) ? "currentColor" : "none"}
               />
             ))}
@@ -135,16 +118,14 @@ const formatPrice = (amount) => {
           </div>
 
           <p className={styles.productDescription}>
-            {handleDescription().substring(0, 60)}
-            {handleDescription().length > 60 ? "..." : ""}
+            {currentDescription?.substring(0, 60)}
+            {currentDescription?.length > 60 ? '...' : ''}
           </p>
 
           <div className={styles.priceRow}>
             <span className={styles.currentPrice}>{formatPrice(price)}</span>
             {original_price > price && (
-              <span className={styles.originalPrice}>
-                {formatPrice(original_price)}
-              </span>
+              <span className={styles.originalPrice}>{formatPrice(original_price)}</span>
             )}
           </div>
         </div>
@@ -152,18 +133,16 @@ const formatPrice = (amount) => {
 
       {/* Bottom Label (Name repeated or extra info - tailored to the design request which had a bottom subCard) */}
       <div
-        className={`${styles.subCard} ${styles.bottomBar} ${
-          isAdded ? styles.added : ""
-        }`}
+        className={`${styles.subCard} ${styles.bottomBar} ${isAdded ? styles.added : ''}`}
         onClick={handleAddToCart}
       >
         <span className={styles.addToCartText}>
-          {isAdded ? "Added to Cart" : "Add to Cart"}
+          {isAdded ? t('product.added_to_cart') : t('product.add_to_cart')}
         </span>
         {isAdded ? <Check size={16} /> : <ShoppingCart size={16} />}
       </div>
     </div>
   );
-}
+};
 
 export default ProductCard;

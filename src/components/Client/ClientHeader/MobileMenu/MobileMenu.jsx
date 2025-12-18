@@ -2,6 +2,7 @@ import React from 'react';
 import { Drawer, IconButton } from "@mui/material";
 import { Menu, X } from "lucide-react";
 import styles from "./MobileMenu.module.css";
+import { useTranslation } from "react-i18next";
 
 // Import existing components
 import Links from "../Links/Links";
@@ -10,6 +11,8 @@ import LangDropDown from "../LangDropDown/LangDropDown";
 import DropDownMenu from "../DropDownMenu/DropDownMenu"; // User Profile logic
 
 const MobileMenu = ({ menuIsOpened, setMenuIsOpened }) => {
+  const { t } = useTranslation();
+
   return (
     <>
       {/* Hamburger Icon - Only visible on mobile via CSS media queries */}
@@ -17,7 +20,7 @@ const MobileMenu = ({ menuIsOpened, setMenuIsOpened }) => {
         <IconButton
           onClick={() => setMenuIsOpened(true)}
           color="inherit" // Inherit white from header usually
-          aria-label="Open Menu"
+          aria-label={t('menu.open_menu')}
         >
           <Menu size={24} />
         </IconButton>
@@ -34,7 +37,7 @@ const MobileMenu = ({ menuIsOpened, setMenuIsOpened }) => {
         <div className={styles.mobileMenu}>
           {/* Header with Close Button */}
           <div className={styles.drawerHeader}>
-            <IconButton onClick={() => setMenuIsOpened(false)} aria-label="Close Menu">
+            <IconButton onClick={() => setMenuIsOpened(false)} aria-label={t('menu.close_menu')}>
               <X size={24} />
             </IconButton>
           </div>
@@ -57,7 +60,7 @@ const MobileMenu = ({ menuIsOpened, setMenuIsOpened }) => {
 
           {/* Language Switcher */}
           <div className={styles.section}>
-            <span style={{ fontSize: '0.85rem', color: '#64748b', fontWeight: 600 }}>Language</span>
+            <span style={{ fontSize: '0.85rem', color: '#64748b', fontWeight: 600 }}>{t('menu.language')}</span>
             <div className={styles.mobileLangWrapper}>
               <LangDropDown menuIsOpened={true} />
             </div>

@@ -1,4 +1,25 @@
 {
-    "welcome": "Welcome to DentQ",
-    "language": "Language"
+    "navbar": {
+        "cart": "Cart",
+        "notifications": "Notifications",
+        "my_orders": "My Orders",
+        "our_products": "Our Products",
+        "search_placeholder": "Search medical products..."
+    },
+    "menu": {
+        "my_profile": "My Profile",
+        "logout": "Logout",
+        "login": "Login",
+        "doctor": "Doctor",
+        "dr": "Dr.",
+        "language": "Language"
+    },
+    "product": {
+        "trending": "Trending",
+        "featured": "Featured",
+        "new_arrival": "New Arrival",
+        "discount": "Discount",
+        "add_to_cart": "Add to Cart",
+        "added_to_cart": "Added to Cart"
+    }
 }

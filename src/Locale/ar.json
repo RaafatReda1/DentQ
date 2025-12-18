@@ -1,4 +1,25 @@
 {
-    "welcome": "مرحبا بك في DentQ",
-    "language": "اللغة"
+    "navbar": {
+        "cart": "السلة",
+        "notifications": "الإشعارات",
+        "my_orders": "طلباتي",
+        "our_products": "منتجاتنا",
+        "search_placeholder": "ابحث عن منتجات طبية..."
+    },
+    "menu": {
+        "my_profile": "ملفي الشخصي",
+        "logout": "تسجيل خروج",
+        "login": "تسجيل دخول",
+        "doctor": "دكتور",
+        "dr": "د.",
+        "language": "اللغة"
+    },
+    "product": {
+        "trending": "رائج",
+        "featured": "مميز",
+        "new_arrival": "وصل حديثاً",
+        "discount": "خصم",
+        "add_to_cart": "أضف للسلة",
+        "added_to_cart": "تمت الإضافة"
+    }
 }
