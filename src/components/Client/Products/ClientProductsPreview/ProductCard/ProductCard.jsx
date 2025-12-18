@@ -17,8 +17,10 @@ const ProductCard = ({ product }) => {
 
   // Destructure product data structure based on the schema
   const {
-    name,
-    description,
+    nameEn,
+    nameAr,
+    descriptionEn,
+    descriptionAr,
     price,
     original_price,
     images = [],
@@ -61,6 +63,13 @@ const formatPrice = (amount) => {
       }).format(isNaN(num) ? 0 : num);
     }
   };
+  const handleDescription = () => {
+    if (i18n.language === "ar") {
+      return descriptionAr;
+    } else {
+      return descriptionEn;
+    }
+  }
   return (
     <div className={styles.card}>
       {/* Top Banner (Category/Status) */}
@@ -69,7 +78,7 @@ const formatPrice = (amount) => {
           {is_trending ? "Trending" : is_featured ? "Featured" : "New Arrival"}
         </span>
         {discount > 0 && (
-          <span className={styles.discountBadge}>-{discount}%</span>
+          <span className={styles.discountBadge}>Discount -{discount}%</span>
         )}
       </div>
 
@@ -80,7 +89,7 @@ const formatPrice = (amount) => {
           {mainImage ? (
             <img
               src={mainImage}
-              alt={name}
+              alt={nameEn}
               className={styles.productImage}
               loading="lazy"
             />
@@ -107,7 +116,7 @@ const formatPrice = (amount) => {
 
         {/* Product Details (Always visible but styled) */}
         <div className={styles.productInfo}>
-          <h3 className={styles.productTitle}>{name}</h3>
+          <h3 className={styles.productTitle}>{i18n.language === "ar" ? nameAr : nameEn}</h3> 
 
           <div className={styles.ratingRow}>
             {[...Array(5)].map((_, i) => (
@@ -126,8 +135,8 @@ const formatPrice = (amount) => {
           </div>
 
           <p className={styles.productDescription}>
-            {description?.substring(0, 60)}
-            {description?.length > 60 ? "..." : ""}
+            {handleDescription().substring(0, 60)}
+            {handleDescription().length > 60 ? "..." : ""}
           </p>
 
           <div className={styles.priceRow}>
