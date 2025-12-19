@@ -9,11 +9,12 @@ import {
   Check,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useRenderProductPage } from "../../../../../utils/RenderProductPage";
 
 const ProductCard = ({ product }) => {
   const [isAdded, setIsAdded] = useState(false);
   const { t, i18n } = useTranslation();
-
+  const renderProductPage = useRenderProductPage();
   // Destructure product data structure based on the schema
   const {
     nameEn,
@@ -96,7 +97,7 @@ const ProductCard = ({ product }) => {
           >
             {isAdded ? <Check size={20} /> : <ShoppingCart size={20} />}
           </button>
-          <button className={styles.actionButton} aria-label={t('product.view_details')}>
+          <button className={styles.actionButton} aria-label={t('product.view_details')} onClick={() => renderProductPage(product.nameEn, product.id)}>
             <Eye size={20} />
           </button>
         </div>

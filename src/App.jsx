@@ -19,9 +19,9 @@ function App() {
           {!user.loadingState && (
             <>
               {(user.type === "client" || user.type === "guest") && (
-                <Route path="/" element={<Client />} />
+                <Route path="*" element={<Client />} />
               )}
-              {user.type === "admin" && <Route path="/" element={<Admin />} />}
+              {user.type === "admin" && <Route path="*" element={<Admin />} />}
             </>
           )}
         </Routes>
