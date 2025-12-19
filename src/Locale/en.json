@@ -4,7 +4,8 @@
         "notifications": "Notifications",
         "my_orders": "My Orders",
         "our_products": "Our Products",
-        "search_placeholder": "Search medical products..."
+        "search_placeholder": "Search medical products...",
+        "no_results": "No results found"
     },
     "menu": {
         "my_profile": "My Profile",
@@ -12,7 +13,9 @@
         "login": "Login",
         "doctor": "Doctor",
         "dr": "Dr.",
-        "language": "Language"
+        "language": "Language",
+        "open_menu": "Open Menu",
+        "close_menu": "Close Menu"
     },
     "product": {
         "trending": "Trending",
@@ -20,6 +23,7 @@
         "new_arrival": "New Arrival",
         "discount": "Discount",
         "add_to_cart": "Add to Cart",
-        "added_to_cart": "Added to Cart"
+        "added_to_cart": "Added to Cart",
+        "view_details": "View Details"
     }
 }

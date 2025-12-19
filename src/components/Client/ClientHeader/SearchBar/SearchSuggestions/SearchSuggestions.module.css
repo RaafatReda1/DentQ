@@ -1,26 +1,115 @@
+/* Main Container */
 .suggestionsParent {
   position: absolute;
-  top: calc(100% + 8px);
-  background: #ffffff;
-  max-width: 40%;
-  min-width: 280px;
-  padding: 15px;
-  box-shadow: 0 8px 24px rgba(0, 74, 128, 0.12);
-  border-radius: 12px;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  /* Match search bar width exactly */
+  background: white;
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  padding: 8px 0;
+  margin-top: 4px;
+  /* Tiny gap */
+  border: 1px solid #f1f5f9;
+  z-index: 1000;
   overflow: hidden;
-  border: 1px solid #e8f2ff;
-  z-index: 100;
+
+  /* Animation states */
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.searchSuggestionItem{
+
+.hidden {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  pointer-events: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+}
+
+/* List Reset */
+.suggestionsParent ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Item Styles */
+.searchSuggestionItem {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
-  border-radius: 8px;
+  gap: 12px;
+  padding: 10px 16px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  list-style: none;
+  border-bottom: 1px solid #f8fafc;
+  transition: background-color 0.2s ease;
 }
-.searchSuggestionItem:hover{
-  background: rgba(0, 183, 168, 0.08);
+
+.searchSuggestionItem:last-child {
+  border-bottom: none;
+}
+
+.searchSuggestionItem:hover {
+  background-color: #f8fafc;
+}
+
+/* Icons (if we add them later via JSX) */
+.iconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  min-width: 20px;
+}
+
+.searchSuggestionItem:hover .iconWrapper {
+  color: #00b7a8;
+}
+
+/* Text Content */
+.suggestionContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+  /* Text truncate fix */
+}
+
+.searchSuggestionName {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #334155;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.searchSuggestionDesc {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 90%;
+}
+
+.searchSuggestionItem:hover .searchSuggestionName {
+  color: #00b7a8;
+  /* Primary Brand Color */
+}
+
+/* No Results Message */
+.noResults {
+  padding: 16px;
+  text-align: center;
+  color: #64748b;
+  font-size: 0.9rem;
+  margin: 0;
 }

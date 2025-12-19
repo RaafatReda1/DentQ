@@ -4,7 +4,8 @@
         "notifications": "الإشعارات",
         "my_orders": "طلباتي",
         "our_products": "منتجاتنا",
-        "search_placeholder": "ابحث عن منتجات طبية..."
+        "search_placeholder": "ابحث عن منتجات طبية...",
+        "no_results": "لا توجد نتائج"
     },
     "menu": {
         "my_profile": "ملفي الشخصي",
@@ -12,7 +13,9 @@
         "login": "تسجيل دخول",
         "doctor": "دكتور",
         "dr": "د.",
-        "language": "اللغة"
+        "language": "اللغة",
+        "open_menu": "فتح القائمة",
+        "close_menu": "إغلاق القائمة"
     },
     "product": {
         "trending": "رائج",
@@ -20,6 +23,7 @@
         "new_arrival": "وصل حديثاً",
         "discount": "خصم",
         "add_to_cart": "أضف للسلة",
-        "added_to_cart": "تمت الإضافة"
+        "added_to_cart": "تمت الإضافة",
+        "view_details": "عرض التفاصيل"
     }
 }
