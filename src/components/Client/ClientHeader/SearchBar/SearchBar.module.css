@@ -1,6 +1,7 @@
 .Searchwrapper {
   max-width: 50%;
   min-width: 300px;
+  align-items: center;
 }
 
 .form {

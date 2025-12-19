@@ -3,6 +3,7 @@ import styles from "./SearchBar.module.css";
 import { Search, X } from "lucide-react";
 import menuStyles from "../MobileMenu/MobileMenu.module.css";
 import { useTranslation } from "react-i18next";
+import SearchSuggestions from "./SearchSuggestions/SearchSuggestions";
 
 const SearchBar = ({ menuIsOpened }) => {
   const [searchValue, setSearchValue] = useState("");
@@ -21,14 +22,16 @@ const SearchBar = ({ menuIsOpened }) => {
   };
 
   return (
-    <div className={menuIsOpened ? menuStyles.Searchwrapper : styles.Searchwrapper}>
+    <div
+      className={menuIsOpened ? menuStyles.Searchwrapper : styles.Searchwrapper}
+    >
       <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.searchContainer}>
           <Search className={styles.searchIcon} />
           <input
             type="text"
             className={styles.input}
-            placeholder={t('navbar.search_placeholder')}
+            placeholder={t("navbar.search_placeholder")}
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
           />
@@ -44,6 +47,7 @@ const SearchBar = ({ menuIsOpened }) => {
           )}
         </div>
       </form>
+      <SearchSuggestions searchQuery={searchValue} />
     </div>
   );
 };

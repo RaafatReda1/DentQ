@@ -1,0 +1,26 @@
+.suggestionsParent {
+  position: absolute;
+  top: calc(100% + 8px);
+  background: #ffffff;
+  max-width: 40%;
+  min-width: 280px;
+  padding: 15px;
+  box-shadow: 0 8px 24px rgba(0, 74, 128, 0.12);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #e8f2ff;
+  z-index: 100;
+}
+.searchSuggestionItem{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  list-style: none;
+}
+.searchSuggestionItem:hover{
+  background: rgba(0, 183, 168, 0.08);
+}
