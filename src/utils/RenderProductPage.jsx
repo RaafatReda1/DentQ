@@ -1,4 +1,4 @@
-// البتاع ده يسطا وظيفته يغير لينك الصفحة الى صفحة المنتج وعملته jsx مش js عشان مينفعش تستخدم رياكت هوك زي usenavigate خالر كومبوننت
+// البتاع ده يسطا وظيفته يغير لينك الصفحة الى صفحة المنتج وعملته jsx مش js عشان مينفعش تستخدم رياكت هوك زي usenavigate خارج كومبوننت
 import { useNavigate } from "react-router-dom";
 
 export function useRenderProductPage() {

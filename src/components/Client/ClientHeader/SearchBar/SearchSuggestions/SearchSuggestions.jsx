@@ -4,12 +4,13 @@ import { productsContext } from "../../../../../utils/AppContexts";
 import FindSearchSuggestionsFromProducts from "../../../../../utils/FindSearchSuggestionsFromProducts";
 import { Search } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useRenderProductPage } from "../../../../../utils/RenderProductPage";
 function SearchSuggestions({ searchQuery }) {
   const [suggestionsIsOpen, setSuggestionsIsOpen] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
   const [products] = useContext(productsContext);
   const { t, i18n } = useTranslation();
-
+  const renderProductPage = useRenderProductPage();
   useEffect(() => {
     if (searchQuery) {
       setSuggestionsIsOpen(true);
@@ -29,7 +30,7 @@ function SearchSuggestions({ searchQuery }) {
       {suggestions.length > 0 ? (
         <ul>
           {suggestions.slice(0, 5).map((suggestion) => (
-            <li className={styles.searchSuggestionItem} key={suggestion._id}>
+            <li className={styles.searchSuggestionItem} key={suggestion._id} onClick={() => renderProductPage(suggestion.nameEn,suggestion.id)}>
               <div className={styles.iconWrapper}>
                 <Search size={16} />
               </div>

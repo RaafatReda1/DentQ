@@ -7,10 +7,10 @@ const FindSearchSuggestionsFromProducts = (products, searchQuery) => {
 
   return products.filter((product) => {
     return (
-      product.nameAr?.toLowerCase().includes(query) ||
+      (product.nameAr?.toLowerCase().includes(query) ||
       product.nameEn?.toLowerCase().includes(query) ||
       product.descriptionAr?.toLowerCase().includes(query) ||
-      product.descriptionEn?.toLowerCase().includes(query)
+      product.descriptionEn?.toLowerCase().includes(query))
     );
   });
 };
