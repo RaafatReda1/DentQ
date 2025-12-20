@@ -30,7 +30,15 @@ function SearchSuggestions({ searchQuery }) {
       {suggestions.length > 0 ? (
         <ul>
           {suggestions.slice(0, 5).map((suggestion) => (
-            <li className={styles.searchSuggestionItem} key={suggestion._id} onClick={() => renderProductPage(suggestion.nameEn,suggestion.id)}>
+            <li
+              className={styles.searchSuggestionItem}
+              key={suggestion._id}
+              onClick={() =>{
+                renderProductPage(suggestion.nameEn, suggestion.id);
+                setSuggestionsIsOpen(false);
+              }
+              }
+            >
               <div className={styles.iconWrapper}>
                 <Search size={16} />
               </div>
