@@ -1,0 +1,91 @@
+.detailsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.5rem;
+}
+
+.tag {
+    font-size: 0.85rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    background: #f3f4f6;
+    color: #4b5563;
+    font-weight: 500;
+}
+
+.tag.trending {
+    background: #fff1f2;
+    color: #e11d48;
+}
+
+.tag.active {
+    background: #ecfdf5;
+    color: #059669;
+}
+
+.priceSection {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.currentPrice {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.originalPrice {
+    text-decoration: line-through;
+    color: #9ca3af;
+    font-size: 1.1rem;
+}
+
+.discount {
+    background: #fee2e2;
+    color: #ef4444;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.addToCartSection {
+    margin-top: 1rem;
+}
+
+.addToCartBtn {
+    width: 100%;
+    padding: 1rem;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.1), 0 2px 4px -1px rgba(37, 99, 235, 0.06);
+}
+
+.addToCartBtn:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 8px -1px rgba(37, 99, 235, 0.15), 0 3px 6px -1px rgba(37, 99, 235, 0.1);
+}
+
+.description {
+    color: #4b5563;
+    line-height: 1.6;
+}

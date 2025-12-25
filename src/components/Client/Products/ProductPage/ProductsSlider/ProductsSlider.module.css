@@ -1,0 +1,39 @@
+.sliderContainer {
+    width: 100%;
+    margin-top: 2rem;
+}
+
+.title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.sliderGrid {
+    display: flex;
+    gap: 50px;
+    overflow-x: auto;
+    padding-bottom: 1.5rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+}
+
+.sliderGrid::-webkit-scrollbar {
+    height: 8px;
+}
+
+.sliderGrid::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.sliderGrid::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+}
+
+.sliderGrid>div {
+    flex: 0 0 auto;
+    width: 250px;
+    /* Adjust based on card width */
+}

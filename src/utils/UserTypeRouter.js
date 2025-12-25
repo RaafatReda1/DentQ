@@ -6,7 +6,7 @@ const UserTypeRouter = async (user, setUser) => {
     setUser({ ...user, loadingState: true });
     // 1️⃣ Get current session
     const { data, error } = await supabase.auth.getSession();
-    
+
     if (error) {
       console.error("Session Error:", error);
       setUser({ type: "error", error: error.message, session: false });
@@ -14,7 +14,7 @@ const UserTypeRouter = async (user, setUser) => {
     }
 
     const session = data.session;
-    
+
     // 2️⃣ Handle no session (logged out)
     if (!session) {
       setUser({ type: "guest", fullName: "", email: "", session: false });
@@ -25,29 +25,29 @@ const UserTypeRouter = async (user, setUser) => {
     const email = session.user.email;
     if (!email) {
       console.error("No email found in session");
-      setUser((prev)=>({
+      setUser((prev) => ({
         ...prev,
-        type: "guest", 
+        type: "guest",
         fullName: session.user.user_metadata?.name || "",
-        email: "", 
+        email: "",
         session,
         avatarUrl: session.user.user_metadata?.avatarUrl || ""
       }));
       return;
     }
 
-    const avatarUrl = session.user.user_metadata?.avatar_url || 
-                      session.user.user_metadata?.avatarUrl || 
-                      "";
-    const fullName = session.user.user_metadata?.full_name || 
-                     session.user.user_metadata?.name || 
-                     "";
-    
+    const avatarUrl = session.user.user_metadata?.avatar_url ||
+      session.user.user_metadata?.avatarUrl ||
+      "";
+    const fullName = session.user.user_metadata?.full_name ||
+      session.user.user_metadata?.name ||
+      "";
+
     console.log("Session found for:", email);
 
     // 4️⃣ Check Admins first
     const { data: adminData, error: adminError } = await supabase
-      .from("Admins") 
+      .from("Admins")
       .select("fullName, email, avatarUrl")
       .eq("email", email)
       .maybeSingle();
@@ -55,14 +55,15 @@ const UserTypeRouter = async (user, setUser) => {
     if (adminError) {
       console.error("Admin check error:", adminError);
     }
-    
+
     if (adminData) {
       console.log("✅ Admin found:", adminData);
-      setUser((prev)=>({
+      setUser((prev) => ({
         ...prev,
         type: "admin",
+        id: adminData.id,
         fullName: adminData.fullName || fullName,
-        nickName:adminData.nickName,
+        nickName: adminData.nickName,
         email: adminData.email,
         session,
         avatarUrl: adminData.avatarUrl || avatarUrl,
@@ -80,14 +81,15 @@ const UserTypeRouter = async (user, setUser) => {
     if (clientError) {
       console.error("Client check error:", clientError);
     }
-    
+
     if (clientData) {
       console.log("✅ Client found:", clientData);
-      setUser((prev)=>({
+      setUser((prev) => ({
         ...prev,
         type: "client",
+        id: clientData.id,
         fullName: clientData.fullName || fullName,
-        nickName:clientData.nickName,
+        nickName: clientData.nickName,
         email: clientData.email,
         session,
         avatarUrl: clientData.avatarUrl || avatarUrl,
@@ -97,7 +99,7 @@ const UserTypeRouter = async (user, setUser) => {
 
     // 6️⃣ Auto-register new user as Client
     console.log("📝 No user record found, auto-registering as client...");
-    
+
     const { data: newClient, error: insertError } = await supabase
       .from("Clients")
       .insert({
@@ -105,14 +107,14 @@ const UserTypeRouter = async (user, setUser) => {
         email: email,
         avatarUrl: avatarUrl
       })
-      .select("fullName, email, avatarUrl")
+      .select("id, fullName, email, avatarUrl")
       .single();
 
     if (insertError) {
       console.error("❌ Client registration error:", insertError);
-      
+
       // Fallback to guest if registration fails
-      setUser((prev)=>({
+      setUser((prev) => ({
         ...prev,
         type: "guest",
         fullName: fullName,
@@ -122,12 +124,13 @@ const UserTypeRouter = async (user, setUser) => {
       }));
       return;
     }
-    
+
     if (newClient) {
       console.log("✅ New client registered:", newClient);
-      setUser((prev)=>({
+      setUser((prev) => ({
         ...prev,
         type: "client",
+        id: newClient.id,
         fullName: newClient.fullName || fullName,
         email: newClient.email,
         session,
@@ -138,7 +141,7 @@ const UserTypeRouter = async (user, setUser) => {
 
     // 7️⃣ Final fallback (should rarely reach here)
     console.log("⚠️ Fallback: Setting as guest");
-    setUser((prev)=>({
+    setUser((prev) => ({
       ...prev,
       type: "guest",
       fullName: fullName,
@@ -149,15 +152,15 @@ const UserTypeRouter = async (user, setUser) => {
 
   } catch (unexpectedError) {
     console.error("💥 Unexpected error in UserTypeRouter:", unexpectedError);
-    setUser((prev)=>({ 
+    setUser((prev) => ({
       ...prev,
-      type: "error", 
+      type: "error",
       error: unexpectedError.message,
-      session: false 
+      session: false
     }));
-  }finally{
+  } finally {
     // 8️⃣ Set loading state to false
-    setUser((prev)=>({...prev, loadingState: false}));
+    setUser((prev) => ({ ...prev, loadingState: false }));
   }
 };
 

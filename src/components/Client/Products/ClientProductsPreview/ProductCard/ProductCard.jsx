@@ -12,7 +12,7 @@ import { useTranslation } from "react-i18next";
 import { useRenderProductPage } from "../../../../../utils/RenderProductPage";
 import RenderProductNameOrDesc from "../../../../../utils/RenderProductNameOrDesc";
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, scrollToTop }) => {
   const [isAdded, setIsAdded] = useState(false);
   const { t, i18n } = useTranslation();
   const renderProductPage = useRenderProductPage();
@@ -103,10 +103,22 @@ const ProductCard = ({ product }) => {
           >
             {isAdded ? <Check size={20} /> : <ShoppingCart size={20} />}
           </button>
+          {/* Open product page scrollToTop*/}
           <button
             className={styles.actionButton}
             aria-label={t("product.view_details")}
-            onClick={() => renderProductPage(product.nameEn, product.id)}
+            onClick={() => {
+              if (scrollToTop) {
+                renderProductPage(product.nameEn, product.id);
+                window.scrollTo({
+                  top: 0,
+                  behavior: "smooth",
+                });
+              } else {
+                renderProductPage(product.nameEn, product.id);
+              }
+              scrollToTop = false;
+            }}
           >
             <Eye size={20} />
           </button>
@@ -114,7 +126,9 @@ const ProductCard = ({ product }) => {
 
         {/* Product Details (Always visible but styled) */}
         <div className={styles.productInfo}>
-          <h3 className={styles.productTitle}>{RenderProductNameOrDesc(product, "name")}</h3>
+          <h3 className={styles.productTitle}>
+            {RenderProductNameOrDesc(product, "name")}
+          </h3>
 
           <div className={styles.ratingRow}>
             {[...Array(5)].map((_, i) => (
@@ -134,7 +148,9 @@ const ProductCard = ({ product }) => {
 
           <p className={styles.productDescription}>
             {RenderProductNameOrDesc(product, "description")?.substring(0, 60)}
-            {RenderProductNameOrDesc(product, "description")?.length > 60 ? "..." : ""}
+            {RenderProductNameOrDesc(product, "description")?.length > 60
+              ? "..."
+              : ""}
           </p>
 
           <div className={styles.priceRow}>
