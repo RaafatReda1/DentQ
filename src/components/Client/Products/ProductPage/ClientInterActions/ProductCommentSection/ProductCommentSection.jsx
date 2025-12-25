@@ -1,9 +1,11 @@
 import React, { useState, useContext, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import styles from "./ProductCommentSection.module.css";
 import { userContext } from "../../../../../../utils/AppContexts";
 import { supabase } from "../../../../../../utils/SupabaseClient";
 
 const ProductCommentSection = ({ product }) => {
+  const { t } = useTranslation();
   const [user] = useContext(userContext);
   const [commentText, setCommentText] = useState("");
   const [comments, setComments] = useState(product.comments || []);
@@ -41,7 +43,7 @@ const ProductCommentSection = ({ product }) => {
 
     if (error) {
       console.error("Error updating comments:", error);
-      alert("Failed to post comment.");
+      alert(t("comments.failed_msg"));
       setComments(comments); // Revert
     } else {
       setCommentText("");
@@ -51,7 +53,7 @@ const ProductCommentSection = ({ product }) => {
 
   return (
     <div className={styles.sectionContainer} id="comment-section">
-      <h3 className={styles.title}>Comments ({comments.length})</h3>
+      <h3 className={styles.title}>{t("comments.title")} ({comments.length})</h3>
 
       <div className={styles.commentsList}>
         {comments.map((c) => (
@@ -71,24 +73,24 @@ const ProductCommentSection = ({ product }) => {
             </div>
           </div>
         ))}
-        {comments.length === 0 && <p style={{ color: '#999' }}>No comments yet. Be the first!</p>}
+        {comments.length === 0 && <p style={{ color: '#999' }}>{t("comments.no_comments")}</p>}
       </div>
 
       {(user.type === "client" || user.type === "admin") ? (
         <form className={styles.formContainer} onSubmit={handleSubmit}>
           <textarea
             className={styles.textarea}
-            placeholder="Write a comment..."
+            placeholder={t("comments.placeholder")}
             value={commentText}
             onChange={(e) => setCommentText(e.target.value)}
           />
           <button type="submit" className={styles.submitBtn} disabled={loading}>
-            {loading ? "Posting..." : "Post Comment"}
+            {loading ? t("comments.posting") : t("comments.post_btn")}
           </button>
         </form>
       ) : (
         <div className={styles.signInMsg}>
-          Please sign in to leave a comment.
+          {t("comments.signin_msg")}
         </div>
       )}
     </div>

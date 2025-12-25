@@ -22,8 +22,40 @@
         "featured": "مميز",
         "new_arrival": "وصل حديثاً",
         "discount": "خصم",
+        "available": "متوفر",
         "add_to_cart": "أضف للسلة",
         "added_to_cart": "تمت الإضافة",
         "view_details": "عرض التفاصيل"
+    },
+    "product_page": {
+        "back": "رجوع",
+        "loading": "جاري التحميل...",
+        "colors": "الألوان",
+        "sizes": "المقاسات",
+        "no_description": "لا يوجد وصف متاح",
+        "related_products": "قد يعجبك أيضاً"
+    },
+    "reviews": {
+        "title": "التقييمات",
+        "reviews_count": "تقييم",
+        "new": "جديد",
+        "rate_title": "قيم هذا المنتج:",
+        "you_rated": "تقييمك:",
+        "signin_alert": "سجل دخولك لتقييم المنتج.",
+        "success_modal": {
+            "title": "شكراً لتقييمك!",
+            "desc": "هل تود كتابة تعليق لمساعدة الآخرين؟",
+            "write_review": "اكتب تعليق",
+            "later": "لاحقاً"
+        }
+    },
+    "comments": {
+        "title": "التعليقات",
+        "no_comments": "لا توجد تعليقات. كن الأول!",
+        "placeholder": "اكتب تعليقاً...",
+        "post_btn": "نشر التعليق",
+        "posting": "جاري النشر...",
+        "signin_msg": "الرجاء تسجيل الدخول لكتابة تعليق.",
+        "failed_msg": "فشل نشر التعليق."
     }
 }

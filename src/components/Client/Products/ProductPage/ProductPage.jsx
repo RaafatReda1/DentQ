@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { productsContext } from "../../../../utils/AppContexts";
 import styles from "./ProductPage.module.css";
 import ProductDetails from "./ProductDetails/ProductDetails";
@@ -12,6 +13,7 @@ import ProductCommentSection from "./ClientInterActions/ProductCommentSection/Pr
 import { ArrowLeft } from "lucide-react";
 
 const ProductPage = () => {
+  const { t, i18n } = useTranslation();
   const { productId } = useParams();
   const [products] = useContext(productsContext);
   const navigate = useNavigate();
@@ -20,15 +22,17 @@ const ProductPage = () => {
     (product) => product.id === productId
   );
 
-  if (!product) return <div>Loading...</div>; // Or some fallback
+  if (!product) return <div>{t("product_page.loading")}</div>; // Or some fallback
+
+  const displayName = i18n.language === "ar" ? product.nameAr : product.nameEn;
 
   return (
     <div className={styles.productPageContainer}>
       <button className={styles.backBtn} onClick={() => navigate(-1)}>
-        <ArrowLeft /> Back
+        <ArrowLeft /> {t("product_page.back")}
       </button>
 
-      <h1 className={styles.productName}>{product.nameEn}</h1>
+      <h1 className={styles.productName}>{displayName}</h1>
 
       <div className={styles.mainContent}>
         <div className={styles.leftColumn}>

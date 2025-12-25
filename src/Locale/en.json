@@ -22,8 +22,40 @@
         "featured": "Featured",
         "new_arrival": "New Arrival",
         "discount": "Discount",
+        "available": "Available",
         "add_to_cart": "Add to Cart",
         "added_to_cart": "Added to Cart",
         "view_details": "View Details"
+    },
+    "product_page": {
+        "back": "Back",
+        "loading": "Loading...",
+        "colors": "Colors",
+        "sizes": "Sizes",
+        "no_description": "No description available",
+        "related_products": "You May Also Like"
+    },
+    "reviews": {
+        "title": "Ratings",
+        "reviews_count": "reviews",
+        "new": "New",
+        "rate_title": "Rate this product:",
+        "you_rated": "You rated:",
+        "signin_alert": "Please sign in to rate this product.",
+        "success_modal": {
+            "title": "Thanks for ratings!",
+            "desc": "Would you like to write a review to help others?",
+            "write_review": "Write a Review",
+            "later": "Later"
+        }
+    },
+    "comments": {
+        "title": "Comments",
+        "no_comments": "No comments yet. Be the first!",
+        "placeholder": "Write a comment...",
+        "post_btn": "Post Comment",
+        "posting": "Posting...",
+        "signin_msg": "Please sign in to leave a comment.",
+        "failed_msg": "Failed to post comment."
     }
 }

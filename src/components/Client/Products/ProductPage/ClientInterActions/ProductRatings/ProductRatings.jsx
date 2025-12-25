@@ -1,10 +1,12 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Star } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import styles from "./ProductRatings.module.css";
 import { userContext } from "../../../../../../utils/AppContexts";
 import { supabase } from "../../../../../../utils/SupabaseClient";
 
 const ProductRatings = ({ product }) => {
+  const { t } = useTranslation();
   const [user] = useContext(userContext);
   const [userRating, setUserRating] = useState(null);
   const [hoverRating, setHoverRating] = useState(0);
@@ -31,7 +33,7 @@ const ProductRatings = ({ product }) => {
 
   const handleRate = async (ratingValue) => {
     if (user.type !== "client" && user.type !== "admin") {
-      alert("Please sign in to rate this product.");
+      alert(t("reviews.signin_alert"));
       return;
     }
 
@@ -50,7 +52,7 @@ const ProductRatings = ({ product }) => {
 
     if (error) {
       console.error("Error rating product:", error);
-      alert("Failed to save rating.");
+      alert(t("reviews.save_rating_failed"));
     } else {
       setUserRating(ratingValue);
       setShowAdviceModal(true); // Encouragement popup
@@ -59,17 +61,17 @@ const ProductRatings = ({ product }) => {
 
   return (
     <div className={styles.ratingsContainer}>
-      <h3 className={styles.title}>Ratings</h3>
+      <h3 className={styles.title}>{t("reviews.title")}</h3>
 
       {/* Average Display */}
       <div className={styles.starsContainer}>
-        <span className={styles.ratingValue}>{product.rating?.toFixed(1) || "New"}</span>
-        <span className={styles.reviewCount}>({product.review_count || 0} reviews)</span>
+        <span className={styles.ratingValue}>{product.rating?.toFixed(1) || t("reviews.new")}</span>
+        <span className={styles.reviewCount}>({product.review_count || 0} {t("reviews.reviews_count")})</span>
       </div>
 
       {/* Interactive Stars */}
       <div className={styles.inputSection}>
-        <p>Rate this product:</p>
+        <p>{t("reviews.rate_title")}</p>
         <div className={styles.starsContainer}>
           {[1, 2, 3, 4, 5].map((star) => (
             <button
@@ -83,22 +85,22 @@ const ProductRatings = ({ product }) => {
             </button>
           ))}
         </div>
-        {userRating && <p className={styles.userRatingMsg}>You rated: {userRating}/5</p>}
+        {userRating && <p className={styles.userRatingMsg}>{t("reviews.you_rated")} {userRating}/5</p>}
       </div>
 
       {/* Advice Modal */}
       {showAdviceModal && (
         <div className={styles.modalOverlay}>
           <div className={styles.modalContent}>
-            <h3 className={styles.modalTitle}>Thanks for rating!</h3>
-            <p>Would you like to write a review to help others?</p>
+            <h3 className={styles.modalTitle}>{t("reviews.success_modal.title")}</h3>
+            <p>{t("reviews.success_modal.desc")}</p>
             <div className={styles.modalButtons}>
               <button className={`${styles.modalBtn} ${styles.modalBtnPrimary}`} onClick={() => {
                 // Ideally scroll to comment section or open it
                 document.querySelector('#comment-section')?.scrollIntoView({ behavior: 'smooth' });
                 setShowAdviceModal(false);
-              }}>Write a Review</button>
-              <button className={`${styles.modalBtn} ${styles.modalBtnSecondary}`} onClick={() => setShowAdviceModal(false)}>Later</button>
+              }}>{t("reviews.success_modal.write_review")}</button>
+              <button className={`${styles.modalBtn} ${styles.modalBtnSecondary}`} onClick={() => setShowAdviceModal(false)}>{t("reviews.success_modal.later")}</button>
             </div>
           </div>
         </div>

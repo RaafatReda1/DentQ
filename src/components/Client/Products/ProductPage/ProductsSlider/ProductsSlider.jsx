@@ -1,9 +1,11 @@
 import React, { useContext } from "react";
+import { useTranslation } from "react-i18next";
 import styles from "./ProductsSlider.module.css";
-import { productsContext } from "../../../../../utils/AppContexts";
+import { productsContext } from "../../../../../../utils/AppContexts";
 import ProductCard from "../../ClientProductsPreview/ProductCard/ProductCard";
 
 const ProductsSlider = ({ category }) => {
+  const { t } = useTranslation();
   const [products] = useContext(productsContext);
 
   // Filter related products (same category, limit 10)
@@ -17,7 +19,7 @@ const ProductsSlider = ({ category }) => {
 
   return (
     <div className={styles.sliderContainer}>
-      <h3 className={styles.title}>You May Also Like</h3>
+      <h3 className={styles.title}>{t("product_page.related_products")}</h3>
       <div className={styles.sliderGrid}>
         {relatedProducts.map((product) => (
           <div key={product.id}>

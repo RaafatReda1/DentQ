@@ -147,8 +147,8 @@ const ProductCard = ({ product, scrollToTop }) => {
           </div>
 
           <p className={styles.productDescription}>
-            {RenderProductNameOrDesc(product, "description")?.substring(0, 60)}
-            {RenderProductNameOrDesc(product, "description")?.length > 60
+            {RenderProductNameOrDesc(product, "desc")?.substring(0, 60)}
+            {RenderProductNameOrDesc(product, "desc")?.length > 60
               ? "..."
               : ""}
           </p>

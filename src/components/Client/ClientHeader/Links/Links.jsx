@@ -39,7 +39,7 @@ const Links = ({ menuIsOpened }) => {
         </Badge>
       </Link>
 
-      <Link to="/ourproducts" className={styles.link}>
+      <Link to="/" className={styles.link}>
         <BriefcaseMedical />
         <span className={styles.linkTxt}>{t('navbar.our_products')}</span>
       </Link>
