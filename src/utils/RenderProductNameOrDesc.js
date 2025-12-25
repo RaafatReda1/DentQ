@@ -5,6 +5,7 @@ const RenderProductNameOrDesc = (product, type) =>{
     const { i18n } = useTranslation();
     const name = i18n.language === "en" ? product.nameEn : product.nameAr;
     const desc = i18n.language === "en" ? product.descriptionEn : product.descriptionAr;
-    return type === "name" ? name : desc;
+    const fullDesc = i18n.language === "en" ? product.fullDescriptionEn : product.fullDescriptionAr;
+    return type === "name" ? name : type === "desc" ? desc : fullDesc;
 }
 export default RenderProductNameOrDesc;
