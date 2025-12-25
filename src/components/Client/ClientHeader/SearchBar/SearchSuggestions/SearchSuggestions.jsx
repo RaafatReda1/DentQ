@@ -32,7 +32,7 @@ function SearchSuggestions({ searchQuery }) {
           {suggestions.slice(0, 5).map((suggestion) => (
             <li
               className={styles.searchSuggestionItem}
-              key={suggestion._id}
+              key={suggestion.id}
               onClick={() =>{
                 renderProductPage(suggestion.nameEn, suggestion.id);
                 setSuggestionsIsOpen(false);

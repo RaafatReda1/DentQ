@@ -9,9 +9,9 @@ const ProdcutsParent = () => {
 
   return (
     <div className={styles.productsParent}>
-      {products.productsList.map((product) => (
+      {products.productsList? (products.productsList.map((product) => (
         <ProductCard key={product.id} product={product} />
-      ))}
+      ))): null}
     </div>
   );
 };

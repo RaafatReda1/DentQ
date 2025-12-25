@@ -16,8 +16,7 @@ const DropDownMenu = ({ menuIsOpened }) => {
   const { t } = useTranslation();
 
   useEffect(() => {
-    if (menuIsOpened) setOpen(true);
-    else setOpen(false);
+    if (!menuIsOpened) setOpen(false);
   }, [menuIsOpened]);
   // Close menu when clicking outside
   useEffect(() => {
@@ -69,7 +68,6 @@ const DropDownMenu = ({ menuIsOpened }) => {
   return (
     <div className={menuIsOpened ? menuStyles.dropdown : styles.dropdown} ref={menuRef}>
       <button className={styles.profileButton} onClick={() => {
-        if (menuIsOpened) return;
         setOpen(!open)
       }}>
         <img src="/vite.svg" alt="Profile" className={styles.profileImage} />
@@ -86,7 +84,7 @@ const DropDownMenu = ({ menuIsOpened }) => {
       </button>
 
       {open && (
-        <div className={styles.dropdownContent}>
+        <div className={menuIsOpened ? menuStyles.dropdownContent : styles.dropdownContent}>
           {user.session ? (
             <>
               <a href="/profile" className={styles.menuItem}>

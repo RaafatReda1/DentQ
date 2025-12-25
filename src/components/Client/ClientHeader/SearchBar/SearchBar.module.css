@@ -2,6 +2,8 @@
   max-width: 50%;
   min-width: 300px;
   align-items: center;
+  position: relative;
+  /* Anchor for suggestions */
 }
 
 .form {
@@ -88,17 +90,26 @@
 }
 
 /* Responsive adjustments */
-@media (max-width: 768px) {
+
+@media (max-width: 950px) {
   .Searchwrapper {
-    display: none;
+    display: flex;
+    /* Force display */
+    max-width: 100%;
+    flex: 1;
+    /* Take available space */
+    min-width: 0;
+    /* Allow shrinking */
   }
 
   .searchContainer {
     border-radius: 40px;
+    background: #f8fafc;
+    /* Slightly darker bg on mobile for contrast if white header */
   }
 
   .input {
-    padding: 10px 44px 10px 44px;
+    padding: 10px 40px 10px 40px;
     font-size: 0.9rem;
   }
 
@@ -109,26 +120,14 @@
   }
 
   .clearButton {
-    width: 28px;
-    height: 28px;
-    right: 6px;
-  }
-
-  .clearButton svg {
-    width: 16px;
-    height: 16px;
+    right: 8px;
   }
 }
 
 @media (max-width: 480px) {
   .input {
-    padding: 8px 40px 8px 38px;
+    padding: 8px 36px 8px 36px;
+    /* Optimized padding */
     font-size: 0.85rem;
-  }
-
-  .searchIcon {
-    left: 12px;
-    width: 16px;
-    height: 16px;
   }
 }

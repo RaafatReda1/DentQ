@@ -1,8 +1,9 @@
-.Header{
+.Header {
     background: var(--primary-color);
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-between;
+    /* Changed from space-around for better control */
     width: 100vw;
     position: sticky;
     top: 0;
@@ -11,5 +12,32 @@
     padding: 10px 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-bottom: 10px;
-    padding: 0;
+    gap: 15px;
+    /* Add gap for flex items */
+}
+
+/* Desktop Only Wrappers */
+.desktopOnly {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+@media (max-width: 950px) {
+    .Header {
+        padding: 10px 15px;
+        gap: 10px;
+    }
+
+    /* Hide desktop specific elements */
+    .Header> :nth-child(3),
+    /* Links */
+    .Header> :nth-child(4),
+    /* LangDropDown */
+    .Header> :nth-child(5)
+
+    /* DropDownMenu */
+        {
+        display: none;
+    }
 }

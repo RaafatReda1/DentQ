@@ -1,16 +1,16 @@
 /* Main Container */
+
 .suggestionsParent {
   position: absolute;
   top: 100%;
-  left: 0;
+  inset-inline-start: 0;
+  /* RTL friendly */
   width: 100%;
-  /* Match search bar width exactly */
   background: white;
   border-radius: 0 0 12px 12px;
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
   padding: 8px 0;
   margin-top: 4px;
-  /* Tiny gap */
   border: 1px solid #f1f5f9;
   z-index: 1000;
   overflow: hidden;
@@ -21,6 +21,23 @@
   transform: translateY(0);
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+@media (max-width: 950px) {
+  .suggestionsParent {
+    position: fixed;
+    /* Break out of header constraints */
+    top: 60px;
+    /* Approx header height */
+    left: 0;
+    right: 0;
+    width: 100vw;
+    border-radius: 0 0 16px 16px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    margin-top: 0;
+    border-top: 1px solid #f1f5f9;
+  }
+}
+
 
 .hidden {
   opacity: 0;

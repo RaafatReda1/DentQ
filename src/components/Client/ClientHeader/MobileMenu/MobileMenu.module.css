@@ -1,18 +1,39 @@
+/* Custom Drawer Paper Styling */
+.drawerPaper {
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    /* Clean shadow handled by MUI, but we can enhance borders */
+    border-right: 1px solid #f1f5f9;
+    /* LTR */
+    border-left: 1px solid #f1f5f9;
+    /* RTL support handled by logic flipping border? No, simplest is just clean bg */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    outline: none;
+}
+
 /* Mobile Menu Container in Drawer */
 .mobileMenu {
     display: flex;
     flex-direction: column;
     height: 100%;
     background: #ffffff;
-    padding-top: 10px;
+    padding-bottom: 20px;
 }
 
-/* Header inside drawer (optional close button area) */
+/* Header inside drawer */
 .drawerHeader {
     display: flex;
-    justify-content: flex-end;
-    padding: 10px 16px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
     border-bottom: 1px solid #f1f5f9;
+}
+
+.drawerTitle {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #0f172a;
 }
 
 /* Mobile Only Trigger Button (Hamburger) */
@@ -28,8 +49,8 @@
     }
 }
 
-/* 
-  Re-using existing components inside mobile menu requires adapting their specific classes via props or hierarchy. 
+/*
+  Re-using existing components inside mobile menu requires adapting their specific classes via props or hierarchy.
   Here we define overrides or layout containers.
 */
 
@@ -41,11 +62,15 @@
     gap: 16px;
 }
 
+/* Links Section */
 .linksSection {
-    padding: 16px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
     gap: 16px;
+    flex: 1;
+    /* Pushes footer down */
+    overflow-y: auto;
 }
 
 /* Styling links inside mobile menu */
@@ -64,19 +89,81 @@
     color: #0f172a;
 }
 
-/* User Profile Section at bottom */
-.profileSection {
+/* Footer Section */
+.footerSection {
     margin-top: auto;
-    padding: 16px;
+    padding: 20px;
     background-color: #f8fafc;
     border-top: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.langWrapper,
+.profileWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sectionLabel {
+    font-size: 0.8rem;
+    color: #64748b;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 /* Utilities */
 .divider {
     height: 1px;
+    width: 100%;
     background-color: #f1f5f9;
-    margin: 0 16px;
+}
+
+/*
+   Dropdown Styling for Mobile Context
+   Used by DropDownMenu when menuIsOpened=true
+*/
+.dropdown {
+    width: 100%;
+    position: relative;
+}
+
+/* Ensure Button takes full width/looks good */
+.dropdown button {
+    width: 100%;
+    justify-content: flex-start;
+    padding: 10px 12px;
+    border-radius: 8px;
+    background: white;
+    border: 1px solid #e2e8f0;
+}
+
+/* Content opens UPWARDS for visibility */
+/* Content opens relative (Accordion style) to avoid overlap */
+.dropdownContent {
+    position: relative;
+    width: 100%;
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 8px 0;
+    margin-top: 8px;
+    border: 1px solid #e2e8f0;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Overrides for specific components when inside mobile */

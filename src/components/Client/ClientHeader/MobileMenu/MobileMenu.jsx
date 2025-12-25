@@ -6,69 +6,62 @@ import { useTranslation } from "react-i18next";
 
 // Import existing components
 import Links from "../Links/Links";
-import SearchBar from "../SearchBar/SearchBar";
 import LangDropDown from "../LangDropDown/LangDropDown";
-import DropDownMenu from "../DropDownMenu/DropDownMenu"; // User Profile logic
+import DropDownMenu from "../DropDownMenu/DropDownMenu";
 
 const MobileMenu = ({ menuIsOpened, setMenuIsOpened }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   return (
     <>
-      {/* Hamburger Icon - Only visible on mobile via CSS media queries */}
+      {/* SearchBar is now in Header, so we only need the Menu Trigger here */}
       <div className={styles.mobileTrigger}>
         <IconButton
           onClick={() => setMenuIsOpened(true)}
-          color="inherit" // Inherit white from header usually
+          color="inherit"
           aria-label={t('menu.open_menu')}
+          size="medium"
         >
-          <Menu size={24} />
+          <Menu size={28} />
         </IconButton>
       </div>
 
       <Drawer
         open={menuIsOpened}
         onClose={() => setMenuIsOpened(false)}
-        anchor="left" // Side drawer
+        anchor={i18n.dir() === 'rtl' || i18n.language.startsWith('ar') ? 'right' : 'left'}
         PaperProps={{
-          sx: { width: "80%", maxWidth: "300px" },
+          sx: { width: "85%", maxWidth: "350px" },
+          className: styles.drawerPaper // Use class for RTL support if needed
         }}
       >
         <div className={styles.mobileMenu}>
           {/* Header with Close Button */}
           <div className={styles.drawerHeader}>
+            <span className={styles.drawerTitle}>{t('menu.menu')}</span>
             <IconButton onClick={() => setMenuIsOpened(false)} aria-label={t('menu.close_menu')}>
               <X size={24} />
             </IconButton>
           </div>
 
-          {/* Search Bar Section */}
-          <div className={styles.section}>
-            <div className={styles.mobileSearchWrapper}>
-              {/* Pass mobile prop if SearchBar supports it to adjust width */}
-              <SearchBar menuIsOpened={true} />
-            </div>
-          </div>
-
-          {/* Navigation Links */}
-          {/* We wrap Links in a div to potentially override styles if Links component allows or via parent selector */}
+          {/* Links Section */}
           <div className={styles.linksSection}>
+            {/* Pass menuIsOpened prop to adapt styles if needed */}
             <Links menuIsOpened={true} />
           </div>
 
           <div className={styles.divider} />
 
-          {/* Language Switcher */}
-          <div className={styles.section}>
-            <span style={{ fontSize: '0.85rem', color: '#64748b', fontWeight: 600 }}>{t('menu.language')}</span>
-            <div className={styles.mobileLangWrapper}>
+          {/* Footer Actions: Language & Profile */}
+          <div className={styles.footerSection}>
+            <div className={styles.langWrapper}>
+              <span className={styles.sectionLabel}>{t('menu.language')}</span>
               <LangDropDown menuIsOpened={true} />
             </div>
-          </div>
 
-          {/* User Profile / Login (Bottom) */}
-          <div className={styles.profileSection}>
-            <DropDownMenu menuIsOpened={true} />
+            <div className={styles.profileWrapper}>
+              <DropDownMenu menuIsOpened={true} />
+            </div>
           </div>
         </div>
       </Drawer>
