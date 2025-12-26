@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { useTranslation } from "react-i18next";
 import styles from "./ProductsSlider.module.css";
-import { productsContext } from "../../../../../../utils/AppContexts";
+import { productsContext } from "../../../../../utils/AppContexts";
 import ProductCard from "../../ClientProductsPreview/ProductCard/ProductCard";
 
 const ProductsSlider = ({ category }) => {

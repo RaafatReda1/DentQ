@@ -24,13 +24,35 @@
     padding: 1rem;
     background: #f9fafb;
     border-radius: 8px;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+}
+
+.commentItem:hover {
+    border-color: #eee;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.avatarWrapper {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
 }
 
 .avatar {
-    width: 40px;
-    height: 40px;
+    width: 100%;
+    height: 100%;
     border-radius: 50%;
     object-fit: cover;
+}
+
+.avatarPlaceholder {
+    background: #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
 }
 
 .commentContent {
@@ -56,6 +78,7 @@
 .text {
     color: #555;
     line-height: 1.5;
+    white-space: pre-wrap;
 }
 
 .formContainer {
@@ -103,4 +126,68 @@
     background: #f3f4f6;
     border-radius: 8px;
     color: #666;
+}
+
+/* Edit/Delete Actions */
+.actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.actionBtn {
+    background: none;
+    border: none;
+    font-size: 0.85rem;
+    cursor: pointer;
+    color: #666;
+    padding: 0;
+    text-decoration: underline;
+}
+
+.actionBtn:hover {
+    color: #2563eb;
+}
+
+.deleteBtn:hover {
+    color: #ef4444;
+}
+
+.editForm {
+    margin-top: 0.5rem;
+}
+
+.editTextarea {
+    width: 100%;
+    min-height: 60px;
+    padding: 0.5rem;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+    font-family: inherit;
+}
+
+.editButtons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.saveBtn {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+.cancelBtn {
+    background: #f3f4f6;
+    color: #333;
+    border: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
 }

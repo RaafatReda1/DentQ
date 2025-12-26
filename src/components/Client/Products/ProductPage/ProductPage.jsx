@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { productsContext } from "../../../../utils/AppContexts";
@@ -11,6 +11,7 @@ import ProductsSlider from "./ProductsSlider/ProductsSlider";
 import ProductRatings from "./ClientInterActions/ProductRatings/ProductRatings";
 import ProductCommentSection from "./ClientInterActions/ProductCommentSection/ProductCommentSection";
 import { ArrowLeft } from "lucide-react";
+import { supabase } from "../../../../utils/SupabaseClient";
 
 const ProductPage = () => {
   const { t, i18n } = useTranslation();
@@ -18,13 +19,48 @@ const ProductPage = () => {
   const [products] = useContext(productsContext);
   const navigate = useNavigate();
 
-  const product = products.productsList.find(
+  const initialProduct = products.productsList.find(
     (product) => product.id === productId
   );
 
-  if (!product) return <div>{t("product_page.loading")}</div>; // Or some fallback
+  const [liveProduct, setLiveProduct] = useState(initialProduct);
 
-  const displayName = i18n.language === "ar" ? product.nameAr : product.nameEn;
+  // Update liveProduct if the initial product from context changes (e.g. initial load)
+  useEffect(() => {
+    if (initialProduct) {
+      setLiveProduct(initialProduct);
+    }
+  }, [initialProduct]);
+
+  // Real-time subscription
+  useEffect(() => {
+    if (!productId) return;
+
+    const channel = supabase
+      .channel(`product-${productId}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'Products',
+          filter: `id=eq.${productId}`,
+        },
+        (payload) => {
+          console.log('Real-time update received:', payload.new);
+          setLiveProduct(prev => ({ ...prev, ...payload.new }));
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [productId]);
+
+  if (!liveProduct) return <div>{t("product_page.loading")}</div>;
+
+  const displayName = i18n.language === "ar" ? liveProduct.nameAr : liveProduct.nameEn;
 
   return (
     <div className={styles.productPageContainer}>
@@ -36,20 +72,20 @@ const ProductPage = () => {
 
       <div className={styles.mainContent}>
         <div className={styles.leftColumn}>
-          <ProductDetails product={product} />
-          <SizesViewer product={product} />
-          <ProductRatings product={product} />
-          <ProductCommentSection product={product} />
+          <ProductDetails product={liveProduct} />
+          <SizesViewer product={liveProduct} />
+          <ProductRatings product={liveProduct} />
+          <ProductCommentSection product={liveProduct} />
         </div>
 
         <div className={styles.rightColumn}>
-          <ImgsViewer product={product} />
-          <ColorsViewer product={product} />
+          <ImgsViewer product={liveProduct} />
+          <ColorsViewer product={liveProduct} />
         </div>
       </div>
 
       <div className={styles.sliderSection}>
-        <ProductsSlider category={product.category_id} />
+        <ProductsSlider category={liveProduct.category_id} />
       </div>
     </div>
   );
