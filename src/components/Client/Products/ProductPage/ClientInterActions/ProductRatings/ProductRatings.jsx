@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Star } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { toast } from "react-hot-toast";
 import styles from "./ProductRatings.module.css";
 import { userContext } from "../../../../../../utils/AppContexts";
 import { supabase } from "../../../../../../utils/SupabaseClient";
@@ -23,7 +24,9 @@ const ProductRatings = ({ product }) => {
           .eq("client_id", user.id)
           .maybeSingle();
 
-        if (data) {
+        if (error) {
+          console.error("Error fetching user rating:", error);
+        } else if (data) {
           setUserRating(data.rating);
         }
       }
@@ -33,7 +36,7 @@ const ProductRatings = ({ product }) => {
 
   const handleRate = async (ratingValue) => {
     if (user.type !== "client" && user.type !== "admin") {
-      alert(t("reviews.signin_alert"));
+      toast.error(t("reviews.signin_alert"));
       return;
     }
 
@@ -52,7 +55,7 @@ const ProductRatings = ({ product }) => {
 
     if (error) {
       console.error("Error rating product:", error);
-      alert(t("reviews.save_rating_failed"));
+      toast.error(t("reviews.save_rating_failed"));
     } else {
       setUserRating(ratingValue);
       setShowAdviceModal(true); // Encouragement popup

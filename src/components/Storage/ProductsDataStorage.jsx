@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import FetchProducts  from '../../utils/FetchProducts'
-function ProductsDataStorage() {
+import FetchProducts from '../../utils/FetchProducts'
+function useProductsData() {
     const [products, setProducts] = useState({
         productsList: null, //stores a list of products' objects from the DB
         productsLoadingState: true //initiate a loading state for products
@@ -13,4 +13,4 @@ function ProductsDataStorage() {
 
 }
 
-export default ProductsDataStorage
+export default useProductsData
