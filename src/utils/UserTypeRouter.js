@@ -1,3 +1,4 @@
+import { GetCookie, MakeCookie } from "./GuestIdCookie";
 import { supabase } from "./SupabaseClient";
 
 const UserTypeRouter = async (user, setUser) => {
@@ -17,7 +18,8 @@ const UserTypeRouter = async (user, setUser) => {
 
     // 2️⃣ Handle no session (logged out)
     if (!session) {
-      setUser({ type: "guest", fullName: "", email: "", session: false });
+      if(!GetCookie()){MakeCookie(30)}//make a guest_id cookie that persists for 30 days
+      setUser({ type: "guest", fullName: "", email: "", session: false, guest_id: GetCookie() });//Storing the guest_id in the user object as a cookie
       return;
     }
 
