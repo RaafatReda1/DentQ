@@ -7,14 +7,16 @@ import useUserData from "./components/Storage/UserDataStorage.jsx";
 import useProductsData from "./components/Storage/ProductsDataStorage.jsx";
 // eslint-disable-next-line no-unused-vars
 import { userContext, productsContext } from "./utils/AppContexts";
+import { Toaster } from "react-hot-toast";
 function App() {
   const { user, setUser } = useUserData(); //I've stored the User state into UserDataStorag.jsx to arrange the code and not to make the code in app.jsx more complex and all states will compelete as this
   const { products, setProducts } = useProductsData();
 
-
   return (
     <userContext.Provider value={[user, setUser]}>
       <productsContext.Provider value={[products, setProducts]}>
+        <Toaster position="top-center" reverseOrder={false} />
+
         <Routes>
           {!user.loadingState && (
             <>

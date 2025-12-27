@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import styles from "./ImgsViewer.module.css";
 
 const ImgsViewer = ({ product }) => {
+  const { t } = useTranslation();
   const images = product?.images || [];
   const [selectedImg, setSelectedImg] = useState(images[0] || "");
 
@@ -22,7 +24,7 @@ const ImgsViewer = ({ product }) => {
           <img
             key={index}
             src={img}
-            alt={`Thumbnail ${index + 1}`}
+            alt={`${t("product_page.thumbnail")} ${index + 1}`}
             className={`${styles.thumbnail} ${selectedImg === img ? styles.selected : ""}`}
             onClick={() => setSelectedImg(img)}
           />
