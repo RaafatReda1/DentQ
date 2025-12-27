@@ -18,10 +18,6 @@ const ProductCard = ({ product, scrollToTop }) => {
   const renderProductPage = useRenderProductPage();
   // Destructure product data structure based on the schema
   const {
-    nameEn,
-    nameAr,
-    descriptionEn,
-    descriptionAr,
     price,
     original_price,
     images = [],

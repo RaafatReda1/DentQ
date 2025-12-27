@@ -3,8 +3,8 @@ import styles from "./ProductCommentSection.module.css";
 import { useProductComments } from "./hooks/useProductComments";
 import CommentItem from "./components/CommentItem";
 import CommentForm from "./components/CommentForm";
-
 const ProductCommentSection = ({ product }) => {
+  // Use the custom hook to access all business logic and state
   const {
     comments,
     loading,

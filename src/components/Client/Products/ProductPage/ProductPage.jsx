@@ -11,10 +11,11 @@ import ProductsSlider from "./ProductsSlider/ProductsSlider";
 import ProductRatings from "./ClientInterActions/ProductRatings/ProductRatings";
 import ProductCommentSection from "./ClientInterActions/ProductCommentSection/ProductCommentSection";
 import { ArrowLeft } from "lucide-react";
-import { supabase } from "../../../../utils/SupabaseClient";
+import useRealtimeSubscription from "../../../../utils/useRealtimeSubscription";
+import RenderProductNameOrDesc from "../../../../utils/RenderProductNameOrDesc";
 
 const ProductPage = () => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { productId } = useParams();
   const [products] = useContext(productsContext);
   const navigate = useNavigate();
@@ -32,35 +33,21 @@ const ProductPage = () => {
     }
   }, [initialProduct]);
 
-  // Real-time subscription
-  useEffect(() => {
-    if (!productId) return;
-
-    const channel = supabase
-      .channel(`product-${productId}`)
-      .on(
-        'postgres_changes',
-        {
-          event: 'UPDATE',
-          schema: 'public',
-          table: 'Products',
-          filter: `id=eq.${productId}`,
-        },
-        (payload) => {
-          console.log('Real-time update received:', payload.new);
-          setLiveProduct(prev => ({ ...prev, ...payload.new }));
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [productId]);
+  // Real-time subscription to Products table
+  useRealtimeSubscription(
+    `product-${productId}`,//channel name which can be anything
+    'Products',//table we're listening to
+    `id=eq.${productId}`,//filter for which product we need to listen
+    (payload) => {
+      console.log('Real-time update received:', payload.new);
+      setLiveProduct(prev => ({ ...prev, ...payload.new }));
+    },
+    'UPDATE'
+  );
 
   if (!liveProduct) return <div>{t("product_page.loading")}</div>;
 
-  const displayName = i18n.language === "ar" ? liveProduct.nameAr : liveProduct.nameEn;
+
 
   return (
     <div className={styles.productPageContainer}>
@@ -68,7 +55,7 @@ const ProductPage = () => {
         <ArrowLeft /> {t("product_page.back")}
       </button>
 
-      <h1 className={styles.productName}>{displayName}</h1>
+      <h1 className={styles.productName}>{RenderProductNameOrDesc(liveProduct, "name")}</h1>
 
       <div className={styles.mainContent}>
         <div className={styles.leftColumn}>

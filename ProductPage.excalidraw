@@ -2807,6 +2807,254 @@
       "originalText": "jsonb feild is stored in products field as (ClientId, ClientName) we should link the 2 tables for this purpose",
       "autoResize": true,
       "lineHeight": 1.25
+    },
+    {
+      "id": "ZzeekI461oTCb2LOzz1R3",
+      "type": "freedraw",
+      "x": -840.3528258459887,
+      "y": -459.9579315373744,
+      "width": 3796.0011590843237,
+      "height": 2891.2716230585715,
+      "angle": 0,
+      "strokeColor": "#2f9e44",
+      "backgroundColor": "#fa5252",
+      "fillStyle": "solid",
+      "strokeWidth": 4,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "index": "b0M",
+      "roundness": null,
+      "seed": 1014976406,
+      "version": 36,
+      "versionNonce": 1090713110,
+      "isDeleted": false,
+      "boundElements": null,
+      "updated": 1766844736243,
+      "link": null,
+      "locked": false,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          54.73473400674902,
+          193.18072056408778
+        ],
+        [
+          209.27931045801915,
+          779.1622887368849
+        ],
+        [
+          370.26314600463,
+          1365.1440042948752
+        ],
+        [
+          492.61083743842346,
+          1925.367799160343
+        ],
+        [
+          569.8831256640588,
+          2350.365973942109
+        ],
+        [
+          602.0800106815354,
+          2511.34980948872
+        ],
+        [
+          602.0800106815354,
+          2524.228032909015
+        ],
+        [
+          602.0800106815354,
+          2530.667586774742
+        ],
+        [
+          602.0800106815354,
+          2517.788773813674
+        ],
+        [
+          589.2011977204675,
+          2504.909960852606
+        ],
+        [
+          589.2011977204675,
+          2492.0314426619248
+        ],
+        [
+          589.2011977204675,
+          2479.1529244712433
+        ],
+        [
+          582.7619386251267,
+          2472.713370605516
+        ],
+        [
+          582.7619386251267,
+          2459.834557644448
+        ],
+        [
+          582.7619386251267,
+          2440.5164855880394
+        ],
+        [
+          582.7619386251267,
+          2427.6376726269714
+        ],
+        [
+          582.7619386251267,
+          2421.1984135316306
+        ],
+        [
+          582.7619386251267,
+          2401.8803414752215
+        ],
+        [
+          582.7619386251267,
+          2395.4410823798808
+        ],
+        [
+          582.7619386251267,
+          2389.0015285141535
+        ],
+        [
+          595.6407515861947,
+          2376.123010323472
+        ],
+        [
+          743.7457741717376,
+          2260.21457798502
+        ],
+        [
+          962.6841206579616,
+          2079.9123756116132
+        ],
+        [
+          1844.8764709278107,
+          1429.5374795594425
+        ],
+        [
+          2514.56943903639,
+          869.3132425383947
+        ],
+        [
+          3055.475456615836,
+          367.0433690717666
+        ],
+        [
+          3435.3973438782837,
+          6.439332787937474
+        ],
+        [
+          3609.259992385963,
+          -180.30205498821294
+        ],
+        [
+          3750.926640187325,
+          -334.8466314394831
+        ],
+        [
+          3783.1232304344153,
+          -347.72522332276117
+        ],
+        [
+          3783.1232304344153,
+          -360.60403628382926
+        ],
+        [
+          3789.5621947593695,
+          -360.60403628382926
+        ],
+        [
+          3796.0011590843237,
+          -360.60403628382926
+        ],
+        [
+          3796.0011590843237,
+          -360.60403628382926
+        ]
+      ],
+      "pressures": [],
+      "simulatePressure": true,
+      "lastCommittedPoint": [
+        3796.0011590843237,
+        -360.60403628382926
+      ]
+    },
+    {
+      "id": "C4iN_M7EPftjwpVT7Fp3O",
+      "type": "rectangle",
+      "x": -2031.6338868627986,
+      "y": -1412.9828442177395,
+      "width": 6796.742029078603,
+      "height": 1010.9793744915801,
+      "angle": 0,
+      "strokeColor": "#2f9e44",
+      "backgroundColor": "#ffec99",
+      "fillStyle": "solid",
+      "strokeWidth": 4,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "index": "b0N",
+      "roundness": {
+        "type": 3
+      },
+      "seed": 1361659146,
+      "version": 108,
+      "versionNonce": 452832918,
+      "isDeleted": false,
+      "boundElements": [
+        {
+          "type": "text",
+          "id": "6bi3348maDq27k9QPxRxL"
+        }
+      ],
+      "updated": 1766844750893,
+      "link": null,
+      "locked": false
+    },
+    {
+      "id": "6bi3348maDq27k9QPxRxL",
+      "type": "text",
+      "x": 523.3653625397842,
+      "y": -929.9931569719495,
+      "width": 1686.7435302734375,
+      "height": 45,
+      "angle": 0,
+      "strokeColor": "#2f9e44",
+      "backgroundColor": "#ffec99",
+      "fillStyle": "solid",
+      "strokeWidth": 4,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "index": "b0O",
+      "roundness": null,
+      "seed": 1817124618,
+      "version": 104,
+      "versionNonce": 1112407306,
+      "isDeleted": false,
+      "boundElements": null,
+      "updated": 1766844787828,
+      "link": null,
+      "locked": false,
+      "text": "Done but we need to make the userName in each comment item to be a link leading to his profile",
+      "fontSize": 36,
+      "fontFamily": 5,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "C4iN_M7EPftjwpVT7Fp3O",
+      "originalText": "Done but we need to make the userName in each comment item to be a link leading to his profile",
+      "autoResize": true,
+      "lineHeight": 1.25
     }
   ],
   "appState": {
