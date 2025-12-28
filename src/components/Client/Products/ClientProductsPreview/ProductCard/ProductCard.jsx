@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import styles from "./ProductCard.module.css";
 import {
@@ -11,13 +12,22 @@ import {
 import { useTranslation } from "react-i18next";
 import { useRenderProductPage } from "../../../../../utils/RenderProductPage";
 import RenderProductNameOrDesc from "../../../../../utils/RenderProductNameOrDesc";
+import { useCartActions } from "../../../../../utils/useCartActions";
 
 const ProductCard = ({ product, scrollToTop }) => {
   const [isAdded, setIsAdded] = useState(false);
   const { t, i18n } = useTranslation();
   const renderProductPage = useRenderProductPage();
+  const { addToCart } = useCartActions();
   // Destructure product data structure based on the schema
   const {
+    id,
+    nameEn,
+    nameAr,
+    descriptionEn,
+    descriptionAr,
+    fullDescriptionEn,
+    fullDescriptionAr,
     price,
     original_price,
     images = [],
@@ -62,8 +72,8 @@ const ProductCard = ({ product, scrollToTop }) => {
           {is_trending
             ? t("product.trending")
             : is_featured
-            ? t("product.featured")
-            : t("product.new_arrival")}
+              ? t("product.featured")
+              : t("product.new_arrival")}
         </span>
         {discount > 0 && (
           <span className={styles.discountBadge}>
@@ -95,7 +105,12 @@ const ProductCard = ({ product, scrollToTop }) => {
           <button
             className={`${styles.actionButton} ${isAdded ? styles.added : ""}`}
             aria-label={t("product.add_to_cart")}
-            onClick={handleAddToCart}
+            onClick={async (e) => {
+              const success = await addToCart(product);
+              if (success) {
+                handleAddToCart(e);
+              }
+            }}
           >
             {isAdded ? <Check size={20} /> : <ShoppingCart size={20} />}
           </button>
@@ -162,10 +177,14 @@ const ProductCard = ({ product, scrollToTop }) => {
 
       {/* Bottom Label (Name repeated or extra info - tailored to the design request which had a bottom subCard) */}
       <div
-        className={`${styles.subCard} ${styles.bottomBar} ${
-          isAdded ? styles.added : ""
-        }`}
-        onClick={handleAddToCart}
+        className={`${styles.subCard} ${styles.bottomBar} ${isAdded ? styles.added : ""
+          }`}
+        onClick={async (e) => {
+          const success = await addToCart(product);
+          if (success) {
+            handleAddToCart(e);
+          }
+        }}
       >
         <span className={styles.addToCartText}>
           {isAdded ? t("product.added_to_cart") : t("product.add_to_cart")}

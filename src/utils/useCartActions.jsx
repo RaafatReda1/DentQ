@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import toast from "react-hot-toast";
-import { supabase } from "../supabaseClient";
-import { UserContext } from "../contexts/UserContext"; // افترض عندك UserContext
+import { supabase } from "./SupabaseClient";
+import { userContext } from "./AppContexts"; // افترض عندك UserContext
 
 /* =========================
    Helper: Compare Variants
@@ -17,7 +17,8 @@ const isSameVariant = (item, product) => {
    Hook: Get Owner Info (client_id / guest_id)
 ========================= */
 const useOwnerInfo = () => {
-  const { user } = useContext(UserContext);
+  const [user] = useContext(userContext);
+  console.log("DEBUG: UserContext value:", user); // Debug log
 
   if (!user) return { ownerId: null, ownerField: null };
 
@@ -34,6 +35,7 @@ export const useCartActions = () => {
   const { ownerId, ownerField } = useOwnerInfo();
 
   const fetchCart = async () => {
+    // ... code ...
     if (!ownerId || !ownerField) return null;
 
     const { data, error } = await supabase
@@ -52,7 +54,11 @@ export const useCartActions = () => {
   };
 
   const addToCart = async (currentProduct) => {
-    if (!ownerId || !ownerField) return;
+    console.log("DEBUG: addToCart called. Owner:", { ownerId, ownerField }); // Debug log
+    if (!ownerId || !ownerField) {
+      console.error("DEBUG: Missing owner info, cannot add to cart.");
+      return false;
+    }
 
     const productToAdd = { ...currentProduct, qty: currentProduct.qty ?? 1 };
     let ownerCart = await fetchCart();
@@ -66,11 +72,11 @@ export const useCartActions = () => {
       if (error) {
         console.error("Error creating cart:", error);
         toast.error("Failed to add to cart");
-        return;
+        return false;
       }
 
       toast.success("Added to cart");
-      return;
+      return true;
     }
 
     const items = [...ownerCart.items];
@@ -87,10 +93,11 @@ export const useCartActions = () => {
     if (error) {
       console.error("Error updating cart:", error);
       toast.error("Failed to update cart");
-      return;
+      return false;
     }
 
     toast.success("Cart updated successfully");
+    return true;
   };
 
   const decreaseCartQty = async (product) => {
@@ -114,7 +121,7 @@ export const useCartActions = () => {
     if (error) {
       console.error("Error decreasing product qty:", error);
       toast.error("Failed to update cart");
-      return;
+      return 0;
     }
 
     toast.success("Cart updated successfully");
