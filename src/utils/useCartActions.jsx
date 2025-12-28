@@ -7,10 +7,11 @@ import { userContext } from "./AppContexts"; // افترض عندك UserContext
    Helper: Compare Variants
 ========================= */
 const isSameVariant = (item, product) => {
-  return Object.keys(product).every((key) => {
-    if (key === "qty") return true;
-    return item[key] === product[key];
-  });
+  return (
+    item.id === product.id &&
+    item.color === product.color &&
+    item.size === product.size
+  );
 };
 
 /* =========================
@@ -60,7 +61,15 @@ export const useCartActions = () => {
       return false;
     }
 
-    const productToAdd = { ...currentProduct, qty: currentProduct.qty ?? 1 };
+    const { id, color, size, qty } = currentProduct;
+    // Create a minimal object with only necessary identifying fields
+    const productToAdd = {
+      id,
+      qty: qty ?? 1,
+      ...(color !== undefined && { color }),
+      ...(size !== undefined && { size }),
+    };
+
     let ownerCart = await fetchCart();
 
     if (!ownerCart) {
