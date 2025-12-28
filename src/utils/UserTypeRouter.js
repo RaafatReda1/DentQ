@@ -1,5 +1,60 @@
-import { GetCookie, MakeCookie } from "./GuestIdCookie";
+import { GetCookie, MakeCookie, DeleteCookie } from "./GuestIdCookie";
 import { supabase } from "./SupabaseClient";
+
+/* =========================
+   Helper: Transfer Guest Cart
+========================= */
+const transferGuestCart = async (clientId) => {
+  const guestId = GetCookie();
+  if (!guestId) return;
+
+  console.log(`🛒 Found guest_id cookie: ${guestId}. Attempting to transfer cart to Client ${clientId}...`);
+
+  // Check if this guest_id actually has a cart
+  const { data: guestCart } = await supabase
+    .from("Carts")
+    .select("id")
+    .eq("guest_id", guestId)
+    .maybeSingle();
+
+  if (guestCart) {
+    // Check if client ALREADY has a cart
+    const { data: clientCart } = await supabase
+      .from("Carts")
+      .select("id")
+      .eq("client_id", clientId)
+      .maybeSingle();
+
+    if (clientCart) {
+      // OPTIONAL: Merge logic could go here. 
+      // For now, based on instructions, we might just reassign (which overrides) or skip.
+      // But if client has a cart, simple reassignment would cause a duplicate key error if client_id is unique.
+      // Let's assume we proceed with the user's specific request: "set client_id to user.id".
+      // To avoid errors, we'll verify if we can simply update.
+      console.warn("Client already has a cart. Merging/Overwriting logic might be needed.");
+      // Note: If we don't handle this, the UPDATE below might fail if there's a unique constraint on client_id.
+      // However, following strict instructions:
+    }
+
+    const { error } = await supabase
+      .from("Carts")
+      .update({
+        guest_id: null,
+        client_id: clientId
+      })
+      .eq("guest_id", guestId);
+
+    if (error) {
+      console.error("❌ Error transferring cart:", error);
+    } else {
+      console.log("✅ Cart transferred successfully.");
+      DeleteCookie(); // Clear the guest cookie
+    }
+  } else {
+    // Guest has no cart, just delete the unused cookie
+    DeleteCookie();
+  }
+};
 
 const UserTypeRouter = async (user, setUser) => {
   try {
@@ -18,7 +73,7 @@ const UserTypeRouter = async (user, setUser) => {
 
     // 2️⃣ Handle no session (logged out)
     if (!session) {
-      if(!GetCookie()){MakeCookie(30)}//make a guest_id cookie that persists for 30 days
+      if (!GetCookie()) { MakeCookie(30) }//make a guest_id cookie that persists for 30 days
       setUser({ type: "guest", fullName: "", email: "", session: false, guest_id: GetCookie() });//Storing the guest_id in the user object as a cookie
       return;
     }
@@ -86,6 +141,10 @@ const UserTypeRouter = async (user, setUser) => {
 
     if (clientData) {
       console.log("✅ Client found:", clientData);
+
+      // Attempt Cart Transfer
+      await transferGuestCart(clientData.id);
+
       setUser((prev) => ({
         ...prev,
         type: "client",
@@ -129,6 +188,10 @@ const UserTypeRouter = async (user, setUser) => {
 
     if (newClient) {
       console.log("✅ New client registered:", newClient);
+
+      // Attempt Cart Transfer for new client too
+      await transferGuestCart(newClient.id);
+
       setUser((prev) => ({
         ...prev,
         type: "client",

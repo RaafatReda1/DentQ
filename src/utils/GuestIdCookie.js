@@ -7,7 +7,7 @@ export const MakeCookie = (days) => {
 
 
 export const GetCookie = () => {
-  const nameEQ = "guest_id"+ "=";
+  const nameEQ = "guest_id" + "=";
   const ca = document.cookie.split(";"); // نفصل كل الكوكيز
   for (let i = 0; i < ca.length; i++) {
     let c = ca[i].trim();
@@ -16,4 +16,8 @@ export const GetCookie = () => {
     }
   }
   return null; // لو مفيش كوكي باسم ده
+};
+
+export const DeleteCookie = () => {
+  document.cookie = "guest_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 };
