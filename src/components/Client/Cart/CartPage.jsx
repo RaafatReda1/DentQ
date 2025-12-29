@@ -1,22 +1,15 @@
-import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft, ShoppingBag } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import styles from './CartPage.module.css';
 import { useCartData } from './hooks/useCartData';
 import CartItem from './CartItem/CartItem';
-
+import { useFormatPrice } from '../../../utils/Hooks/useFormatPrice';
 const CartPage = () => {
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const { cartItems, loading, totalPrice, refreshCart } = useCartData();
-
-    const formatPrice = (price) => {
-        return new Intl.NumberFormat(i18n.language === 'ar' ? 'ar-EG' : 'en-US', {
-            style: 'currency',
-            currency: 'USD',
-        }).format(price);
-    };
+    const formatedTotalPrice = useFormatPrice(totalPrice);
 
     return (
         <div className={styles.pageContainer}>
@@ -54,7 +47,7 @@ const CartPage = () => {
                         <div className={styles.summarySection}>
                             <div className={styles.totalRow}>
                                 <span>{t("cart.total") || "Total"}:</span>
-                                <span className={styles.totalValue}>{formatPrice(totalPrice)}</span>
+                                <span className={styles.totalValue}>{formatedTotalPrice}</span>
                             </div>
 
                             <button className={styles.checkoutBtn}>

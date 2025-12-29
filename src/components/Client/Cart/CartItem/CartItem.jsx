@@ -4,23 +4,16 @@ import RenderProductNameOrDesc from '../../../../utils/RenderProductNameOrDesc';
 import styles from './CartItem.module.css';
 import CartActions from '../CartActions/CartActions';
 import { useTranslation } from 'react-i18next';
+import { useFormatPrice } from '../../../../utils/Hooks/useFormatPrice';
 
 const CartItem = ({ item, onUpdate }) => {
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     const product = item.product;
-
+    const formattedPrice = useFormatPrice(product.price);
+    const formattedSubtotal = useFormatPrice(product.price * item.qty);
     // Safety check in case product was deleted but still in cart
     if (!product) return null;
-
     const mainImage = product.images && product.images.length > 0 ? product.images[0] : null;
-
-    const formatPrice = (price) => {
-        return new Intl.NumberFormat(i18n.language === 'ar' ? 'ar-EG' : 'en-US', {
-            style: 'currency',
-            currency: 'USD',
-        }).format(price);
-    };
-
     return (
         <div className={styles.itemContainer}>
             <div className={styles.productInfo}>
@@ -50,7 +43,7 @@ const CartItem = ({ item, onUpdate }) => {
                     </div>
 
                     <div className={styles.price}>
-                        {formatPrice(product.price)}
+                        {formattedPrice}
                     </div>
                 </div>
             </div>
@@ -59,7 +52,7 @@ const CartItem = ({ item, onUpdate }) => {
                 {/* Subtotal for this line item */}
                 <div className={styles.subtotal}>
                     <span className={styles.subtotalLabel}>{t("cart.subtotal") || "Subtotal"}:</span>
-                    <span className={styles.subtotalValue}>{formatPrice(product.price * item.qty)}</span>
+                    <span className={styles.subtotalValue}>{formattedSubtotal}</span>
                 </div>
 
                 <CartActions item={item} onUpdate={onUpdate} />

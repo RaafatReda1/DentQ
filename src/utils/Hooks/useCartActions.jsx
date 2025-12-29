@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import toast from "react-hot-toast";
-import { supabase } from "./SupabaseClient";
-import { userContext } from "./AppContexts"; // افترض عندك UserContext
+import { supabase } from "../SupabaseClient";
+import { userContext } from "../AppContexts"; // افترض عندك UserContext
 
 /* =========================
    Helper: Compare Variants
@@ -23,8 +23,10 @@ const useOwnerInfo = () => {
 
   if (!user) return { ownerId: null, ownerField: null };
 
-  if (user.type === "client") return { ownerId: user.id, ownerField: "client_id" };
-  if (user.type === "guest") return { ownerId: user.guest_id, ownerField: "guest_id" };
+  if (user.type === "client")
+    return { ownerId: user.id, ownerField: "client_id" };
+  if (user.type === "guest")
+    return { ownerId: user.guest_id, ownerField: "guest_id" };
 
   return { ownerId: null, ownerField: null };
 };
@@ -92,12 +94,18 @@ export const useCartActions = () => {
     const index = items.findIndex((item) => isSameVariant(item, productToAdd));
 
     if (index !== -1) {
-      items[index] = { ...items[index], qty: items[index].qty + productToAdd.qty };
+      items[index] = {
+        ...items[index],
+        qty: items[index].qty + productToAdd.qty,
+      };
     } else {
       items.push(productToAdd);
     }
 
-    const { error } = await supabase.from("Carts").update({ items }).eq("id", ownerCart.id);
+    const { error } = await supabase
+      .from("Carts")
+      .update({ items })
+      .eq("id", ownerCart.id);
 
     if (error) {
       console.error("Error updating cart:", error);
@@ -125,7 +133,10 @@ export const useCartActions = () => {
       items.splice(index, 1);
     }
 
-    const { error } = await supabase.from("Carts").update({ items }).eq("id", ownerCart.id);
+    const { error } = await supabase
+      .from("Carts")
+      .update({ items })
+      .eq("id", ownerCart.id);
 
     if (error) {
       console.error("Error decreasing product qty:", error);
@@ -148,7 +159,10 @@ export const useCartActions = () => {
 
     items.splice(index, 1);
 
-    const { error } = await supabase.from("Carts").update({ items }).eq("id", ownerCart.id);
+    const { error } = await supabase
+      .from("Carts")
+      .update({ items })
+      .eq("id", ownerCart.id);
 
     if (error) {
       console.error("Error deleting product from cart:", error);
@@ -161,7 +175,6 @@ export const useCartActions = () => {
 
   return { addToCart, decreaseCartQty, deleteProductFromCart, fetchCart };
 };
-
 
 // 🔹 How to Use in Components
 // 1️⃣ Add to cart button (default qty 1)

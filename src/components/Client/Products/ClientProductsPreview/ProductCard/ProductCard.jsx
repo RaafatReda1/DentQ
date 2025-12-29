@@ -12,22 +12,18 @@ import {
 import { useTranslation } from "react-i18next";
 import { useRenderProductPage } from "../../../../../utils/RenderProductPage";
 import RenderProductNameOrDesc from "../../../../../utils/RenderProductNameOrDesc";
-import { useCartActions } from "../../../../../utils/useCartActions";
+import { useCartActions } from "../../../../../utils/Hooks/useCartActions";
+import { useFormatPrice } from "../../../../../utils/Hooks/useFormatPrice";
 
 const ProductCard = ({ product, scrollToTop }) => {
   const [isAdded, setIsAdded] = useState(false);
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const renderProductPage = useRenderProductPage();
   const { addToCart } = useCartActions();
+  const formattedPrice = useFormatPrice(product.price);
+  const formattedOriginalPrice = useFormatPrice(product.original_price);
   // Destructure product data structure based on the schema
   const {
-    id,
-    nameEn,
-    nameAr,
-    descriptionEn,
-    descriptionAr,
-    fullDescriptionEn,
-    fullDescriptionAr,
     price,
     original_price,
     images = [],
@@ -55,14 +51,7 @@ const ProductCard = ({ product, scrollToTop }) => {
   };
 
   // Format price
-  const formatPrice = (amount) => {
-    const num = Number(amount);
-    const locale = i18n.language === "ar" ? "ar-EG" : "en-US";
-    return new Intl.NumberFormat(locale, {
-      style: "currency",
-      currency: "EGP", // Assuming EGP based on your previous code
-    }).format(isNaN(num) ? 0 : num);
-  };
+
 
   return (
     <div className={styles.card}>
@@ -72,12 +61,12 @@ const ProductCard = ({ product, scrollToTop }) => {
           {is_trending
             ? t("product.trending")
             : is_featured
-              ? t("product.featured")
-              : t("product.new_arrival")}
+            ? t("product.featured")
+            : t("product.new_arrival")}
         </span>
         {discount > 0 && (
           <span className={styles.discountBadge}>
-            {t("product.discount")} -{discount}%
+            {t("product.discount")} {discount}%
           </span>
         )}
       </div>
@@ -159,16 +148,14 @@ const ProductCard = ({ product, scrollToTop }) => {
 
           <p className={styles.productDescription}>
             {RenderProductNameOrDesc(product, "desc")?.substring(0, 60)}
-            {RenderProductNameOrDesc(product, "desc")?.length > 60
-              ? "..."
-              : ""}
+            {RenderProductNameOrDesc(product, "desc")?.length > 60 ? "..." : ""}
           </p>
 
           <div className={styles.priceRow}>
-            <span className={styles.currentPrice}>{formatPrice(price)}</span>
+            <span className={styles.currentPrice}>{formattedPrice}</span>
             {original_price > price && (
               <span className={styles.originalPrice}>
-                {formatPrice(original_price)}
+                {formattedOriginalPrice}
               </span>
             )}
           </div>
@@ -177,8 +164,9 @@ const ProductCard = ({ product, scrollToTop }) => {
 
       {/* Bottom Label (Name repeated or extra info - tailored to the design request which had a bottom subCard) */}
       <div
-        className={`${styles.subCard} ${styles.bottomBar} ${isAdded ? styles.added : ""
-          }`}
+        className={`${styles.subCard} ${styles.bottomBar} ${
+          isAdded ? styles.added : ""
+        }`}
         onClick={async (e) => {
           const success = await addToCart(product);
           if (success) {
