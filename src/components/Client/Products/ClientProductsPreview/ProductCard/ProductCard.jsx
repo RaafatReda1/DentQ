@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import styles from "./ProductCard.module.css";
 import {
@@ -10,7 +9,7 @@ import {
   Check,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { useRenderProductPage } from "../../../../../utils/RenderProductPage";
+import { useRenderProductPage } from "../../../../../utils/Hooks/useRenderProductPage";
 import RenderProductNameOrDesc from "../../../../../utils/RenderProductNameOrDesc";
 import { useCartActions } from "../../../../../utils/Hooks/useCartActions";
 import { useFormatPrice } from "../../../../../utils/Hooks/useFormatPrice";
@@ -20,8 +19,7 @@ const ProductCard = ({ product, scrollToTop }) => {
   const { t } = useTranslation();
   const renderProductPage = useRenderProductPage();
   const { addToCart } = useCartActions();
-  const formattedPrice = useFormatPrice(product.price);
-  const formattedOriginalPrice = useFormatPrice(product.original_price);
+  const formatPrice = useFormatPrice(); // Use the custom hook that gives us an arrow function that needs a name and a number parameter 
   // Destructure product data structure based on the schema
   const {
     price,
@@ -152,10 +150,10 @@ const ProductCard = ({ product, scrollToTop }) => {
           </p>
 
           <div className={styles.priceRow}>
-            <span className={styles.currentPrice}>{formattedPrice}</span>
+            <span className={styles.currentPrice}>{formatPrice(price)}</span>
             {original_price > price && (
               <span className={styles.originalPrice}>
-                {formattedOriginalPrice}
+                {formatPrice(original_price)}
               </span>
             )}
           </div>

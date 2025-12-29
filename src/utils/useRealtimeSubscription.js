@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { supabase } from "./SupabaseClient";
-const useRealtimeSubscription = (channelName, table, filter, callback, event = '*', schema = 'public') => {
+const useRealtimeSubscription = (channelName /* name it anyhting */, table /*use the table name u want to listen*/, filter /* optional */, callback, event = '*', schema = 'public') => {
     useEffect(() => {
         if (!channelName || !table) return;
 
@@ -29,3 +29,17 @@ const useRealtimeSubscription = (channelName, table, filter, callback, event = '
 };
 
 export default useRealtimeSubscription;
+
+
+// examble
+//   // Real-time subscription to Products table
+//   useRealtimeSubscription(
+//     `product-${productId}`,//channel name which can be anything
+//     'Products',//table we're listening to
+//     `id=eq.${productId}`,//filter for which product we need to listen
+//     (payload) => {
+//       console.log('Real-time update received:', payload.new);
+//       setLiveProduct(prev => ({ ...prev, ...payload.new }));
+//     },
+//     'UPDATE'
+//   );

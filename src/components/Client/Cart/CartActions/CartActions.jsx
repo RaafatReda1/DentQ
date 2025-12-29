@@ -2,17 +2,19 @@ import React, { useState } from "react";
 import { Plus, Minus, X } from "lucide-react";
 import styles from "./CartActions.module.css";
 import { useCartActions } from "../../../../utils/Hooks/useCartActions";
+import { confirmAlert } from "react-confirm-alert";
+import { useTranslation } from "react-i18next";
 
 const CartActions = ({ item, onUpdate }) => {
   const { addToCart, decreaseCartQty, deleteProductFromCart } =
     useCartActions();
   const [loading, setLoading] = useState(false);
-
+  const { t } = useTranslation();
   const handleIncrease = async () => {
     setLoading(true);
     // Pass only the necessary payload for the variant
     // (addToCart internals will handle filtering, but we pass full item to match signature)
-    await addToCart(item); // item has { id, color, size, qty... }
+    await addToCart(item, true); // item has { id, color, size, qty... }
     setLoading(false);
     if (onUpdate) onUpdate();
   };
@@ -25,9 +27,26 @@ const CartActions = ({ item, onUpdate }) => {
   };
 
   const handleDelete = async () => {
-    if (!window.confirm("Remove this item?")) return;
     setLoading(true);
-    await deleteProductFromCart(item);
+    confirmAlert({
+      //this's a preformed component in "react-confirm-alert"
+      title: t("product.delete_title"),
+      message: t("product.delete_msg"),
+      buttons: [
+        {
+          label: t("product.yes"),
+          onClick: async () => {
+            await deleteProductFromCart(item);
+            setLoading(false);
+            if (onUpdate) onUpdate();
+          },
+        },
+        {
+          label: t("product.no"),
+          onClick: () => console.log("Delete cart item is Cancelled"),
+        },
+      ],
+    });
     setLoading(false);
     if (onUpdate) onUpdate();
   };

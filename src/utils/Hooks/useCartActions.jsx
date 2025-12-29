@@ -56,8 +56,7 @@ export const useCartActions = () => {
     return data;
   };
 
-  const addToCart = async (currentProduct) => {
-    console.log("DEBUG: addToCart called. Owner:", { ownerId, ownerField }); // Debug log
+  const addToCart = async (currentProduct, singleIncrease) => {//if we passed singleIncrease with true it willonly add 1 to that specific product
     if (!ownerId || !ownerField) {
       console.error("DEBUG: Missing owner info, cannot add to cart.");
       return false;
@@ -67,7 +66,7 @@ export const useCartActions = () => {
     // Create a minimal object with only necessary identifying fields
     const productToAdd = {
       id,
-      qty: qty ?? 1,
+      qty: (qty && !singleIncrease) ? qty : 1,
       ...(color !== undefined && { color }),
       ...(size !== undefined && { size }),
     };
@@ -128,7 +127,7 @@ export const useCartActions = () => {
     if (index === -1) return;
 
     if (items[index].qty > 1) {
-      items[index].qty -= product.qty ?? 1;
+      items[index].qty -= 1;
     } else {
       items.splice(index, 1);
     }

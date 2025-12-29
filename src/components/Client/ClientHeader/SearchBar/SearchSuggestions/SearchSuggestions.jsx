@@ -4,7 +4,7 @@ import { productsContext } from "../../../../../utils/AppContexts";
 import FindSearchSuggestionsFromProducts from "../../../../../utils/FindSearchSuggestionsFromProducts";
 import { Search } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { useRenderProductPage } from "../../../../../utils/RenderProductPage";
+import { useRenderProductPage } from "../../../../../utils/Hooks/useRenderProductPage";
 function SearchSuggestions({ searchQuery }) {
   const [suggestionsIsOpen, setSuggestionsIsOpen] = useState(false);
   const [suggestions, setSuggestions] = useState([]);

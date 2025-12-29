@@ -9,8 +9,8 @@ const CartPage = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { cartItems, loading, totalPrice, refreshCart } = useCartData();
-    const formatedTotalPrice = useFormatPrice(totalPrice);
-
+    const formatPrice = useFormatPrice(); // Use the custom hook that gives us an arrow function that needs a name and a number parameter
+    
     return (
         <div className={styles.pageContainer}>
             <div className={styles.header}>
@@ -47,10 +47,9 @@ const CartPage = () => {
                         <div className={styles.summarySection}>
                             <div className={styles.totalRow}>
                                 <span>{t("cart.total") || "Total"}:</span>
-                                <span className={styles.totalValue}>{formatedTotalPrice}</span>
+                                <span className={styles.totalValue}>{formatPrice(totalPrice)}</span>
                             </div>
-
-                            <button className={styles.checkoutBtn}>
+                            <button className={styles.checkoutBtn} onClick={() => navigate('/checkout')}>
                                 {t("cart.checkout") || "Proceed to Checkout"}
                             </button>
                         </div>

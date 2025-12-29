@@ -9,10 +9,10 @@ import { useFormatPrice } from '../../../../utils/Hooks/useFormatPrice';
 const CartItem = ({ item, onUpdate }) => {
     const { t } = useTranslation();
     const product = item.product;
-    const formattedPrice = useFormatPrice(product.price);
-    const formattedSubtotal = useFormatPrice(product.price * item.qty);
+    const formatPrice = useFormatPrice(); // Use the custom hook that gives us an arrow function that needs a name and a number parameter
     // Safety check in case product was deleted but still in cart
     if (!product) return null;
+    if(item.qty === 0) return null;
     const mainImage = product.images && product.images.length > 0 ? product.images[0] : null;
     return (
         <div className={styles.itemContainer}>
@@ -43,7 +43,7 @@ const CartItem = ({ item, onUpdate }) => {
                     </div>
 
                     <div className={styles.price}>
-                        {formattedPrice}
+                        {formatPrice(product.price)}
                     </div>
                 </div>
             </div>
@@ -52,7 +52,7 @@ const CartItem = ({ item, onUpdate }) => {
                 {/* Subtotal for this line item */}
                 <div className={styles.subtotal}>
                     <span className={styles.subtotalLabel}>{t("cart.subtotal") || "Subtotal"}:</span>
-                    <span className={styles.subtotalValue}>{formattedSubtotal}</span>
+                    <span className={styles.subtotalValue}>{formatPrice(product.price * item.qty)}</span>
                 </div>
 
                 <CartActions item={item} onUpdate={onUpdate} />

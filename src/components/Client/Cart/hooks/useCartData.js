@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { supabase } from "../../../../utils/SupabaseClient";
 import { useCartActions } from "../../../../utils/Hooks/useCartActions";
 import { userContext } from "../../../../utils/AppContexts";
+import useRealtimeSubscription from "../../../../utils/useRealtimeSubscription";
 
 export const useCartData = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -9,9 +10,18 @@ export const useCartData = () => {
   const [totalPrice, setTotalPrice] = useState(0);
   const { fetchCart } = useCartActions();
   const [user] = useContext(userContext);
-
   const [trigger, setTrigger] = useState(0);
 
+  useRealtimeSubscription(
+    'CartChangesChannel',
+    'Carts',
+    user.id? `client_id=eq.${user.id}` : `guest_id=eq.${user.guest_id}`,
+    (payload) => {
+      console.log('Real-time update received:', payload.new);
+      setTrigger((prev) => prev + 1);
+    },
+    'UPDATE'
+  )
   const refreshCart = () => {
     setTrigger((prev) => prev + 1);
   };
@@ -86,7 +96,8 @@ export const useCartData = () => {
     return () => {
       active = false;
     };
-  }, [user, trigger]); // depend on trigger
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, trigger]); // depend on user and trigger
 
   return { cartItems, loading, totalPrice, refreshCart };
 };
