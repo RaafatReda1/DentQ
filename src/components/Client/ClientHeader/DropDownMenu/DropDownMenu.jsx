@@ -75,7 +75,7 @@ const DropDownMenu = ({ menuIsOpened }) => {
           setOpen(!open);
         }}
       >
-        <img src="/vite.svg" alt="Profile" className={styles.profileImage} />
+        <img src={user.avatarUrl} alt="Profile" className={styles.profileImage} />
 
         {/* dispalying Doctor if no session and full name if session with no nick name and the nick name if session and nick name */}
 

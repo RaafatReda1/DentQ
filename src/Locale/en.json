@@ -99,5 +99,21 @@
         "size": "Size",
         "unit_price": "Unit Price",
         "remove_item": "Remove item"
+    },
+    "profile": {
+        "title": "My Profile",
+        "full_name": "Full Name",
+        "nickname": "Nickname",
+        "phone": "Phone Number",
+        "email": "Email Address",
+        "address": "Home Address",
+        "edit": "Edit Profile",
+        "save": "Save Changes",
+        "cancel": "Cancel",
+        "upload": "Upload Photo",
+        "success": "Profile updated successfully!",
+        "error": "Failed to update profile",
+        "upload_success": "Photo uploaded successfully!",
+        "upload_error": "Failed to upload photo"
     }
 }
