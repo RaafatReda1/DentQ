@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from "react-i18next";
 import styles from "./SizesViewer.module.css";
 
-function SizesViewer({ product }) {
+function SizesViewer({ product, selectedSize, setSelectedSize }) {
   const { t } = useTranslation();
   const sizes = product?.sizes;
 
@@ -13,9 +13,14 @@ function SizesViewer({ product }) {
       <h3 className={styles.title}>{t("product_page.sizes")}</h3>
       <div className={styles.sizesGrid}>
         {sizes.map((size, idx) => (
-          <div key={idx} className={styles.sizeOption}>
+          <button
+            key={idx}
+            className={`${styles.sizeOption} ${selectedSize === size ? styles.active : ""
+              }`}
+            onClick={() => setSelectedSize(size)}
+          >
             {size}
-          </div>
+          </button>
         ))}
       </div>
     </div>

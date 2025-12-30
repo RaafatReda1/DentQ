@@ -10,48 +10,81 @@ const transferGuestCart = async (clientId) => {
 
   console.log(`🛒 Found guest_id cookie: ${guestId}. Attempting to transfer cart to Client ${clientId}...`);
 
-  // Check if this guest_id actually has a cart
+  // 1. Fetch Guest Cart
   const { data: guestCart } = await supabase
     .from("Carts")
-    .select("id")
+    .select("*")
     .eq("guest_id", guestId)
     .maybeSingle();
 
-  if (guestCart) {
-    // Check if client ALREADY has a cart
+  if (guestCart && guestCart.items?.length > 0) {
+    // 2. Check if Client ALREADY has a cart
     const { data: clientCart } = await supabase
       .from("Carts")
-      .select("id")
+      .select("*")
       .eq("client_id", clientId)
       .maybeSingle();
 
-    if (clientCart) {
-      // OPTIONAL: Merge logic could go here. 
-      // For now, based on instructions, we might just reassign (which overrides) or skip.
-      // But if client has a cart, simple reassignment would cause a duplicate key error if client_id is unique.
-      // Let's assume we proceed with the user's specific request: "set client_id to user.id".
-      // To avoid errors, we'll verify if we can simply update.
-      console.warn("Client already has a cart. Merging/Overwriting logic might be needed.");
-      // Note: If we don't handle this, the UPDATE below might fail if there's a unique constraint on client_id.
-      // However, following strict instructions:
-    }
+    let finalItems = [...guestCart.items];
 
-    const { error } = await supabase
-      .from("Carts")
-      .update({
-        guest_id: null,
-        client_id: clientId
-      })
-      .eq("guest_id", guestId);
+    if (clientCart && clientCart.items?.length > 0) {
+      console.log("🔄 Client already has a cart. Merging items...");
 
-    if (error) {
-      console.error("❌ Error transferring cart:", error);
+      // Merge logic: Start with client items
+      const merged = [...clientCart.items];
+
+      guestCart.items.forEach(gItem => {
+        // Find if this variant exists in client cart
+        const index = merged.findIndex(cItem =>
+          cItem.id === gItem.id &&
+          cItem.size === gItem.size &&
+          cItem.color === gItem.color
+        );
+
+        if (index !== -1) {
+          // Exists -> Sum quantity
+          merged[index].qty += gItem.qty;
+        } else {
+          // New variant -> Add to list
+          merged.push(gItem);
+        }
+      });
+      finalItems = merged;
+
+      // 3. Update Client's existing cart
+      const { error: updateError } = await supabase
+        .from("Carts")
+        .update({ items: finalItems })
+        .eq("id", clientCart.id);
+
+      if (updateError) {
+        console.error("❌ Error merging into client cart:", updateError);
+        return;
+      }
+
+      // 4. Delete the guest cart record (cleanup)
+      await supabase.from("Carts").delete().eq("id", guestCart.id);
     } else {
-      console.log("✅ Cart transferred successfully.");
-      DeleteCookie(); // Clear the guest cookie
+      // Client has no cart: Move guest cart to client
+      const { error: moveError } = await supabase
+        .from("Carts")
+        .update({
+          guest_id: null,
+          client_id: clientId
+        })
+        .eq("id", guestCart.id);
+
+      if (moveError) {
+        console.error("❌ Error moving guest cart to client:", moveError);
+        return;
+      }
     }
+
+    console.log("✅ Cart transfer/merge completed successfully.");
+    DeleteCookie(); // Clear the guest cookie
   } else {
-    // Guest has no cart, just delete the unused cookie
+    // Guest has no cart or empty cart, just delete the unused cookie
+    if (guestCart) await supabase.from("Carts").delete().eq("id", guestCart.id);
     DeleteCookie();
   }
 };

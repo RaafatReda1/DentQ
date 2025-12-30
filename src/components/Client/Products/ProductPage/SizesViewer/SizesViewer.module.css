@@ -16,12 +16,16 @@
 }
 
 .sizeOption {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     min-width: 40px;
-    padding: 0.5rem 0.75rem;
+    padding: 10px 20px;
+    /* Changed from 0.5rem 0.75rem */
     text-align: center;
-    border-radius: 6px;
+    border-radius: var(--radius-md);
+    /* Changed from 6px */
     cursor: pointer;
-    border: 1px solid #d1d5db;
     background: #fff;
     color: #374151;
     font-size: 0.9rem;

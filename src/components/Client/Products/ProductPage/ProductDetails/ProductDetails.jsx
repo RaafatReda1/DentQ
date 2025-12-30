@@ -4,16 +4,12 @@ import RenderProductNameOrDesc from '../../../../../utils/RenderProductNameOrDes
 import MDEditor from "@uiw/react-md-editor";
 import styles from "./ProductDetails.module.css";
 import { ShoppingCart } from "lucide-react";
+import Actions from "../Actions/Actions";
+import { useFormatPrice } from '../../../../../utils/Hooks/useFormatPrice';
 
-function ProductDetails({ product }) {
+function ProductDetails({ product, selectedSize, selectedColor, qty, setQty }) {
   const { t } = useTranslation();
-
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD', // Or dynamic currency
-    }).format(price);
-  };
+  const  formatPrice = useFormatPrice();
 
   return (
     <div className={styles.detailsContainer}>
@@ -36,13 +32,14 @@ function ProductDetails({ product }) {
         )}
       </div>
 
-      {/* Add To Cart */}
-      <div className={styles.addToCartSection}>
-        <button className={styles.addToCartBtn}>
-          <ShoppingCart size={20} />
-          {t("product.add_to_cart")}
-        </button>
-      </div>
+      {/* Product Actions (Qty & Add to Cart) */}
+      <Actions
+        product={product}
+        selectedSize={selectedSize}
+        selectedColor={selectedColor}
+        qty={qty}
+        setQty={setQty}
+      />
 
       {/* Description */}
       <div className={styles.description}>

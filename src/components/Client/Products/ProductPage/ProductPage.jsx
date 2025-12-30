@@ -25,13 +25,23 @@ const ProductPage = () => {
   );
 
   const [liveProduct, setLiveProduct] = useState(initialProduct);
+  const [selectedSize, setSelectedSize] = useState(null);
+  const [selectedColor, setSelectedColor] = useState(null);
+  const [qty, setQty] = useState(1);
 
   // Update liveProduct if the initial product from context changes (e.g. initial load)
   useEffect(() => {
     if (initialProduct) {
       setLiveProduct(initialProduct);
+      // Set defaults for size/color if they exist and haven't been selected yet
+      if (!selectedSize && initialProduct.sizes?.length > 0) {
+        setSelectedSize(initialProduct.sizes[0]);
+      }
+      if (!selectedColor && initialProduct.colors?.length > 0) {
+        setSelectedColor(initialProduct.colors[0]);
+      }
     }
-  }, [initialProduct]);
+  }, [initialProduct, selectedSize, selectedColor]);
 
   // Real-time subscription to Products table
   useRealtimeSubscription(
@@ -47,8 +57,6 @@ const ProductPage = () => {
 
   if (!liveProduct) return <div>{t("product_page.loading")}</div>;
 
-
-
   return (
     <div className={styles.productPageContainer}>
       <button className={styles.backBtn} onClick={() => navigate(-1)}>
@@ -59,15 +67,29 @@ const ProductPage = () => {
 
       <div className={styles.mainContent}>
         <div className={styles.leftColumn}>
-          <ProductDetails product={liveProduct} />
-          <SizesViewer product={liveProduct} />
+          <ProductDetails
+            product={liveProduct}
+            selectedSize={selectedSize}
+            selectedColor={selectedColor}
+            qty={qty}
+            setQty={setQty}
+          />
+          <SizesViewer
+            product={liveProduct}
+            selectedSize={selectedSize}
+            setSelectedSize={setSelectedSize}
+          />
           <ProductRatings product={liveProduct} />
           <ProductCommentSection product={liveProduct} />
         </div>
 
         <div className={styles.rightColumn}>
           <ImgsViewer product={liveProduct} />
-          <ColorsViewer product={liveProduct} />
+          <ColorsViewer
+            product={liveProduct}
+            selectedColor={selectedColor}
+            setSelectedColor={setSelectedColor}
+          />
         </div>
       </div>
 

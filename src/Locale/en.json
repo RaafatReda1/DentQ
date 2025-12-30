@@ -31,7 +31,8 @@
         "delete_title": "Remove from Cart?",
         "delete_msg": "Are you sure you want to remove this item from your cart?",
         "yes": "Yes, Remove",
-        "no": "Cancel"
+        "no": "Cancel",
+        "in_cart": "In Cart Already"
     },
     "product_page": {
         "back": "Back",
