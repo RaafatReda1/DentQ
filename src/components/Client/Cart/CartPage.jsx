@@ -51,7 +51,7 @@ const CartPage = () => {
                             <h1 className={styles.title}>{t("cart.title") || "My Cart"}</h1>
                             {!loading && cartItems.length > 0 && (
                                 <p className={styles.subtitle}>
-                                    {totalItems} {totalItems === 1 ? 'item' : 'items'} in your cart
+                                    {totalItems} {totalItems === 1 ? t("cart.item") : t("cart.items")} {t("cart.in_your_cart")}
                                 </p>
                             )}
                         </div>
@@ -70,7 +70,7 @@ const CartPage = () => {
                         </div>
                         <h2 className={styles.emptyTitle}>{t("cart.empty") || "Your cart is empty"}</h2>
                         <p className={styles.emptySubtitle}>
-                            Looks like you haven't added any items yet. Start shopping to fill your cart!
+                            {t("cart.empty_description")}
                         </p>
                         <button className={styles.continueBtn} onClick={() => navigate('/')}>
                             <Package size={20} />
@@ -82,8 +82,8 @@ const CartPage = () => {
                         {/* Items List */}
                         <div className={styles.itemsSection}>
                             <div className={styles.sectionHeader}>
-                                <h2 className={styles.sectionTitle}>Cart Items</h2>
-                                <span className={styles.itemCount}>{totalItems} items</span>
+                                <h2 className={styles.sectionTitle}>{t("cart.cart_items")}</h2>
+                                <span className={styles.itemCount}>{totalItems} {t("cart.items")}</span>
                             </div>
 
                             <div className={styles.itemsList}>
@@ -102,17 +102,17 @@ const CartPage = () => {
                             <div className={styles.summarySection}>
                                 <div className={styles.summaryHeader}>
                                     <Sparkles size={20} className={styles.sparkleIcon} />
-                                    <h3 className={styles.summaryTitle}>Order Summary</h3>
+                                    <h3 className={styles.summaryTitle}>{t("cart.order_summary")}</h3>
                                 </div>
 
                                 <div className={styles.summaryDetails}>
                                     <div className={styles.summaryRow}>
-                                        <span className={styles.summaryLabel}>Subtotal ({totalItems} items)</span>
+                                        <span className={styles.summaryLabel}>{t("cart.subtotal")} ({totalItems} {t("cart.items")})</span>
                                         <span className={styles.summaryValue}>{formatPrice(totalPrice)}</span>
                                     </div>
                                     <div className={styles.summaryRow}>
-                                        <span className={styles.summaryLabel}>Shipping</span>
-                                        <span className={styles.summaryValueFree}>Calculated at checkout</span>
+                                        <span className={styles.summaryLabel}>{t("cart.shipping")}</span>
+                                        <span className={styles.summaryValueFree}>{t("cart.calculated_at_checkout")}</span>
                                     </div>
 
                                     <div className={styles.divider}></div>

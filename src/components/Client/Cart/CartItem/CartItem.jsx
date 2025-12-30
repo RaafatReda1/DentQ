@@ -26,7 +26,7 @@ const CartItem = ({ item, onUpdate }) => {
                         <img src={mainImage} alt={RenderProductNameOrDesc(product, "name")} className={styles.productImg} />
                     ) : (
                         <div className={styles.placeholderImg}>
-                            <span>No Image</span>
+                            <span>{t("cart.no_image")}</span>
                         </div>
                     )}
                 </div>
@@ -47,7 +47,7 @@ const CartItem = ({ item, onUpdate }) => {
                             )}
                             {item.size && (
                                 <span className={styles.variantBadge}>
-                                    <span className={styles.sizeLabel}>Size:</span>
+                                    <span className={styles.sizeLabel}>{t("cart.size")}:</span>
                                     {item.size}
                                 </span>
                             )}
@@ -55,7 +55,7 @@ const CartItem = ({ item, onUpdate }) => {
                     )}
 
                     <div className={styles.priceRow}>
-                        <span className={styles.priceLabel}>Unit Price:</span>
+                        <span className={styles.priceLabel}>{t("cart.unit_price")}:</span>
                         <span className={styles.price}>{formatPrice(product.price)}</span>
                     </div>
                 </div>

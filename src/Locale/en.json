@@ -25,7 +25,11 @@
         "available": "Available",
         "add_to_cart": "Add to Cart",
         "added_to_cart": "Added to Cart",
-        "view_details": "View Details"
+        "view_details": "View Details",
+        "delete_title": "Remove from Cart?",
+        "delete_msg": "Are you sure you want to remove this item from your cart?",
+        "yes": "Yes, Remove",
+        "no": "Cancel"
     },
     "product_page": {
         "back": "Back",
@@ -76,9 +80,21 @@
     "cart": {
         "title": "My Cart",
         "empty": "Your cart is empty",
+        "empty_description": "Looks like you haven't added any items yet. Start shopping to fill your cart!",
         "continue_shopping": "Continue Shopping",
         "total": "Total",
         "subtotal": "Subtotal",
-        "checkout": "Proceed to Checkout"
+        "checkout": "Proceed to Checkout",
+        "item": "item",
+        "items": "items",
+        "in_your_cart": "in your cart",
+        "cart_items": "Cart Items",
+        "order_summary": "Order Summary",
+        "shipping": "Shipping",
+        "calculated_at_checkout": "Calculated at checkout",
+        "no_image": "No Image",
+        "size": "Size",
+        "unit_price": "Unit Price",
+        "remove_item": "Remove item"
     }
 }

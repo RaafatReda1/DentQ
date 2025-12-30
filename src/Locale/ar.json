@@ -25,7 +25,11 @@
         "available": "متوفر",
         "add_to_cart": "أضف للسلة",
         "added_to_cart": "تمت الإضافة",
-        "view_details": "عرض التفاصيل"
+        "view_details": "عرض التفاصيل",
+        "delete_title": "إزالة من السلة؟",
+        "delete_msg": "هل أنت متأكد من إزالة هذا المنتج من السلة؟",
+        "yes": "نعم، إزالة",
+        "no": "إلغاء"
     },
     "product_page": {
         "back": "رجوع",
@@ -76,9 +80,21 @@
     "cart": {
         "title": "عربة التسوق",
         "empty": "عربة التسوق فارغة",
+        "empty_description": "يبدو أنك لم تضف أي منتجات بعد. ابدأ التسوق لملء عربتك!",
         "continue_shopping": "متابعة التسوق",
         "total": "المجموع",
         "subtotal": "المجموع الفرعي",
-        "checkout": "إتمام الشراء"
+        "checkout": "إتمام الشراء",
+        "item": "منتج",
+        "items": "منتجات",
+        "in_your_cart": "في عربتك",
+        "cart_items": "منتجات السلة",
+        "order_summary": "ملخص الطلب",
+        "shipping": "الشحن",
+        "calculated_at_checkout": "يُحسب عند الدفع",
+        "no_image": "لا توجد صورة",
+        "size": "المقاس",
+        "unit_price": "سعر الوحدة",
+        "remove_item": "إزالة المنتج"
     }
 }

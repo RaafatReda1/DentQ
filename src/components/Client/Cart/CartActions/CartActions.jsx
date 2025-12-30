@@ -77,7 +77,7 @@ const CartActions = ({ item, onUpdate }) => {
         className={styles.deleteBtn}
         onClick={handleDelete}
         disabled={loading}
-        aria-label="Remove item"
+        aria-label={t("cart.remove_item")}
       >
         <X size={18} />
       </button>
