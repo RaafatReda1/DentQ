@@ -3,16 +3,7 @@ import toast from "react-hot-toast";
 import { supabase } from "../SupabaseClient";
 import { userContext } from "../AppContexts"; // افترض عندك UserContext
 
-/* =========================
-   Helper: Compare Variants
-========================= */
-const isSameVariant = (item, product) => {
-  return (
-    item.id === product.id &&
-    item.color === product.color &&
-    item.size === product.size
-  );
-};
+import { isSameVariant } from "../isSameVariant";
 
 /* =========================
    Hook: Get Owner Info (client_id / guest_id)

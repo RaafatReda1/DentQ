@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Badge from "@mui/material/Badge";
 import styles from "./Links.module.css";
@@ -46,9 +45,7 @@ const Links = ({ menuIsOpened }) => {
   ];
 
   const containerClasses = `${styles.linksWraper} ${menuIsOpened ? styles.isMobile : ""}`;
-  useEffect(() => {
-    
-  },[cartCount])
+
   return (
     <nav className={containerClasses}>
       {navLinks.map((link) => {

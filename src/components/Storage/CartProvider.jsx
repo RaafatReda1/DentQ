@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext } from "react";
-import useCartDataStorage from "../Storage/useCartDataStorage";
+import useCartDataStorage from "./useCartDataStorage";
 
 export const cartContext = createContext(null);
 

@@ -1,23 +1,20 @@
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { useCart } from "../../components/Storage/CartProvider";
 
+/**
+ * useBadgeNumberCounter Hook
+ * Synchronously calculates the total quantity of items in the cart.
+ * Responds immediately to changes in the cart state from the CartProvider.
+ */
 export const useBadgeNumberCounter = () => {
-  const [cartCount, setCartCount] = useState(0);
   const { cart } = useCart();
 
-  const cartBadgeCount = async () => {
-    if (!cart?.items) {
-      setCartCount(0);
-      return;
+  const cartCount = useMemo(() => {
+    if (!cart || !cart.items || !Array.isArray(cart.items)) {
+      return 0;
     }
-    const totalQty = cart.items.reduce((sum, item) => sum + item.qty, 0);
-
-    setCartCount(totalQty);
-  };
-
-  useEffect(() => {
-    cartBadgeCount();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // Calculate total quantity by summing the qty of each item
+    return cart.items.reduce((sum, item) => sum + (Number(item.qty) || 0), 0);
   }, [cart]);
 
   return { cartCount };

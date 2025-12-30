@@ -5,6 +5,7 @@ import { useCartData } from '../../../Cart/hooks/useCartData';
 import styles from './Actions.module.css';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
+import { isSameVariant } from '../../../../../utils/isSameVariant';
 
 /**
  * Actions Component
@@ -12,18 +13,19 @@ import { useTranslation } from 'react-i18next';
  */
 const Actions = ({ product, selectedSize, selectedColor, qty, setQty }) => {
     const { addToCart } = useCartActions();
-    const { cartItems } = useCartData();
-    const {t} = useTranslation();
+    const { cartItems, refreshCart } = useCartData();
+    const { t } = useTranslation();
+
     // Find if this specific product (with current variant) is already in the cart
     const inCartQty = useMemo(() => {
         if (!cartItems || cartItems.length === 0) return 0;
 
-        // Find item that matches ID and variants
-        const match = cartItems.find(item =>
-            item.id === product.id &&
-            item.size === selectedSize &&
-            item.color === selectedColor
-        );
+        // Find item that matches ID and variants using unified helper
+        const match = cartItems.find(item => isSameVariant(item, {
+            id: product.id,
+            size: selectedSize,
+            color: selectedColor
+        }));
 
         return match ? match.qty : 0;
     }, [cartItems, product.id, selectedSize, selectedColor]);
@@ -76,9 +78,11 @@ const Actions = ({ product, selectedSize, selectedColor, qty, setQty }) => {
 
         const itemWithFinalQty = { ...currentItem, qty: finalQty };
         const success = await addToCart(itemWithFinalQty);
+
         if (success) {
             // Success toast is inside useCartActions
             setQty(1); // Reset to 1 after adding
+            refreshCart(); // Force global state update immediately
         }
     };
 

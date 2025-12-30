@@ -103,16 +103,22 @@ const useCartDataStorage = () => {
       active = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.id, user?.guest_id, user?.type, trigger]);
+  }, [user?.id, user?.guest_id, user?.type, user?.loadingState, trigger]);
 
-  // Only subscribe to realtime updates if cart exists and has an id
+  // Robust owner-based realtime subscription
+  const ownerFilter = user?.id
+    ? `client_id=eq.${user.id}`
+    : user?.guest_id
+      ? `guest_id=eq.${user.guest_id}`
+      : null;
+
   useRealtimeSubscription(
-    cart?.id ? `cart-${cart.id}` : null,
+    ownerFilter ? `user-cart-${user.id || user.guest_id}` : null,
     "Carts",
-    cart?.id ? `id=eq.${cart.id}` : null,
+    ownerFilter,
     (payload) => {
-      console.log("Real-time cart update received:", payload.new);
-      // Trigger a refetch to get updated product details
+      console.log("Real-time cart update received for owner:", payload.eventType);
+      // Trigger a refetch on any change (insert, update, delete)
       setTrigger((prev) => prev + 1);
     }
   );
