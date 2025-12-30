@@ -113,6 +113,25 @@ const ProfilePage = () => {
     setSaving(false);
   };
 
+  if (!user || user.type !== 'client' || !user.session) {
+    return (
+      <div className={styles.profileContainer}>
+        <div className={styles.guestContainer}>
+          <div className={styles.guestIcon}>
+            <User size={64} />
+          </div>
+          <h2 className={styles.guestTitle}>{t('profile.guest_title') || 'Welcome, Doctor'}</h2>
+          <p className={styles.guestDesc}>
+            {t('profile.guest_desc') || 'Please sign in to access your professional profile, order history, and saved addresses.'}
+          </p>
+          <div className={styles.loginCta}>
+            <SignInForm />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (loading) {
     return (
       <div className={styles.profileContainer}>
@@ -148,7 +167,7 @@ const ProfilePage = () => {
               {currentDisplayAvatar ? (
                 <img src={currentDisplayAvatar} alt="Avatar" className={styles.avatar} />
               ) : (
-                <User size={80} className={styles.avatarPlaceholder} />
+                <img src="/blank-user.png" alt="Default Avatar" className={styles.avatar} />
               )}
               {saving && previewUrl && (
                 <div className={styles.savingOverlay}>
