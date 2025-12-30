@@ -7,58 +7,106 @@
 .qtyControls {
     display: flex;
     align-items: center;
-    background-color: #f3f4f6;
-    border-radius: 8px;
-    padding: 0.25rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 12px;
+    padding: 0.4rem;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .qtyBtn {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 28px;
+    width: 32px;
+    height: 32px;
     border: none;
     background: white;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
-    color: #374151;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-    transition: all 0.2s;
+    color: #667eea;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-weight: 600;
 }
 
 .qtyBtn:hover:not(:disabled) {
-    background: #e5e7eb;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+}
+
+.qtyBtn:active:not(:disabled) {
+    transform: scale(0.95);
 }
 
 .qtyBtn:disabled {
-    opacity: 0.5;
+    opacity: 0.4;
     cursor: not-allowed;
+    background: #f3f4f6;
+    color: #9ca3af;
 }
 
 .qtyValue {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: #111827;
-    min-width: 30px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1f2937;
+    min-width: 36px;
     text-align: center;
+    user-select: none;
 }
 
 .deleteBtn {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     border: none;
-    background: #fee2e2;
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
     color: #ef4444;
-    border-radius: 50%;
+    border-radius: 10px;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 4px rgba(239, 68, 68, 0.1);
 }
 
-.deleteBtn:hover {
-    background: #fecaca;
-    transform: scale(1.05);
+.deleteBtn:hover:not(:disabled) {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.deleteBtn:active:not(:disabled) {
+    transform: scale(0.95) rotate(0deg);
+}
+
+.deleteBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Mobile Responsive */
+@media (max-width: 480px) {
+    .actionsContainer {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .qtyControls {
+        flex: 1;
+        justify-content: space-between;
+        padding: 0.5rem;
+    }
+
+    .qtyBtn {
+        width: 36px;
+        height: 36px;
+    }
+
+    .qtyValue {
+        min-width: 40px;
+    }
 }

@@ -1,59 +1,139 @@
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, ShoppingBag } from 'lucide-react';
+import { ArrowLeft, ShoppingBag, ShoppingCart, Package, Sparkles } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import styles from './CartPage.module.css';
 import { useCartData } from './hooks/useCartData';
 import CartItem from './CartItem/CartItem';
 import { useFormatPrice } from '../../../utils/Hooks/useFormatPrice';
+
 const CartPage = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { cartItems, loading, totalPrice, refreshCart } = useCartData();
-    const formatPrice = useFormatPrice(); // Use the custom hook that gives us an arrow function that needs a name and a number parameter
-    
+    const formatPrice = useFormatPrice();
+
+    // Calculate total items count
+    const totalItems = cartItems.reduce((sum, item) => sum + item.qty, 0);
+
+    // Loading skeleton
+    const LoadingSkeleton = () => (
+        <div className={styles.skeletonContainer}>
+            {[1, 2, 3].map((i) => (
+                <div key={i} className={styles.skeletonItem}>
+                    <div className={styles.skeletonImage}></div>
+                    <div className={styles.skeletonContent}>
+                        <div className={styles.skeletonLine}></div>
+                        <div className={styles.skeletonLineShort}></div>
+                    </div>
+                </div>
+            ))}
+        </div>
+    );
+
     return (
         <div className={styles.pageContainer}>
-            <div className={styles.header}>
-                <button className={styles.backBtn} onClick={() => navigate(-1)}>
-                    <ArrowLeft size={20} />
-                    {t("product_page.back") || "Back"}
-                </button>
-                <h1 className={styles.title}>{t("cart.title") || "My Cart"}</h1>
+            {/* Header with gradient background */}
+            <div className={styles.headerSection}>
+                <div className={styles.headerContent}>
+                    <button className={styles.backBtn} onClick={() => navigate(-1)}>
+                        <ArrowLeft size={20} />
+                        <span>{t("product_page.back") || "Back"}</span>
+                    </button>
+
+                    <div className={styles.titleWrapper}>
+                        <div className={styles.iconWrapper}>
+                            <ShoppingCart className={styles.cartIcon} size={32} />
+                            {!loading && cartItems.length > 0 && (
+                                <span className={styles.itemBadge}>{totalItems}</span>
+                            )}
+                        </div>
+                        <div>
+                            <h1 className={styles.title}>{t("cart.title") || "My Cart"}</h1>
+                            {!loading && cartItems.length > 0 && (
+                                <p className={styles.subtitle}>
+                                    {totalItems} {totalItems === 1 ? 'item' : 'items'} in your cart
+                                </p>
+                            )}
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div className={styles.content}>
                 {loading ? (
-                    <div className={styles.loadingState}>{t("product_page.loading") || "Loading..."}</div>
+                    <LoadingSkeleton />
                 ) : cartItems.length === 0 ? (
                     <div className={styles.emptyState}>
-                        <ShoppingBag size={64} className={styles.emptyIcon} />
-                        <h2>{t("cart.empty") || "Your cart is empty"}</h2>
+                        <div className={styles.emptyIconWrapper}>
+                            <ShoppingBag className={styles.emptyIcon} size={80} />
+                            <div className={styles.emptyIconDecor}></div>
+                        </div>
+                        <h2 className={styles.emptyTitle}>{t("cart.empty") || "Your cart is empty"}</h2>
+                        <p className={styles.emptySubtitle}>
+                            Looks like you haven't added any items yet. Start shopping to fill your cart!
+                        </p>
                         <button className={styles.continueBtn} onClick={() => navigate('/')}>
+                            <Package size={20} />
                             {t("cart.continue_shopping") || "Continue Shopping"}
                         </button>
                     </div>
                 ) : (
-                    <>
-                        <div className={styles.itemsList}>
-                            {cartItems.map((item, idx) => (
-                                <CartItem
-                                    key={`${item.id}-${item.color}-${item.size}-${idx}`}
-                                    item={item}
-                                    onUpdate={refreshCart}
-                                />
-                            ))}
+                    <div className={styles.cartLayout}>
+                        {/* Items List */}
+                        <div className={styles.itemsSection}>
+                            <div className={styles.sectionHeader}>
+                                <h2 className={styles.sectionTitle}>Cart Items</h2>
+                                <span className={styles.itemCount}>{totalItems} items</span>
+                            </div>
+
+                            <div className={styles.itemsList}>
+                                {cartItems.map((item, idx) => (
+                                    <CartItem
+                                        key={`${item.id}-${item.color}-${item.size}-${idx}`}
+                                        item={item}
+                                        onUpdate={refreshCart}
+                                    />
+                                ))}
+                            </div>
                         </div>
 
-                        <div className={styles.summarySection}>
-                            <div className={styles.totalRow}>
-                                <span>{t("cart.total") || "Total"}:</span>
-                                <span className={styles.totalValue}>{formatPrice(totalPrice)}</span>
+                        {/* Summary Section - Sticky on desktop */}
+                        <div className={styles.summaryWrapper}>
+                            <div className={styles.summarySection}>
+                                <div className={styles.summaryHeader}>
+                                    <Sparkles size={20} className={styles.sparkleIcon} />
+                                    <h3 className={styles.summaryTitle}>Order Summary</h3>
+                                </div>
+
+                                <div className={styles.summaryDetails}>
+                                    <div className={styles.summaryRow}>
+                                        <span className={styles.summaryLabel}>Subtotal ({totalItems} items)</span>
+                                        <span className={styles.summaryValue}>{formatPrice(totalPrice)}</span>
+                                    </div>
+                                    <div className={styles.summaryRow}>
+                                        <span className={styles.summaryLabel}>Shipping</span>
+                                        <span className={styles.summaryValueFree}>Calculated at checkout</span>
+                                    </div>
+
+                                    <div className={styles.divider}></div>
+
+                                    <div className={styles.totalRow}>
+                                        <span className={styles.totalLabel}>{t("cart.total") || "Total"}</span>
+                                        <span className={styles.totalValue}>{formatPrice(totalPrice)}</span>
+                                    </div>
+                                </div>
+
+                                <button className={styles.checkoutBtn} onClick={() => navigate('/checkout')}>
+                                    <span>{t("cart.checkout") || "Proceed to Checkout"}</span>
+                                    <ArrowLeft size={20} className={styles.checkoutArrow} />
+                                </button>
+
+                                <button className={styles.continueShoppingBtn} onClick={() => navigate('/')}>
+                                    {t("cart.continue_shopping") || "Continue Shopping"}
+                                </button>
                             </div>
-                            <button className={styles.checkoutBtn} onClick={() => navigate('/checkout')}>
-                                {t("cart.checkout") || "Proceed to Checkout"}
-                            </button>
                         </div>
-                    </>
+                    </div>
                 )}
             </div>
         </div>
