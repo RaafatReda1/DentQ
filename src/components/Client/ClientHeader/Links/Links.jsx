@@ -4,15 +4,15 @@ import styles from "./Links.module.css";
 import menuStyles from "../MobileMenu/MobileMenu.module.css";
 import { useTranslation } from "react-i18next";
 import { Boxes, BriefcaseMedical, ShoppingCart, Bell } from "lucide-react";
-
+import { useBadgeNumberCounter } from "../../../../utils/Hooks/useBadgeNumberCounter";
 const Links = ({ menuIsOpened }) => {
   const { t } = useTranslation();
-
+  const { cartCount } = useBadgeNumberCounter();
   return (
     <div className={menuIsOpened ? menuStyles.linksWraper : styles.linksWraper}>
       <Link to="/cart" className={styles.link}>
         <Badge
-          badgeContent={3}
+          badgeContent={cartCount}
           sx={{
             "& .MuiBadge-badge": {
               backgroundColor: "#00b7a8",

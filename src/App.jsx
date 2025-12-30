@@ -8,6 +8,7 @@ import useProductsData from "./components/Storage/ProductsDataStorage.jsx";
 // eslint-disable-next-line no-unused-vars
 import { userContext, productsContext } from "./utils/AppContexts";
 import { Toaster } from "react-hot-toast";
+import { CartProvider } from "./components/Storage/CartProvider.jsx";
 function App() {
   const { user, setUser } = useUserData(); //I've stored the User state into UserDataStorag.jsx to arrange the code and not to make the code in app.jsx more complex and all states will compelete as this
   const { products, setProducts } = useProductsData();
@@ -15,19 +16,23 @@ function App() {
   return (
     <userContext.Provider value={[user, setUser]}>
       <productsContext.Provider value={[products, setProducts]}>
-        <Toaster position="top-center" reverseOrder={false} />
+        <CartProvider>
+          <Toaster position="top-center" reverseOrder={false} />
 
-        <Routes>
-          {!user.loadingState && (
-            <>
-              {(user.type === "client" || user.type === "guest") && (
-                <Route path="*" element={<Client />} />
-              )}
-              {user.type === "admin" && <Route path="*" element={<Admin />} />}
-            </>
-          )}
-        </Routes>
-        <GoogleBtn />
+          <Routes>
+            {!user.loadingState && (
+              <>
+                {(user.type === "client" || user.type === "guest") && (
+                  <Route path="*" element={<Client />} />
+                )}
+                {user.type === "admin" && (
+                  <Route path="*" element={<Admin />} />
+                )}
+              </>
+            )}
+          </Routes>
+          <GoogleBtn />
+        </CartProvider>
       </productsContext.Provider>
     </userContext.Provider>
   );
