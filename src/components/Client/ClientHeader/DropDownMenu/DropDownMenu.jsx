@@ -46,7 +46,7 @@ const DropDownMenu = ({ menuIsOpened }) => {
         userName = userName.slice(0, 20) + "...";
       }
     } else {
-      userName = t('menu.doctor');
+      userName = t("menu.doctor");
     }
     return userName;
   };
@@ -69,15 +69,18 @@ const DropDownMenu = ({ menuIsOpened }) => {
       className={`${styles.dropdown} ${menuIsOpened ? styles.isMobile : ""}`}
       ref={menuRef}
     >
-      <button className={styles.profileButton} onClick={() => {
-        setOpen(!open)
-      }}>
+      <button
+        className={styles.profileButton}
+        onClick={() => {
+          setOpen(!open);
+        }}
+      >
         <img src="/vite.svg" alt="Profile" className={styles.profileImage} />
 
         {/* dispalying Doctor if no session and full name if session with no nick name and the nick name if session and nick name */}
 
         <span>
-          {user.session && t('menu.dr')}
+          {user.session && t("menu.dr")}
           {handleUserName()}
         </span>
         <ChevronDown
@@ -89,23 +92,27 @@ const DropDownMenu = ({ menuIsOpened }) => {
         <div className={styles.dropdownContent}>
           {user.session ? (
             <>
-              <a href="/profile" className={styles.menuItem}>
+              <Link to="/profile" className={styles.menuItem}>
                 <User className={styles.menuIcon} />
-                <span>{t('menu.my_profile')}</span>
-              </a>
+                <span>{t("menu.my_profile")}</span>
+              </Link>
               <span
                 className={`${styles.menuItem} ${styles.logoutItem}`}
                 onClick={handleSignOut}
                 style={{ cursor: "pointer" }}
               >
                 <LogOut className={styles.menuIcon} />
-                <span>{t('menu.logout')}</span>
+                <span>{t("menu.logout")}</span>
               </span>
             </>
           ) : (
-            <span style={{ textDecoration: "none", cursor: "pointer" }} className={`${styles.menuItem}`}>
+            <span
+              style={{ textDecoration: "none", cursor: "pointer" }}
+              className={`${styles.menuItem}`}
+            >
               <Login className={styles.menuIcon} />
-              <SignInForm /> {/*this is the signin component which includes login span as normal text which opens a popup inside the component once clicked */}
+              <SignInForm />{" "}
+              {/*this is the signin component which includes login span as normal text which opens a popup inside the component once clicked */}
             </span>
           )}
         </div>
