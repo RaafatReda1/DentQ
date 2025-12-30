@@ -8,6 +8,7 @@
         "no_results": "لا توجد نتائج"
     },
     "menu": {
+        "menu": "القائمة",
         "my_profile": "ملفي الشخصي",
         "logout": "تسجيل خروج",
         "login": "تسجيل دخول",
@@ -15,7 +16,8 @@
         "dr": "د.",
         "language": "اللغة",
         "open_menu": "فتح القائمة",
-        "close_menu": "إغلاق القائمة"
+        "close_menu": "إغلاق القائمة",
+        "user_menu": "قائمة المستخدم"
     },
     "product": {
         "trending": "رائج",

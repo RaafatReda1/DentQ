@@ -1,49 +1,82 @@
-import { Link } from "react-router-dom";
+import React from "react";
+import { Link, useLocation } from "react-router-dom";
 import Badge from "@mui/material/Badge";
 import styles from "./Links.module.css";
-import menuStyles from "../MobileMenu/MobileMenu.module.css";
 import { useTranslation } from "react-i18next";
 import { Boxes, BriefcaseMedical, ShoppingCart, Bell } from "lucide-react";
 import { useBadgeNumberCounter } from "../../../../utils/Hooks/useBadgeNumberCounter";
+
+/**
+ * Links Component
+ * Renders navigation links with dynamic badges for both mobile and desktop.
+ */
 const Links = ({ menuIsOpened }) => {
   const { t } = useTranslation();
   const { cartCount } = useBadgeNumberCounter();
+  const location = useLocation();
+
+  const navLinks = [
+    {
+      to: "/cart",
+      icon: ShoppingCart,
+      label: t('navbar.cart'),
+      badge: cartCount,
+      badgeColor: "#00b7a8"
+    },
+    {
+      to: "/notifications",
+      icon: Bell,
+      label: t('navbar.notifications'),
+      badge: 5,
+      badgeColor: "error"
+    },
+    {
+      to: "/myorders",
+      icon: Boxes,
+      label: t('navbar.my_orders'),
+      badge: 2,
+      badgeColor: "primary"
+    },
+    {
+      to: "/",
+      icon: BriefcaseMedical,
+      label: t('navbar.our_products'),
+      badge: 0
+    },
+  ];
+
+  const containerClasses = `${styles.linksWraper} ${menuIsOpened ? styles.isMobile : ""}`;
+
   return (
-    <div className={menuIsOpened ? menuStyles.linksWraper : styles.linksWraper}>
-      <Link to="/cart" className={styles.link}>
-        <Badge
-          badgeContent={cartCount}
-          sx={{
-            "& .MuiBadge-badge": {
-              backgroundColor: "#00b7a8",
-              color: "white",
-            },
-          }}
-        >
-          <ShoppingCart />
-          <span className={styles.linkTxt}>{t('navbar.cart')}</span>
-        </Badge>
-      </Link>
+    <nav className={containerClasses}>
+      {navLinks.map((link) => {
+        const Icon = link.icon;
+        const isActive = location.pathname === link.to;
 
-      <Link to="/notifications" className={styles.link}>
-        <Badge badgeContent={5} color="error">
-          <Bell />
-          <span className={styles.linkTxt}>{t('navbar.notifications')}</span>
-        </Badge>
-      </Link>
-
-      <Link to="/myorders" className={styles.link}>
-        <Badge badgeContent={2} color="primary">
-          <Boxes />
-          <span className={styles.linkTxt}>{t('navbar.my_orders')}</span>
-        </Badge>
-      </Link>
-
-      <Link to="/" className={styles.link}>
-        <BriefcaseMedical />
-        <span className={styles.linkTxt}>{t('navbar.our_products')}</span>
-      </Link>
-    </div>
+        return (
+          <Link
+            key={link.to}
+            to={link.to}
+            className={`${styles.link} ${isActive ? styles.active : ""}`}
+            aria-current={isActive ? "page" : undefined}
+          >
+            <Badge
+              badgeContent={link.badge || 0}
+              color={link.badgeColor === "error" || link.badgeColor === "primary" ? link.badgeColor : undefined}
+              sx={link.badgeColor && link.badgeColor !== "error" && link.badgeColor !== "primary" ? {
+                "& .MuiBadge-badge": {
+                  backgroundColor: link.badgeColor,
+                  color: "white",
+                },
+              } : {}}
+            >
+              <Icon size={22} strokeWidth={isActive ? 2.5 : 2} />
+            </Badge>
+            <span className={styles.linkTxt}>{link.label}</span>
+          </Link>
+        );
+      })}
+    </nav>
   );
 };
 

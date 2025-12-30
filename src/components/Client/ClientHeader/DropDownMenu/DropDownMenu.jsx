@@ -6,7 +6,6 @@ import { supabase } from "../../../../utils/SupabaseClient";
 import { Login } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { SignInForm } from "../../../Auth/SignInForm/SignInForm";
-import menuStyles from "../MobileMenu/MobileMenu.module.css";
 import { useTranslation } from "react-i18next";
 
 const DropDownMenu = ({ menuIsOpened }) => {
@@ -66,7 +65,10 @@ const DropDownMenu = ({ menuIsOpened }) => {
     }
   };
   return (
-    <div className={menuIsOpened ? menuStyles.dropdown : styles.dropdown} ref={menuRef}>
+    <div
+      className={`${styles.dropdown} ${menuIsOpened ? styles.isMobile : ""}`}
+      ref={menuRef}
+    >
       <button className={styles.profileButton} onClick={() => {
         setOpen(!open)
       }}>
@@ -84,7 +86,7 @@ const DropDownMenu = ({ menuIsOpened }) => {
       </button>
 
       {open && (
-        <div className={menuIsOpened ? menuStyles.dropdownContent : styles.dropdownContent}>
+        <div className={styles.dropdownContent}>
           {user.session ? (
             <>
               <a href="/profile" className={styles.menuItem}>

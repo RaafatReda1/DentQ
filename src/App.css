@@ -1,31 +1,53 @@
 :root {
   /* 🎨 Primary Brand Colors */
-  --primary-color: #a5dcfa;      /* أزرق طبي رايق */
-  --primary-hover: #0096c7;      /* أزرق أفتح */
-  --secondary-color: #90e0ef;    /* سماوي فاتح - إحساس نضافة */
-  --accent-color: #00b4d8;       /* لون مميز للأزرار أو الأيقونات */
-  --highlight-color: #00b7a8;    /* خلفيات ناعمة */
+  --primary-color: #a5dcfa;
+  /* أزرق طبي رايق */
+  --primary-hover: #0096c7;
+  /* أزرق أفتح */
+  --secondary-color: #90e0ef;
+  /* سماوي فاتح - إحساس نضافة */
+  --accent-color: #00b4d8;
+  /* لون مميز للأزرار أو الأيقونات */
+  --highlight-color: #00b7a8;
+  /* خلفيات ناعمة */
 
   /* ⚪ Neutral Palette */
-  --background-light: #f9f9fb;   /* خلفية عامة فاتحة */
-  --background-dark: #1c1c1e;    /* خلفية للثيم الغامق */
-  --card-bg: #ffffff;            /* خلفية الكروت والعناصر */
-  --border-color: #e0e0e0;       /* حدود ناعمة */
+  --background-light: #f9f9fb;
+  /* خلفية عامة فاتحة */
+  --background-dark: #1c1c1e;
+  /* خلفية للثيم الغامق */
+  --card-bg: #ffffff;
+  /* خلفية الكروت والعناصر */
+  --border-color: #e0e0e0;
+  /* حدود ناعمة */
 
   /* 🧠 Text */
-  --text-main: #303030;          /* نص أساسي */
-  --text-secondary: #555555;     /* نص خفيف */
-  --text-muted: #888888;         /* نص باهت */
-  --text-light: #ffffff;         /* نص على خلفية غامقة */
+  --text-main: #303030;
+  /* نص أساسي */
+  --text-secondary: #555555;
+  /* نص خفيف */
+  --text-muted: #888888;
+  /* نص باهت */
+  --text-light: #ffffff;
+  /* نص على خلفية غامقة */
 
   /* 💡 Shadows & Effects */
   --shadow-light: 0 2px 10px rgba(0, 0, 0, 0.08);
   --shadow-medium: 0 4px 20px rgba(0, 0, 0, 0.15);
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.3);
+  --glass-blur: 12px;
+
+  /* ⚡ Animations & Transitions */
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 
   /* 📏 Sizing & Spacing */
   --radius-sm: 6px;
   --radius-md: 10px;
   --radius-lg: 16px;
+  --radius-full: 9999px;
 
   --padding-sm: 0.5rem;
   --padding-md: 1rem;
@@ -42,12 +64,60 @@
   --dark-accent: #00b4d8;
 }
 
-
-*{
-    margin: 0;
-    padding: 0;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
-body{
-    background: var(--background-light);
-    font-family:  'Open Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+
+body {
+  background: var(--background-light);
+  font-family: 'Open Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+  overflow-x: hidden;
+  color: var(--text-main);
+}
+
+/* --- 🏥 Medical Store Custom Scrollbar --- */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background-light);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--secondary-color), var(--highlight-color));
+  border: 2.5px solid var(--background-light);
+  border-radius: var(--radius-full);
+  transition: all var(--transition-normal);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-color);
+}
+
+/* Firefox Support */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--highlight-color) var(--background-light);
+}
+
+/* Utility: Lock Scroll */
+.lock-scroll {
+  overflow: hidden !important;
+  padding-inline-end: 15px;
+  /* Adjust for scrollbar width to prevent layout shift */
+}
+
+/* Accessibility: Hide scrollbar but keep functionality if needed */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

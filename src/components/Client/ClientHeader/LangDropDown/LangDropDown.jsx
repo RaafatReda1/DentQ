@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import menuStyles from "../MobileMenu/MobileMenu.module.css";
 import styles from "./LangDropDown.module.css";
 import { useTranslation } from "react-i18next";
 import { Globe, ChevronDown, Check } from "lucide-react";
@@ -7,7 +6,7 @@ import { Globe, ChevronDown, Check } from "lucide-react";
 const LangDropDown = ({ menuIsOpened }) => {
   const { i18n } = useTranslation();
   const [currentLang, setCurrentLang] = useState(i18n.language || "en");
-  
+
   useEffect(() => {
     setCurrentLang(i18n.language);
     // Ensure direction is set on mount/change
@@ -20,11 +19,10 @@ const LangDropDown = ({ menuIsOpened }) => {
 
   return (
     <div
-      className={`${styles.dropdownContainer} ${
-        menuIsOpened
-          ? menuStyles.mobileLangDropDown
-          : styles.desktopLangDropDown
-      }`}
+      className={`${styles.dropdownContainer} ${menuIsOpened
+        ? styles.mobileLangDropDown
+        : styles.desktopLangDropDown
+        }`}
     >
       {/* Trigger Button */}
       <button className={styles.triggerButton} aria-label="Select Language">
@@ -37,9 +35,8 @@ const LangDropDown = ({ menuIsOpened }) => {
       {/* Dropdown Menu */}
       <div className={styles.dropdownMenu}>
         <button
-          className={`${styles.menuItem} ${
-            currentLang === "en" ? styles.active : ""
-          }`}
+          className={`${styles.menuItem} ${currentLang === "en" ? styles.active : ""
+            }`}
           onClick={() => changeLanguage("en")}
         >
           <span>
@@ -49,9 +46,8 @@ const LangDropDown = ({ menuIsOpened }) => {
         </button>
 
         <button
-          className={`${styles.menuItem} ${
-            currentLang === "ar" ? styles.active : ""
-          }`}
+          className={`${styles.menuItem} ${currentLang === "ar" ? styles.active : ""
+            }`}
           onClick={() => changeLanguage("ar")}
         >
           <span>

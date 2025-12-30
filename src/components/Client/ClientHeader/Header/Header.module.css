@@ -1,43 +1,144 @@
 .Header {
-    background: var(--primary-color);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    /* Changed from space-around for better control */
-    width: 100vw;
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border-bottom: 1px solid var(--glass-border);
+    width: 100%;
     position: sticky;
     top: 0;
     left: 0;
-    z-index: 100;
-    padding: 10px 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 10px;
-    gap: 15px;
-    /* Add gap for flex items */
+    z-index: 1000;
+    transition: all var(--transition-normal);
+    padding: 12px 0;
+    animation: slideDown 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Desktop Only Wrappers */
-.desktopOnly {
+.scrolled {
+    padding: 8px 0;
+    box-shadow: var(--shadow-medium);
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: space-between;
+    gap: 20px;
+    transition: all var(--transition-normal);
 }
 
+.leftSection {
+    flex-shrink: 0;
+    z-index: 2;
+}
+
+.centerSection {
+    flex-grow: 1;
+    max-width: 600px;
+    transition: all var(--transition-normal);
+    z-index: 1;
+}
+
+.rightSection {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    z-index: 2;
+}
+
+.desktopNav {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.verticalDivider {
+    width: 1px;
+    height: 24px;
+    background: var(--border-color);
+    margin: 0 5px;
+}
+
+/* --- Mobile Refined Layout (950px and below) --- */
 @media (max-width: 950px) {
     .Header {
-        padding: 10px 15px;
-        gap: 10px;
+        padding: 10px 0;
     }
 
-    /* Hide desktop specific elements */
-    .Header> :nth-child(3),
-    /* Links */
-    .Header> :nth-child(4),
-    /* LangDropDown */
-    .Header> :nth-child(5)
+    .container {
+        flex-wrap: wrap;
+        padding: 0 15px;
+        gap: 12px;
+    }
 
-    /* DropDownMenu */
-        {
+    /* Logo stays top left */
+    .leftSection {
+        order: 1;
+    }
+
+    /* Mobile Menu Trigger stays top right */
+    .rightSection {
+        order: 2;
+    }
+
+    /* Search Bar moves to second row, full width */
+    .centerSection {
+        order: 3;
+        flex-basis: 100%;
+        max-width: 100%;
+        margin-top: 4px;
+        animation: fadeIn 0.4s ease-out;
+    }
+
+    .desktopNav {
         display: none;
+    }
+}
+
+/* Animations using @keyframes */
+@keyframes slideDown {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* RTL Support for mirroring */
+[dir="rtl"] .leftSection {
+    transform-origin: right;
+}
+
+[dir="rtl"] .container {
+    flex-direction: row;
+    /* Flex default is row, but just to be explicit for mirror check */
+}
+
+@media (max-width: 480px) {
+    .container {
+        gap: 8px;
+    }
+
+    .leftSection {
+        transform: scale(0.9);
     }
 }

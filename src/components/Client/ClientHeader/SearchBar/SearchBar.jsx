@@ -1,17 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import styles from "./SearchBar.module.css";
 import { Search, X } from "lucide-react";
-import menuStyles from "../MobileMenu/MobileMenu.module.css";
 import { useTranslation } from "react-i18next";
 import SearchSuggestions from "./SearchSuggestions/SearchSuggestions";
 
+/**
+ * SearchBar Component
+ * Integrated search input with suggestions and interactive states.
+ */
 const SearchBar = ({ menuIsOpened }) => {
   const [searchValue, setSearchValue] = useState("");
   const { t } = useTranslation();
+  const inputRef = useRef(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (searchValue.trim()) {
+      // In progress: implement actual search redirection
       console.log("Searching for:", searchValue);
     }
   };
@@ -19,16 +24,20 @@ const SearchBar = ({ menuIsOpened }) => {
   const handleClear = (e) => {
     e.stopPropagation();
     setSearchValue("");
+    if (inputRef.current) inputRef.current.focus();
   };
 
+  const wrapperClasses = styles.Searchwrapper;
+
   return (
-    <div
-      className={menuIsOpened ? menuStyles.Searchwrapper : styles.Searchwrapper}
-    >
+    <div className={wrapperClasses}>
       <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.searchContainer}>
-          <Search className={styles.searchIcon} />
+          <div className={styles.iconWrapper}>
+            <Search size={18} className={styles.searchIcon} />
+          </div>
           <input
+            ref={inputRef}
             type="text"
             className={styles.input}
             placeholder={t("navbar.search_placeholder")}
@@ -42,12 +51,12 @@ const SearchBar = ({ menuIsOpened }) => {
               onClick={handleClear}
               aria-label="Clear search"
             >
-              <X />
+              <X size={16} />
             </button>
           )}
         </div>
       </form>
-      <SearchSuggestions searchQuery={searchValue} />
+      {searchValue && <SearchSuggestions searchQuery={searchValue} />}
     </div>
   );
 };

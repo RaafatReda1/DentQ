@@ -8,6 +8,7 @@
         "no_results": "No results found"
     },
     "menu": {
+        "menu": "Menu",
         "my_profile": "My Profile",
         "logout": "Logout",
         "login": "Login",
@@ -15,7 +16,8 @@
         "dr": "Dr.",
         "language": "Language",
         "open_menu": "Open Menu",
-        "close_menu": "Close Menu"
+        "close_menu": "Close Menu",
+        "user_menu": "User Menu"
     },
     "product": {
         "trending": "Trending",

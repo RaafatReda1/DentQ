@@ -10,35 +10,35 @@
   background: transparent;
   border: none;
   cursor: pointer;
-  padding: 0;
-  transition: all 0.3s ease;
-  border-radius: 50px;
-  padding: 4px 8px;
+  padding: 6px 12px;
+  transition: all var(--transition-normal);
+  border-radius: var(--radius-full);
+  color: var(--text-main);
 }
 
 .profileButton:hover {
-  background: rgba(0, 183, 168, 0.08);
+  background: rgba(0, 0, 0, 0.05);
 }
 
 .profileImage {
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  border: 2px solid #e8f2ff;
-  transition: all 0.3s ease;
+  border: 2px solid var(--border-color);
+  transition: all var(--transition-fast);
   object-fit: cover;
 }
 
 .profileButton:hover .profileImage {
-  border-color: #00b7a8;
+  border-color: var(--accent-color);
   transform: scale(1.05);
 }
 
 .chevron {
-  width: 16px;
-  height: 16px;
-  color: #004a80;
-  transition: transform 0.3s ease;
+  width: 14px;
+  height: 14px;
+  color: var(--text-muted);
+  transition: transform var(--transition-normal);
 }
 
 .chevron.rotated {
@@ -47,16 +47,16 @@
 
 .dropdownContent {
   position: absolute;
-  right: 0;
-  top: calc(100% + 8px);
-  background: #ffffff;
-  min-width: 200px;
-  box-shadow: 0 8px 24px rgba(0, 74, 128, 0.12);
-  border-radius: 12px;
+  inset-inline-end: 0;
+  top: calc(100% + 12px);
+  background: var(--card-bg);
+  min-width: 220px;
+  box-shadow: var(--shadow-medium);
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  border: 1px solid #e8f2ff;
-  animation: fadeInDown 0.2s ease;
-  z-index: 100;
+  border: 1px solid var(--border-color);
+  animation: fadeInDown var(--transition-fast);
+  z-index: 1000;
   padding: 8px;
 }
 
@@ -64,74 +64,87 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px 16px;
+  padding: 10px 14px;
   text-decoration: none;
-  color: #004a80;
+  color: var(--text-main);
   font-weight: 500;
-  font-size: 0.95rem;
-  transition: all 0.2s ease;
-  border-radius: 8px;
+  font-size: 0.9rem;
+  transition: all var(--transition-fast);
+  border-radius: var(--radius-md);
 }
 
 .menuItem:hover {
-  background: linear-gradient(
-    135deg,
-    rgba(0, 183, 168, 0.08) 0%,
-    rgba(0, 183, 168, 0.05) 100%
-  );
-  color: #00b7a8;
+  background: rgba(0, 180, 216, 0.06);
+  color: var(--accent-color);
   transform: translateX(4px);
+}
+
+[dir="rtl"] .menuItem:hover {
+  transform: translateX(-4px);
 }
 
 .menuIcon {
   width: 18px;
   height: 18px;
-  color: inherit;
+  color: var(--text-muted);
   flex-shrink: 0;
 }
 
+.menuItem:hover .menuIcon {
+  color: var(--accent-color);
+}
+
 .logoutItem {
+  margin-top: 4px;
   color: #ef4444;
 }
 
 .logoutItem:hover {
-  background: linear-gradient(
-    135deg,
-    rgba(239, 68, 68, 0.08) 0%,
-    rgba(239, 68, 68, 0.05) 100%
-  );
+  background: rgba(239, 68, 68, 0.06);
+  color: #dc2626;
+}
+
+.logoutItem:hover .menuIcon {
   color: #dc2626;
 }
 
 @keyframes fadeInDown {
   from {
     opacity: 0;
-    transform: translateY(-8px);
+    transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .dropdownContent {
-    min-width: 180px;
-  }
-
-  .menuItem {
-    padding: 10px 14px;
-    font-size: 0.9rem;
-  }
-
-  .menuIcon {
-    width: 16px;
-    height: 16px;
-  }
+/* Mobile Overrides when inside MobileMenu */
+/* Assuming 'menuIsOpened' logic applies here too */
+.isMobile {
+  width: 100%;
 }
-@media(max-width: 295px){
-  .dropdown{
-    display: none;
-  }
+
+.isMobile .profileButton {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: var(--radius-md);
+  justify-content: space-between;
+}
+
+.isMobile .dropdownContent {
+  position: static;
+  box-shadow: none;
+  border: none;
+  background: transparent;
+  padding: 0 0 0 16px;
+  width: 100%;
+  animation: none;
+  margin-top: 8px;
+}
+
+[dir="rtl"] .isMobile .dropdownContent {
+  padding: 0 16px 0 0;
 }

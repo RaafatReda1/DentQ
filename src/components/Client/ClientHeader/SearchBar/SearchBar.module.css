@@ -1,9 +1,6 @@
 .Searchwrapper {
-  max-width: 50%;
-  min-width: 300px;
-  align-items: center;
   position: relative;
-  /* Anchor for suggestions */
+  width: 100%;
 }
 
 .form {
@@ -14,120 +11,93 @@
   position: relative;
   display: flex;
   align-items: center;
-  background: #ffffff;
-  border: 2px solid #e0e7ff;
-  border-radius: 50px;
-  box-shadow: 0 2px 8px rgba(0, 74, 128, 0.08);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  overflow: hidden;
+  background: rgba(255, 255, 255, 0.9);
+  /* More consistent background */
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-full);
+  padding: 2px 6px;
+  transition: all var(--transition-normal);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.02);
 }
 
 .searchContainer:focus-within {
-  border-color: #00b7a8;
-  box-shadow: 0 4px 16px rgba(0, 183, 168, 0.15);
-  transform: translateY(-1px);
+  background: var(--card-bg);
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 4px rgba(0, 180, 216, 0.1), 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.iconWrapper {
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
 }
 
 .searchIcon {
-  position: absolute;
-  left: 16px;
-  width: 20px;
-  height: 20px;
-  color: #00b7a8;
-  flex-shrink: 0;
-  pointer-events: none;
+  transition: color var(--transition-fast);
+}
+
+.searchContainer:focus-within .searchIcon {
+  color: var(--accent-color);
 }
 
 .input {
-  flex: 1;
-  padding: 12px 48px 12px 48px;
+  width: 100%;
+  height: 42px;
+  background: transparent;
   border: none;
   outline: none;
   font-size: 0.95rem;
-  color: #004a80;
-  background: transparent;
-  font-weight: 500;
-  font-family: "Poppins", "Montserrat", -apple-system, BlinkMacSystemFont,
-    sans-serif;
+  color: var(--text-main);
+  padding: 8px 0;
 }
 
 .input::placeholder {
-  color: #94a3b8;
+  color: #999;
   font-weight: 400;
 }
 
 .clearButton {
-  position: absolute;
-  right: 8px;
-  width: 32px;
-  height: 32px;
+  background: none;
+  border: none;
+  color: #999;
+  padding: 10px;
+  cursor: pointer;
   display: flex;
   align-items: center;
-  justify-content: center;
-  background: #f1f5f9;
-  border: none;
   border-radius: 50%;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
-  color: #64748b;
+  transition: all var(--transition-fast);
 }
 
 .clearButton:hover {
-  background: #e2e8f0;
-  color: #004a80;
-  transform: scale(1.05);
+  background: rgba(0, 0, 0, 0.06);
+  color: var(--text-main);
 }
 
-.clearButton svg {
-  width: 18px;
-  height: 18px;
+/* RTL Support */
+[dir="rtl"] .searchContainer {
+  flex-direction: row-reverse;
 }
 
-/* Focus state */
-.searchContainer:focus-within .searchIcon {
-  color: #00b7a8;
+[dir="rtl"] .input {
+  text-align: right;
 }
 
-/* Responsive adjustments */
-
+/* Mobile Adjustments for the new row */
 @media (max-width: 950px) {
-  .Searchwrapper {
-    display: flex;
-    /* Force display */
-    max-width: 100%;
-    flex: 1;
-    /* Take available space */
-    min-width: 0;
-    /* Allow shrinking */
-  }
-
   .searchContainer {
-    border-radius: 40px;
-    background: #f8fafc;
-    /* Slightly darker bg on mobile for contrast if white header */
+    height: 40px;
+    background: rgba(255, 255, 255, 1);
+    border-color: #eee;
   }
 
   .input {
-    padding: 10px 40px 10px 40px;
+    height: 38px;
     font-size: 0.9rem;
   }
 
-  .searchIcon {
-    left: 14px;
-    width: 18px;
-    height: 18px;
-  }
-
-  .clearButton {
-    right: 8px;
-  }
-}
-
-@media (max-width: 480px) {
-  .input {
-    padding: 8px 36px 8px 36px;
-    /* Optimized padding */
-    font-size: 0.85rem;
+  .iconWrapper {
+    padding: 0 10px;
   }
 }

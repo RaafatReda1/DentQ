@@ -1,112 +1,74 @@
-/* Main Container */
 .dropdownContainer {
     position: relative;
     display: inline-block;
-    font-family: 'Inter', system-ui, sans-serif;
-    z-index: 50;
+    z-index: 100;
 }
 
-/* Desktop Visibility */
-.desktopLangDropDown {
-    display: block;
-}
-
-@media (max-width: 950px) {
-    .desktopLangDropDown {
-        display: none;
-    }
-}
-
-/* Trigger Button */
 .triggerButton {
     display: flex;
     align-items: center;
     gap: 8px;
     background: transparent;
     border: 1px solid transparent;
-    padding: 8px 12px;
-    border-radius: 8px;
+    padding: 6px 12px;
+    border-radius: var(--radius-full);
     cursor: pointer;
-    color: #334155;
+    color: var(--text-main);
     font-weight: 500;
-    font-size: 0.95rem;
-    transition: all 0.2s ease;
+    font-size: 0.9rem;
+    transition: all var(--transition-normal);
 }
 
 .triggerButton:hover {
-    background-color: #f1f5f9;
-    color: #0f172a;
-}
-
-.triggerButton.active {
-    background-color: #e2e8f0;
+    background-color: rgba(0, 0, 0, 0.05);
 }
 
 .iconGlobe {
-    color: #64748b;
+    color: var(--text-muted);
 }
 
 .iconChevron {
-    width: 16px;
-    height: 16px;
-    transition: transform 0.3s ease;
-    color: #94a3b8;
-}
-
-.triggerButton:hover .iconChevron {
-    color: #475569;
+    color: var(--text-muted);
+    transition: transform var(--transition-normal);
 }
 
 .dropdownContainer:hover .iconChevron {
     transform: rotate(180deg);
 }
 
-/* Dropdown Menu */
 .dropdownMenu {
     position: absolute;
-    top: calc(100% + 8px);
-    right: 0;
-    width: 160px;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    border: 1px solid #f1f5f9;
-    /* Allow pseudo-element bridge to extend outside */
-    overflow: visible;
-
+    top: calc(100% + 12px);
+    inset-inline-end: 0;
+    width: 180px;
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-medium);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
     opacity: 0;
     visibility: hidden;
     transform: translateY(-10px);
-
-    /* Delay hiding to allow mouse transition through gap */
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-    transition-delay: 0.15s;
-
-    pointer-events: none;
-    z-index: 100;
+    transition: all var(--transition-fast) cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 1000;
 }
 
-/* Invisible bridge to cover the gap */
+/* Bridge to keep hover active */
 .dropdownMenu::before {
     content: "";
     position: absolute;
-    top: -20px;
+    top: -15px;
     left: 0;
     width: 100%;
-    height: 20px;
-    background: transparent;
+    height: 15px;
 }
 
 .dropdownContainer:hover .dropdownMenu {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
-    pointer-events: auto;
-    transition-delay: 0s;
-    /* Instant open */
 }
 
-/* Menu Items */
 .menuItem {
     display: flex;
     align-items: center;
@@ -116,44 +78,49 @@
     border: none;
     background: transparent;
     cursor: pointer;
-    text-align: left;
     font-size: 0.9rem;
-    color: #475569;
-    transition: background 0.2s ease;
-}
-
-/* Radii for first/last items since we removed overflow:hidden */
-.menuItem:first-child {
-    border-radius: 12px 12px 0 0;
-}
-
-.menuItem:last-child {
-    border-radius: 0 0 12px 12px;
+    color: var(--text-main);
+    transition: all var(--transition-fast);
 }
 
 .menuItem:hover {
-    background-color: #f8fafc;
-    color: #0f172a;
+    background-color: rgba(0, 180, 216, 0.06);
+    color: var(--accent-color);
 }
 
 .menuItem.active {
-    background-color: #eff6ff;
-    color: #2563eb;
+    background-color: rgba(0, 180, 216, 0.1);
+    color: var(--accent-color);
     font-weight: 600;
 }
 
 .flag {
+    margin-inline-end: 10px;
     font-size: 1.1rem;
-    margin-right: 8px;
 }
 
-[dir="rtl"] .flag {
-    margin-right: 0;
-    margin-left: 8px;
+/* Mobile Overrides */
+.mobileLangDropDown {
+    width: 100%;
 }
 
-/* RTL positioning */
-[dir="rtl"] .dropdownMenu {
-    right: auto;
-    left: 0;
+.mobileLangDropDown .triggerButton {
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(0, 0, 0, 0.03);
+    border-radius: var(--radius-md);
+    justify-content: space-between;
+}
+
+.mobileLangDropDown .dropdownMenu {
+    position: static;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    box-shadow: none;
+    border: none;
+    background: transparent;
+    width: 100%;
+    margin-top: 8px;
+    padding-inline-start: 16px;
 }

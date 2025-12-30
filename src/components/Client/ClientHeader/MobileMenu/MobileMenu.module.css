@@ -1,163 +1,158 @@
-/* Custom Drawer Paper Styling */
-.drawerPaper {
-    display: flex;
-    flex-direction: column;
-    background: #ffffff;
-    /* Clean shadow handled by MUI, but we can enhance borders */
-    border-right: 1px solid #f1f5f9;
-    /* LTR */
-    border-left: 1px solid #f1f5f9;
-    /* RTL support handled by logic flipping border? No, simplest is just clean bg */
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    outline: none;
-}
-
-/* Mobile Menu Container in Drawer */
-.mobileMenu {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    background: #ffffff;
-    padding-bottom: 20px;
-}
-
-/* Header inside drawer */
-.drawerHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px 20px;
-    border-bottom: 1px solid #f1f5f9;
-}
-
-.drawerTitle {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: #0f172a;
-}
-
-/* Mobile Only Trigger Button (Hamburger) */
 .mobileTrigger {
     display: none;
 }
 
-@media (max-width: 950px) {
-    .mobileTrigger {
-        display: block;
-        color: white;
-        /* Assuming header is primary color */
-    }
+.triggerButton {
+    color: var(--text-main) !important;
+    transition: all var(--transition-fast) !important;
 }
 
-/*
-  Re-using existing components inside mobile menu requires adapting their specific classes via props or hierarchy.
-  Here we define overrides or layout containers.
-*/
-
-.section {
-    padding: 16px;
-    border-bottom: 1px solid #f1f5f9;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+.triggerButton:hover {
+    background: rgba(0, 0, 0, 0.05) !important;
+    transform: scale(1.05);
 }
 
-/* Links Section */
-.linksSection {
-    padding: 20px;
+.drawerContainer {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    height: 100%;
+    position: relative;
+    background: var(--background-light);
+    overflow-x: hidden;
+}
+
+.drawerHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.titleWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.drawerTitle {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-main);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.titleUnderline {
+    width: 30px;
+    height: 3px;
+    background: var(--accent-color);
+    border-radius: var(--radius-full);
+}
+
+.closeButton {
+    color: var(--text-muted) !important;
+    transition: all var(--transition-fast) !important;
+}
+
+.closeButton:hover {
+    color: var(--text-main) !important;
+    background: rgba(0, 0, 0, 0.05) !important;
+}
+
+.scrollContent {
     flex: 1;
-    /* Pushes footer down */
     overflow-y: auto;
-}
-
-/* Styling links inside mobile menu */
-.linksSection a {
-    font-size: 1rem;
-    font-weight: 500;
-    color: #334155;
-    text-decoration: none;
-    padding: 12px;
-    border-radius: 8px;
-    transition: background 0.2s ease;
-}
-
-.linksSection a:hover {
-    background-color: #f8fafc;
-    color: #0f172a;
-}
-
-/* Footer Section */
-.footerSection {
-    margin-top: auto;
-    padding: 20px;
-    background-color: #f8fafc;
-    border-top: 1px solid #e2e8f0;
+    overflow-x: hidden;
+    padding: 20px 24px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 30px;
 }
 
-.langWrapper,
-.profileWrapper {
+.navSection {
+    width: 100%;
+    animation: slideInFromLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+}
+
+[dir="rtl"] .navSection {
+    animation-name: slideInFromRight;
+}
+
+.divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--border-color), transparent);
+    width: 100%;
+    animation: fadeIn 0.8s ease-out 0.2s forwards;
+    opacity: 0;
+}
+
+.actionsSection {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 25px;
+    animation: slideInFromBottom 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+    opacity: 0;
+}
+
+.actionItem {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .sectionLabel {
-    font-size: 0.8rem;
-    color: #64748b;
-    font-weight: 600;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
-/* Utilities */
-.divider {
-    height: 1px;
-    width: 100%;
-    background-color: #f1f5f9;
+.drawerFooter {
+    padding: 20px 24px;
+    border-top: 1px solid var(--border-color);
+    background: rgba(0, 0, 0, 0.02);
+    animation: fadeIn 0.6s ease-out 0.5s forwards;
+    opacity: 0;
 }
 
-/*
-   Dropdown Styling for Mobile Context
-   Used by DropDownMenu when menuIsOpened=true
-*/
-.dropdown {
-    width: 100%;
-    position: relative;
+.footerText {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-align: center;
 }
 
-/* Ensure Button takes full width/looks good */
-.dropdown button {
-    width: 100%;
-    justify-content: flex-start;
-    padding: 10px 12px;
-    border-radius: 8px;
-    background: white;
-    border: 1px solid #e2e8f0;
-}
-
-/* Content opens UPWARDS for visibility */
-/* Content opens relative (Accordion style) to avoid overlap */
-.dropdownContent {
-    position: relative;
-    width: 100%;
-    background: #ffffff;
-    border-radius: 8px;
-    padding: 8px 0;
-    margin-top: 8px;
-    border: 1px solid #e2e8f0;
-    animation: fadeIn 0.3s ease;
-}
-
-@keyframes fadeIn {
+/* --- Pure CSS Animations --- */
+@keyframes slideInFromLeft {
     from {
         opacity: 0;
-        transform: translateY(-5px);
+        transform: translateX(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInFromRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInFromBottom {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
     }
 
     to {
@@ -166,15 +161,24 @@
     }
 }
 
-/* Overrides for specific components when inside mobile */
-/* Note: These classes are applied to wrappers in JSX */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
 
-.mobileSearchWrapper {
-    width: 100%;
+    to {
+        opacity: 1;
+    }
 }
 
-.mobileLangWrapper {
-    width: 100%;
-    display: flex;
-    justify-content: flex-start;
+/* RTL Support via logical properties */
+[dir="rtl"] .titleUnderline {
+    margin-right: 0;
+    margin-left: auto;
+}
+
+@media (max-width: 950px) {
+    .mobileTrigger {
+        display: block;
+    }
 }

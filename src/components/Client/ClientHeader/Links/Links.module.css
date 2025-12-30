@@ -1,38 +1,87 @@
-.linksWraper{
-    height: 100%;
-    padding: 15px;
+.linksWraper {
     display: flex;
-    flex-direction: row;
-    margin: 5px;
-    border-radius: 30px;
-    gap: 20px;
-}
-.link{
-    display: flex;
-    flex-direction: row;
-    text-decoration: none;
     align-items: center;
-    gap: 3px;
-    color: var(--text-main);
-    transition: all .2s;
-}
-.link:hover{
-    transform: scale(1.02);
-    color: var(--highlight-color);
+    gap: 24px;
 }
 
-@media (max-width: 1100px)   {
-    .linkTxt{
-        display: none;
-    }
+.link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: var(--text-main);
+    transition: all var(--transition-normal);
+    position: relative;
+    padding: 8px 0;
 }
-@media (max-width: 515px){
-    .linksWraper{
-        display: none;
-    }
+
+.link:hover {
+    color: var(--accent-color);
+    transform: translateY(-2px);
 }
-@media (max-width: 515px){
-    .linkTxt{
-        display: block;
+
+.linkTxt {
+    margin-inline-start: 10px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    white-space: nowrap;
+}
+
+.active {
+    color: var(--accent-color);
+}
+
+.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    inset-inline: 0;
+    height: 2px;
+    background: var(--accent-color);
+    border-radius: var(--radius-full);
+}
+
+/* Mobile Overrides */
+.isMobile {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    width: 100%;
+}
+
+.isMobile .link {
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(0, 0, 0, 0.03);
+    border-radius: var(--radius-md);
+}
+
+.isMobile .link:hover {
+    background: rgba(0, 180, 216, 0.08);
+    transform: translateX(5px);
+}
+
+.isMobile .linkTxt {
+    display: block !important;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.isMobile .active {
+    background: rgba(0, 180, 216, 0.1);
+}
+
+.isMobile .active::after {
+    display: none;
+}
+
+/* RTL Specific adjustments */
+[dir="rtl"] .isMobile .link:hover {
+    transform: translateX(-5px);
+}
+
+@media (max-width: 1100px) {
+    .linkTxt {
+        display: none;
     }
 }
