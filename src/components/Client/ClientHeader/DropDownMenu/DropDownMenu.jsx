@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
 import styles from "./DropDownMenu.module.css";
-import { User, Package, LogOut, ChevronDown } from "lucide-react";
+import { User, Package, LogOut, ChevronDown, User2Icon } from "lucide-react";
 import { userContext } from "../../../../utils/AppContexts";
 import { supabase } from "../../../../utils/SupabaseClient";
 import { Login } from "@mui/icons-material";
@@ -75,11 +75,15 @@ const DropDownMenu = ({ menuIsOpened }) => {
           setOpen(!open);
         }}
       >
-        <img
+        {user.session ? (
+          <img
           src={user.avatarUrl || "/blank-user.png"}
           alt="Profile"
           className={styles.profileImage}
         />
+        ) : (
+          <User2Icon className={styles.menuIcon} />
+        )}
 
         {/* dispalying Doctor if no session and full name if session with no nick name and the nick name if session and nick name */}
 
