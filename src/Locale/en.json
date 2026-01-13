@@ -117,5 +117,31 @@
         "upload_error": "Failed to upload photo",
         "governorate": "Governorate",
         "select_governorate": "Select Governorate"
+    },
+    "checkout": {
+        "shipping_info": "Shipping Information",
+        "guest_checkout": "Guest Checkout",
+        "full_name": "Full Name",
+        "enter_name": "Enter your full name",
+        "phone": "Phone Number",
+        "enter_phone": "Enter your phone number",
+        "governorate": "Governorate",
+        "select_governorate": "Select your governorate",
+        "full_address": "Full Address",
+        "enter_address": "Street, building, floor...",
+        "payment_method": "Payment Method",
+        "cash_on_delivery": "Cash on Delivery",
+        "online_payment": "Online Payment",
+        "coming_soon": "Coming Soon",
+        "order_summary": "Order Summary",
+        "subtotal": "Subtotal",
+        "shipping": "Shipping",
+        "select_location": "Select location first",
+        "total": "Total",
+        "promo_code": "Promo Code",
+        "apply": "Apply",
+        "confirm_order": "Confirm Order",
+        "fill_all_fields": "Please fill all required fields",
+        "order_confirmed": "Order confirmed successfully!"
     }
 }

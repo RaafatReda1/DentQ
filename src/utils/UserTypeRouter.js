@@ -100,7 +100,10 @@ const UserTypeRouter = async (user, setUser) => {
         nickName: clientData.nickName,
         email: clientData.email,
         session,
+        phone: clientData.phone,
+        address: clientData.address,
         avatarUrl: clientData.avatarUrl || avatarUrl,
+        governorateId: clientData.governorateId,
       }));
       return;
     }

@@ -117,5 +117,31 @@
         "upload_error": "فشل في رفع الصورة",
         "governorate": "محافظة",
         "select_governorate": "اختر المحافظة"
+    },
+    "checkout": {
+        "shipping_info": "معلومات الشحن",
+        "guest_checkout": "طلب كضيف",
+        "full_name": "الاسم الكامل",
+        "enter_name": "أدخل اسمك الكامل",
+        "phone": "رقم الهاتف",
+        "enter_phone": "أدخل رقم هاتفك",
+        "governorate": "المحافظة",
+        "select_governorate": "اختر محافظتك",
+        "full_address": "العنوان الكامل",
+        "enter_address": "الشارع، المبنى، الطابق...",
+        "payment_method": "طريقة الدفع",
+        "cash_on_delivery": "الدفع عند الاستلام",
+        "online_payment": "الدفع الإلكتروني",
+        "coming_soon": "قريباً",
+        "order_summary": "ملخص الطلب",
+        "subtotal": "المجموع الفرعي",
+        "shipping": "الشحن",
+        "select_location": "اختر الموقع أولاً",
+        "total": "الإجمالي",
+        "promo_code": "كود الخصم",
+        "apply": "تطبيق",
+        "confirm_order": "تأكيد الطلب",
+        "fill_all_fields": "الرجاء ملء جميع الحقول المطلوبة",
+        "order_confirmed": "تم تأكيد الطلب بنجاح!"
     }
 }

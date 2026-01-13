@@ -1,0 +1,119 @@
+/* Summary Section */
+.summarySection {
+    position: sticky;
+    top: 2rem;
+    height: fit-content;
+}
+
+.summaryCard {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+.sectionTitle {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 1.5rem;
+}
+
+.summaryRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+    color: #64748b;
+}
+
+.summaryRow.total {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 1rem 0;
+}
+
+.price {
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.divider {
+    height: 2px;
+    background: #f1f5f9;
+    margin: 1rem 0;
+}
+
+.promoSection {
+    display: flex;
+    gap: 0.5rem;
+    margin: 1.5rem 0;
+}
+
+.promoInput {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    font-size: 0.9rem;
+}
+
+.promoInput:disabled {
+    background: #f1f5f9;
+    cursor: not-allowed;
+}
+
+.promoButton {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    border: none;
+    background: #e2e8f0;
+    color: #64748b;
+    font-weight: 600;
+    cursor: not-allowed;
+}
+
+.confirmButton {
+    width: 100%;
+    padding: 1rem;
+    border-radius: 10px;
+    border: none;
+    background: #00b7a8;
+    color: white;
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 12px rgba(0, 183, 168, 0.3);
+}
+
+.confirmButton:hover {
+    background: #009688;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 183, 168, 0.4);
+}
+
+.confirmButton:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 8px rgba(0, 183, 168, 0.4);
+}
+
+/* Disabled state */
+.confirmButton:disabled {
+    background: #b0b0b0;
+    color: #f5f5f5;
+    cursor: not-allowed;
+    box-shadow: none;
+    opacity: 0.7;
+    transform: none;
+}
+
+/* Prevent hover/active effects when disabled */
+.confirmButton:disabled:hover,
+.confirmButton:disabled:active {
+    background: #b0b0b0;
+    transform: none;
+    box-shadow: none;
+}
