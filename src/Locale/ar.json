@@ -114,6 +114,8 @@
         "success": "تم تحديث الحساب بنجاح!",
         "error": "فشل في تحديث الحساب",
         "upload_success": "تم رفع الصورة بنجاح!",
-        "upload_error": "فشل في رفع الصورة"
+        "upload_error": "فشل في رفع الصورة",
+        "governorate": "محافظة",
+        "select_governorate": "اختر المحافظة"
     }
 }

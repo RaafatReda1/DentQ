@@ -114,6 +114,8 @@
         "success": "Profile updated successfully!",
         "error": "Failed to update profile",
         "upload_success": "Photo uploaded successfully!",
-        "upload_error": "Failed to upload photo"
+        "upload_error": "Failed to upload photo",
+        "governorate": "Governorate",
+        "select_governorate": "Select Governorate"
     }
 }

@@ -1,0 +1,135 @@
+/* Premium Custom Select Styling */
+.selectGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.selectLabel {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #475569;
+    margin-left: 0.25rem;
+    transition: color 0.2s;
+}
+
+.selectWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.selectIcon {
+    position: absolute;
+    left: 1rem;
+    color: #94a3b8;
+    pointer-events: none;
+    z-index: 2;
+    transition: color 0.3s ease;
+}
+
+[dir="rtl"] .selectIcon {
+    left: auto;
+    right: 1rem;
+}
+
+.selectInput {
+    width: 100%;
+    padding: 0.75rem 2.75rem 0.75rem 3rem;
+    border-radius: 12px;
+    border: 2px solid #e2e8f0;
+    background: #ffffff;
+    color: #334155;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    position: relative;
+    z-index: 1;
+}
+
+[dir="rtl"] .selectInput {
+    padding: 0.75rem 3rem 0.75rem 2.75rem;
+}
+
+.selectInput:hover {
+    border-color: #cbd5e1;
+    background: #f8fafc;
+}
+
+.selectInput:focus {
+    outline: none;
+    border-color: #00b7a8;
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(0, 183, 168, 0.1);
+}
+
+.selectInput:focus+.selectArrow {
+    color: #00b7a8;
+    transform: translateY(-50%) rotate(180deg);
+}
+
+.selectInput:disabled {
+    background: #f1f5f9;
+    color: #94a3b8;
+    border-color: #e2e8f0;
+    cursor: not-allowed;
+}
+
+.selectWrapper:hover .selectIcon {
+    color: #00b7a8;
+}
+
+.selectWrapper:focus-within .selectIcon {
+    color: #00b7a8;
+}
+
+.selectWrapper:focus-within .selectLabel {
+    color: #00b7a8;
+}
+
+/* Custom Arrow */
+.selectArrow {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #64748b;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+}
+
+[dir="rtl"] .selectArrow {
+    right: auto;
+    left: 1rem;
+}
+
+/* Option Styling */
+.selectInput option {
+    padding: 0.75rem;
+    background: #ffffff;
+    color: #1e293b;
+    font-weight: 500;
+}
+
+.selectInput option:hover {
+    background: #f0fdfa;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .selectInput {
+        padding: 0.875rem 2.5rem 0.875rem 3rem;
+        font-size: 1rem;
+    }
+
+    [dir="rtl"] .selectInput {
+        padding: 0.875rem 3rem 0.875rem 2.5rem;
+    }
+}
