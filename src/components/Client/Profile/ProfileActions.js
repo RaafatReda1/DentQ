@@ -74,3 +74,18 @@ export const uploadProfilePicture = async (clientId, fullName, file) => {
         return null;
     }
 };
+/**
+ * Fetch all governorates for shipping
+ */
+export const fetchGovernorates = async () => {
+    const { data, error } = await supabase
+        .from("GovernoratesShipping")
+        .select("id, governorateEn, governorateAr")
+        .order("governorateEn", { ascending: true });
+
+    if (error) {
+        console.error("Error fetching governorates:", error);
+        return [];
+    }
+    return data;
+};

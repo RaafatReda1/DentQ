@@ -1,6 +1,7 @@
 import React from 'react';
 import { User, Edit2, Phone, Mail, MapPin, Save, Loader2 } from 'lucide-react';
 import ProfileField from './ProfileField';
+import ProfileSelect from './ProfileSelect';
 import styles from '../ProfilePage.module.css';
 
 const ProfileForm = ({
@@ -10,8 +11,16 @@ const ProfileForm = ({
     isEditing,
     setIsEditing,
     saving,
-    t
+    governorates,
+    t,
+    i18n
 }) => {
+    // Localize governorate names
+    const localizedGovernorates = governorates.map(g => ({
+        id: g.id,
+        label: i18n.language === 'ar' ? g.governorateAr : g.governorateEn
+    }));
+
     return (
         <form onSubmit={handleSubmit}>
             <div className={styles.formGrid}>
@@ -54,6 +63,17 @@ const ProfileForm = ({
                     type="email"
                 />
 
+                <ProfileSelect
+                    label={t('profile.governorate') || 'Governorate'}
+                    name="governorateId"
+                    value={formData.governorateId}
+                    onChange={handleChange}
+                    icon={MapPin}
+                    disabled={!isEditing || saving}
+                    options={localizedGovernorates}
+                    placeholder={t('profile.select_governorate') || 'Select Governorate'}
+                />
+
                 <ProfileField
                     label={t('profile.address') || 'Address'}
                     name="address"
@@ -63,6 +83,7 @@ const ProfileForm = ({
                     disabled={!isEditing || saving}
                     className={styles.fullWidth}
                 />
+
             </div>
 
             <div className={styles.actions}>

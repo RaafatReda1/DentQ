@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { userContext } from '../../../utils/AppContexts';
-import { fetchClientData, updateClientData, uploadProfilePicture } from './ProfileActions';
+import { fetchClientData, updateClientData, uploadProfilePicture, fetchGovernorates } from './ProfileActions';
 import styles from './ProfilePage.module.css';
 import { Loader2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -13,26 +13,35 @@ import ProfileForm from './subcomponents/ProfileForm';
 import ProfileImageModal from './subcomponents/ProfileImageModal';
 
 const ProfilePage = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [user, setUser] = useContext(userContext);
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [previewUrl, setPreviewUrl] = useState(null);
+  const [governorates, setGovernorates] = useState([]);
   const [formData, setFormData] = useState({
     fullName: '',
     nickName: '',
     email: '',
     phone: '',
     address: '',
-    avatarUrl: ''
+    avatarUrl: '',
+    governorateId: ''
   });
 
   useEffect(() => {
     const loadProfile = async () => {
       if (user && user.id) {
-        const data = await fetchClientData(user.id);
+        setLoading(true);
+        const [data, govs] = await Promise.all([
+          fetchClientData(user.id),
+          fetchGovernorates()
+        ]);
+
+        if (govs) setGovernorates(govs);
+
         if (data) {
           setFormData({
             fullName: data.fullName || '',
@@ -40,7 +49,8 @@ const ProfilePage = () => {
             email: data.email || '',
             phone: data.phone || '',
             address: data.address || '',
-            avatarUrl: data.avatarUrl || ''
+            avatarUrl: data.avatarUrl || '',
+            governorateId: data.governorateId || ''
           });
         }
         setLoading(false);
@@ -89,7 +99,8 @@ const ProfilePage = () => {
       fullName: formData.fullName,
       nickName: formData.nickName,
       phone: formData.phone,
-      address: formData.address
+      address: formData.address,
+      governorateId: formData.governorateId
     };
 
     const updated = await updateClientData(user.id, updates);
@@ -149,7 +160,9 @@ const ProfilePage = () => {
           isEditing={isEditing}
           setIsEditing={setIsEditing}
           saving={saving}
+          governorates={governorates}
           t={t}
+          i18n={i18n}
         />
       </div>
     </div>

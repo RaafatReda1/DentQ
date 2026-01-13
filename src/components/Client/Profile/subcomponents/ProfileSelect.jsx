@@ -1,15 +1,15 @@
 import React from 'react';
 import styles from '../ProfilePage.module.css';
 
-const ProfileField = ({
+const ProfileSelect = ({
     label,
     name,
     value,
     onChange,
     icon: Icon,
     disabled,
-    required,
-    type = "text",
+    options,
+    placeholder,
     className = ""
 }) => {
     return (
@@ -17,18 +17,24 @@ const ProfileField = ({
             <label className={styles.label}>{label}</label>
             <div className={styles.inputWrapper}>
                 <Icon className={styles.inputIcon} size={18} />
-                <input
+                <select
                     className={styles.input}
-                    type={type}
                     name={name}
-                    value={value}
+                    value={value || ""}
                     onChange={onChange}
                     disabled={disabled}
-                    required={required}
-                />
+                    style={{ appearance: 'none', cursor: disabled ? 'not-allowed' : 'pointer' }}
+                >
+                    <option value="" disabled>{placeholder}</option>
+                    {options.map(option => (
+                        <option key={option.id} value={option.id}>
+                            {option.label}
+                        </option>
+                    ))}
+                </select>
             </div>
         </div>
     );
 };
 
-export default ProfileField;
+export default ProfileSelect;
