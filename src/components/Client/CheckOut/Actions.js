@@ -46,7 +46,7 @@ export const confirmOrder = async (FormData) => {
     if (error) {
         console.error(error);
         return [];
-    } else if (data) {
+    } else{
         toast.success("Order confirmed!");
     }
 };

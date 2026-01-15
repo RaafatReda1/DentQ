@@ -13,6 +13,7 @@ const OrderSum = ({
   onRemovePromoCode,
   userId,
   t,
+  isSubmitting
 }) => {
   const checkValidForm = () => {
     if (
@@ -72,10 +73,17 @@ const OrderSum = ({
         />
         <button
           className={styles.confirmButton}
-          disabled={!checkValidForm()}
+          disabled={!checkValidForm() || isSubmitting}
           onClick={handleConfirmOrder}
         >
-          {t("checkout.confirm_order") || "Confirm Order"}
+          {isSubmitting ? (
+            <div className={styles.buttonLoader}>
+              <div className={styles.spinner}></div>
+              <span>{t("checkout.processing") || "Processing..."}</span>
+            </div>
+          ) : (
+            t("checkout.confirm_order") || "Confirm Order"
+          )}
         </button>
       </div>
     </div>

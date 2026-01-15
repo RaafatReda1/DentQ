@@ -129,14 +129,50 @@ function CheckOutPage() {
     label: i18n.language === 'ar' ? g.governorateAr : g.governorateEn
   }));
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleConfirmOrder = async () => {
     // Validation
     if (!formData.full_name || !formData.phone_number || !formData.governorate_id || !formData.address) {
       toast.error(t('checkout.fill_all_fields') || 'Please fill all required fields');
       return;
     }
-    await confirmOrder(formData);
-    // TODO: Create order in database
+
+    setIsSubmitting(true);
+    try {
+      const result = await confirmOrder(formData);
+
+      if (result) {
+        // Reset form and promo code on success
+        setPromoCode({
+          code: '',
+          isApplied: false,
+          discountAmount: 0,
+          discountType: null,
+          discountValue: null,
+          isLoading: false
+        });
+
+        // Reset ALL form fields to empty state
+        setFormData(prev => ({
+          ...prev,
+          full_name: '',
+          phone_number: '',
+          governorate_id: '',
+          address: '',
+          payment_method: 'cash_on_delivery',
+          promocode_id: null,
+          // total_amount updates via useEffect
+        }));
+
+        // Navigation could go here, e.g., router.push('/order-success')
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(t('checkout.error_generic') || 'Something went wrong');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (loading) {
@@ -172,6 +208,7 @@ function CheckOutPage() {
           onRemovePromoCode={handleRemovePromoCode}
           userId={user?.id}
           t={t}
+          isSubmitting={isSubmitting}
         />
       </div>
     </div>
