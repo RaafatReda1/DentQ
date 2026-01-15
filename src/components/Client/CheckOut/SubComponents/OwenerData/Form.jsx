@@ -19,8 +19,8 @@ const Form = ({
                 </label>
                 <input
                     type="text"
-                    name="fullName"
-                    value={formData.fullName}
+                    name="full_name"
+                    value={formData.full_name}
                     onChange={handleChange}
                     className={styles.input}
                     placeholder={t('checkout.enter_name') || 'Enter your full name'}
@@ -35,8 +35,8 @@ const Form = ({
                 </label>
                 <input
                     type="tel"
-                    name="phone"
-                    value={formData.phone}
+                    name="phone_number"
+                    value={formData.phone_number}
                     onChange={handleChange}
                     className={styles.input}
                     placeholder={t('checkout.enter_phone') || 'Enter your phone'}
@@ -46,8 +46,8 @@ const Form = ({
 
             <ProfileSelect
                 label={t('checkout.governorate') || 'Governorate'}
-                name="governorateId"
-                value={formData.governorateId}
+                name="governorate_id"
+                value={formData.governorate_id}
                 onChange={handleChange}
                 icon={MapPin}
                 options={localizedGovernorates}

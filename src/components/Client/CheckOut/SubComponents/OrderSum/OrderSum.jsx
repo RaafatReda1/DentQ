@@ -1,20 +1,24 @@
-import validatePromoCode from "../../../../../utils/CheckPromoCodeValidity";
 import styles from "./OerderSum.module.css";
 import PromoCodeSection from "./PromoCodeSection";
 
-const OrderSum = async ({
+const OrderSum = ({
   subtotal,
   shipping,
+  discount,
   total,
   formData,
   handleConfirmOrder,
+  promoCode,
+  onApplyPromoCode,
+  onRemovePromoCode,
+  userId,
   t,
 }) => {
   const checkValidForm = () => {
     if (
-      !formData.fullName ||
-      !formData.phone ||
-      !formData.governorateId ||
+      !formData.full_name ||
+      !formData.phone_number ||
+      !formData.governorate_id ||
       !formData.address
     ) {
       return false;
@@ -36,11 +40,21 @@ const OrderSum = async ({
         <div className={styles.summaryRow}>
           <span>{t("checkout.shipping") || "Shipping"}</span>
           <span className={styles.price}>
-            {formData.governorateId
+            {formData.governorate_id
               ? `${shipping}`
               : t("checkout.select_location") || "-"}
           </span>
         </div>
+
+        {/* Discount Row - Only show if promo code is applied */}
+        {promoCode.isApplied && (
+          <div className={`${styles.summaryRow} ${styles.discount}`}>
+            <span>
+              {t("checkout.discount") || "Discount"} ({promoCode.code})
+            </span>
+            <span className={styles.discountPrice}>-{discount}</span>
+          </div>
+        )}
 
         <div className={styles.divider} />
 
@@ -48,8 +62,14 @@ const OrderSum = async ({
           <span>{t("checkout.total") || "Total"}</span>
           <span className={styles.price}>{total}</span>
         </div>
+
         {/* PromoCodeSection */}
-        <PromoCodeSection/>
+        <PromoCodeSection
+          promoCode={promoCode}
+          onApply={onApplyPromoCode}
+          onRemove={onRemovePromoCode}
+          userId={userId}
+        />
         <button
           className={styles.confirmButton}
           disabled={!checkValidForm()}

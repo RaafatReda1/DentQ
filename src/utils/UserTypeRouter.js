@@ -114,6 +114,7 @@ const UserTypeRouter = async (user, setUser) => {
     const { data: newClient, error: insertError } = await supabase
       .from("Clients")
       .insert({
+        id: session.user.id,
         fullName: fullName,
         email: email,
         avatarUrl: avatarUrl

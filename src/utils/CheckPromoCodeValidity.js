@@ -1,3 +1,5 @@
+
+//الفانكشن ده ف الداتا بيز بيشيك ع البروموكود بس يسطا منغير م يسجل ان اليوزر استخدمه
 export default async function validatePromoCode(code, userId) {
   const response = await fetch(
     `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/validate-promo-code`,
@@ -83,3 +85,40 @@ export default async function validatePromoCode(code, userId) {
 //   "messageEn": "Internal server error",
 //   "error": "details here"
 // }
+
+
+
+// الفانكشن ده بيسجل ان اليوزر استخدم البروموكود بالفعل وهنستخدمه ف ال Confirm Order BTN
+
+export async function applyPromoCode(promoCodeId, userId, orderId) {
+  try {
+    const res = await fetch(
+      `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/confirm-using-promocode`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+          'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY
+        },
+        body: JSON.stringify({
+          promoCodeId,
+          userId,
+          orderId
+        })
+      }
+    )
+
+    if (!res.ok) {
+      const errorText = await res.text()
+      console.error('Response error:', errorText)
+      throw new Error(`HTTP error! status: ${res.status}`)
+    }
+
+    const result = await res.json()
+    return result
+  } catch (error) {
+    console.error('Error applying promo code:', error)
+    throw error
+  }
+}

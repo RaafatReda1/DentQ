@@ -11,13 +11,13 @@ const OwnerDataField = ({ formData, handlePaymentMethodChange, t }) => {
       </h3>
 
       <div className={styles.paymentOptions}>
-        <label className={`${styles.paymentOption} ${formData.paymentMethod === 'cash' ? styles.selected : ''}`}>
+        <label className={`${styles.paymentOption} ${formData.payment_method === 'cash_on_delivery' ? styles.selected : ''}`}>
           <input
             type="radio"
-            name="paymentMethod"
-            value="cash"
-            checked={formData.paymentMethod === 'cash'}
-            onChange={() => handlePaymentMethodChange('cash')}
+            name="payment_method"
+            value="cash_on_delivery"
+            checked={formData.payment_method === 'cash_on_delivery'}
+            onChange={() => handlePaymentMethodChange('cash_on_delivery')}
           />
           <div className={styles.paymentContent}>
             <Truck size={20} />
