@@ -93,6 +93,7 @@ function CheckOutPage() {
       toast.success(i18n.language === 'ar' ? result.message : result.messageEn);
     } else {
       setPromoCode(prev => ({ ...prev, isLoading: false }));
+      setFormData(prev => ({ ...prev, promocode_id: null }));
       toast.error(i18n.language === 'ar' ? result.message : result.messageEn);
     }
   };
@@ -106,6 +107,7 @@ function CheckOutPage() {
       discountValue: null,
       isLoading: false
     });
+    setFormData(prev => ({ ...prev, promocode_id: null }));
     toast.success(t('checkout.promo_removed') || 'Promo code removed');
   };
 
