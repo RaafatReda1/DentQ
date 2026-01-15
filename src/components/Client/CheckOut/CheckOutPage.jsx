@@ -58,7 +58,7 @@ function CheckOutPage() {
   };
 
   // Calculate totals
-  const subtotal = formatPrice(totalPrice); // TODO: Calculate from cart
+  const subtotal = formatPrice(totalPrice);
   const shipping = formatPrice(calculateShipping(formData.governorateId, governorates));
   const total = formatPrice(totalPrice + calculateShipping(formData.governorateId, governorates));
 

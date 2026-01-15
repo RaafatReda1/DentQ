@@ -26,3 +26,4 @@ export const calculateShipping = (governorateId, governorates) => {
     return governorate ? governorate.shippingPrice : 0;
 };
 
+

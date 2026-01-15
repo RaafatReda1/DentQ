@@ -1,6 +1,4 @@
-import React, { use } from 'react';
 import styles from './OerderSum.module.css';
-import { useFormatPrice } from '../../../../../utils/Hooks/useFormatPrice';
 
 const OrderSum = ({
   subtotal,
@@ -10,7 +8,6 @@ const OrderSum = ({
   handleConfirmOrder,
   t
 }) => {
-  const formatPrice = useFormatPrice();
   const checkValidForm = () => {
     if (!formData.fullName || !formData.phone || !formData.governorateId || !formData.address) {
       return false;
