@@ -1,65 +1,62 @@
-import styles from './OerderSum.module.css';
+import validatePromoCode from "../../../../../utils/CheckPromoCodeValidity";
+import styles from "./OerderSum.module.css";
+import PromoCodeSection from "./PromoCodeSection";
 
-const OrderSum = ({
+const OrderSum = async ({
   subtotal,
   shipping,
   total,
   formData,
   handleConfirmOrder,
-  t
+  t,
 }) => {
   const checkValidForm = () => {
-    if (!formData.fullName || !formData.phone || !formData.governorateId || !formData.address) {
+    if (
+      !formData.fullName ||
+      !formData.phone ||
+      !formData.governorateId ||
+      !formData.address
+    ) {
       return false;
     }
     return true;
-  }
+  };
   return (
     <div className={styles.summarySection}>
       <h2 className={styles.sectionTitle}>
-        {t('checkout.order_summary') || 'Order Summary'}
+        {t("checkout.order_summary") || "Order Summary"}
       </h2>
 
       <div className={styles.summaryCard}>
         <div className={styles.summaryRow}>
-          <span>{t('checkout.subtotal') || 'Subtotal'}</span>
+          <span>{t("checkout.subtotal") || "Subtotal"}</span>
           <span className={styles.price}>{subtotal}</span>
         </div>
 
         <div className={styles.summaryRow}>
-          <span>{t('checkout.shipping') || 'Shipping'}</span>
+          <span>{t("checkout.shipping") || "Shipping"}</span>
           <span className={styles.price}>
-            {formData.governorateId ? `${shipping}` : t('checkout.select_location') || '-'}
+            {formData.governorateId
+              ? `${shipping}`
+              : t("checkout.select_location") || "-"}
           </span>
         </div>
 
         <div className={styles.divider} />
 
         <div className={`${styles.summaryRow} ${styles.total}`}>
-          <span>{t('checkout.total') || 'Total'}</span>
+          <span>{t("checkout.total") || "Total"}</span>
           <span className={styles.price}>{total}</span>
         </div>
-
-        <div className={styles.promoSection}>
-          <input
-            type="text"
-            className={styles.promoInput}
-            placeholder={t('checkout.promo_code') || 'Promo Code'}
-            disabled
-          />
-          <button className={styles.promoButton} disabled>
-            {t('checkout.apply') || 'Apply'}
-          </button>
-        </div>
-
+        {/* PromoCodeSection */}
+        <PromoCodeSection/>
         <button
           className={styles.confirmButton}
-          disabled = {!checkValidForm()}
+          disabled={!checkValidForm()}
           onClick={handleConfirmOrder}
         >
-          {t('checkout.confirm_order') || 'Confirm Order'}
+          {t("checkout.confirm_order") || "Confirm Order"}
         </button>
-
       </div>
     </div>
   );
