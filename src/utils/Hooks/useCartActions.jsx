@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useCallback } from "react";
 import toast from "react-hot-toast";
 import { supabase } from "../SupabaseClient";
 import { userContext } from "../AppContexts"; // افترض عندك UserContext
@@ -28,7 +28,7 @@ const useOwnerInfo = () => {
 export const useCartActions = () => {
   const { ownerId, ownerField } = useOwnerInfo();
 
-  const fetchCart = async () => {
+  const fetchCart = useCallback(async () => {
     // ... code ...
     if (!ownerId || !ownerField) return null;
 
@@ -45,123 +45,146 @@ export const useCartActions = () => {
     }
 
     return data;
-  };
+  }, [ownerId, ownerField]);
 
-  const addToCart = async (currentProduct, singleIncrease) => {//if we passed singleIncrease with true it willonly add 1 to that specific product
-    if (!ownerId || !ownerField) {
-      console.error("DEBUG: Missing owner info, cannot add to cart.");
-      return false;
-    }
-
-    const { id, color, size, qty } = currentProduct;
-    // Create a minimal object with only necessary identifying fields
-    const productToAdd = {
-      id,
-      qty: (qty && !singleIncrease) ? qty : 1,
-      ...(color !== undefined && { color }),
-      ...(size !== undefined && { size }),
-    };
-
-    let ownerCart = await fetchCart();
-
-    if (!ownerCart) {
-      const { error } = await supabase.from("Carts").insert({
-        [ownerField]: ownerId,
-        items: [productToAdd],
-      });
-
-      if (error) {
-        console.error("Error creating cart:", error);
-        toast.error("Failed to add to cart");
+  const addToCart = useCallback(
+    async (currentProduct, singleIncrease) => {
+      //if we passed singleIncrease with true it willonly add 1 to that specific product
+      if (!ownerId || !ownerField) {
+        console.error("DEBUG: Missing owner info, cannot add to cart.");
         return false;
       }
 
-      toast.success("Added to cart");
-      return true;
-    }
-
-    const items = [...ownerCart.items];
-    const index = items.findIndex((item) => isSameVariant(item, productToAdd));
-
-    if (index !== -1) {
-      items[index] = {
-        ...items[index],
-        qty: items[index].qty + productToAdd.qty,
+      const { id, color, size, qty } = currentProduct;
+      // Create a minimal object with only necessary identifying fields
+      const productToAdd = {
+        id,
+        qty: qty && !singleIncrease ? qty : 1,
+        ...(color !== undefined && { color }),
+        ...(size !== undefined && { size }),
       };
-    } else {
-      items.push(productToAdd);
-    }
 
-    const { error } = await supabase
-      .from("Carts")
-      .update({ items })
-      .eq("id", ownerCart.id);
+      let ownerCart = await fetchCart();
 
-    if (error) {
-      console.error("Error updating cart:", error);
-      toast.error("Failed to update cart");
-      return false;
-    }
+      if (!ownerCart) {
+        const { error } = await supabase.from("Carts").insert({
+          [ownerField]: ownerId,
+          items: [productToAdd],
+        });
 
-    toast.success("Cart updated successfully");
-    return true;
-  };
+        if (error) {
+          console.error("Error creating cart:", error);
+          toast.error("Failed to add to cart");
+          return false;
+        }
 
-  const decreaseCartQty = async (product) => {
-    if (!ownerId || !ownerField) return;
+        toast.success("Added to cart");
 
-    let ownerCart = await fetchCart();
-    if (!ownerCart) return;
+        // Trigger app reload on first cart creation as requested
 
-    const items = [...ownerCart.items];
-    const index = items.findIndex((item) => isSameVariant(item, product));
-    if (index === -1) return;
+        window.forceRerender()
+        return true;
+      }
 
-    if (items[index].qty > 1) {
-      items[index].qty -= 1;
-    } else {
+      const items = [...ownerCart.items];
+      const wasEmpty = items.length === 0; // Check if it was empty before adding
+
+      const index = items.findIndex((item) =>
+        isSameVariant(item, productToAdd)
+      );
+
+      if (index !== -1) {
+        items[index] = {
+          ...items[index],
+          qty: items[index].qty + productToAdd.qty,
+        };
+      } else {
+        items.push(productToAdd);
+      }
+
+      const { error } = await supabase
+        .from("Carts")
+        .update({ items })
+        .eq("id", ownerCart.id);
+
+      if (error) {
+        console.error("Error updating cart:", error);
+        toast.error("Failed to update cart");
+        return false;
+      }
+
+      toast.success("Cart updated successfully");
+
+      if (wasEmpty) {
+        window.forceRerender();
+      }
+
+      return true;
+    },
+    [ownerId, ownerField, fetchCart]
+  );
+
+  const decreaseCartQty = useCallback(
+    async (product) => {
+      if (!ownerId || !ownerField) return;
+
+      let ownerCart = await fetchCart();
+      if (!ownerCart) return;
+
+      const items = [...ownerCart.items];
+      const index = items.findIndex((item) => isSameVariant(item, product));
+      if (index === -1) return;
+
+      if (items[index].qty > 1) {
+        items[index].qty -= 1;
+      } else {
+        items.splice(index, 1);
+      }
+
+      const { error } = await supabase
+        .from("Carts")
+        .update({ items })
+        .eq("id", ownerCart.id);
+
+      if (error) {
+        console.error("Error decreasing product qty:", error);
+        toast.error("Failed to update cart");
+        return 0;
+      }
+
+      toast.success("Cart updated successfully");
+    },
+    [ownerId, ownerField, fetchCart]
+  );
+
+  const deleteProductFromCart = useCallback(
+    async (product) => {
+      if (!ownerId || !ownerField) return;
+
+      let ownerCart = await fetchCart();
+      if (!ownerCart) return;
+
+      const items = [...ownerCart.items];
+      const index = items.findIndex((item) => isSameVariant(item, product));
+      if (index === -1) return;
+
       items.splice(index, 1);
-    }
 
-    const { error } = await supabase
-      .from("Carts")
-      .update({ items })
-      .eq("id", ownerCart.id);
+      const { error } = await supabase
+        .from("Carts")
+        .update({ items })
+        .eq("id", ownerCart.id);
 
-    if (error) {
-      console.error("Error decreasing product qty:", error);
-      toast.error("Failed to update cart");
-      return 0;
-    }
+      if (error) {
+        console.error("Error deleting product from cart:", error);
+        toast.error("Failed to update cart");
+        return;
+      }
 
-    toast.success("Cart updated successfully");
-  };
-
-  const deleteProductFromCart = async (product) => {
-    if (!ownerId || !ownerField) return;
-
-    let ownerCart = await fetchCart();
-    if (!ownerCart) return;
-
-    const items = [...ownerCart.items];
-    const index = items.findIndex((item) => isSameVariant(item, product));
-    if (index === -1) return;
-
-    items.splice(index, 1);
-
-    const { error } = await supabase
-      .from("Carts")
-      .update({ items })
-      .eq("id", ownerCart.id);
-
-    if (error) {
-      console.error("Error deleting product from cart:", error);
-      toast.error("Failed to update cart");
-      return;
-    }
-
-    toast.success("Product removed from cart");
-  };
+      toast.success("Product removed from cart");
+    },
+    [ownerId, ownerField, fetchCart]
+  );
 
   return { addToCart, decreaseCartQty, deleteProductFromCart, fetchCart };
 };

@@ -19,17 +19,17 @@ const useCartDataStorage = () => {
     let active = true;
 
     const loadCart = async () => {
-      console.log("🔄 loadCart called - user:", user, "trigger:", trigger);
+      // Don't fetch if user is not initialized at all (neither client nor guest)
+      // But allow fetch if user object exists even if loadingState might be inconsistent - 
+      // rely on useCartActions to provide the correct ID.
+      if (!user) {
+        if (active) setLoading(false);
+        return;
+      }
 
-      // Don't fetch if user is not ready
-      if (!user || user.loadingState) {
-        console.log("⏸️ User not ready, skipping cart fetch");
-        if (active) {
-          setLoading(false);
-          setCart(null);
-          setCartItems([]);
-          setTotalPrice(0);
-        }
+      // If we have neither ID, we can't fetch.
+      if (!user.id && !user.guest_id) {
+        if (active) setLoading(false);
         return;
       }
 
@@ -37,7 +37,6 @@ const useCartDataStorage = () => {
       setLoading(true);
 
       const data = await fetchCart();
-      console.log("📦 Cart data received:", data);
 
       if (!active) return;
 
@@ -54,7 +53,7 @@ const useCartDataStorage = () => {
 
       const rawItems = data.items;
       const productIds = [...new Set(rawItems.map((item) => item.id))];
-      console.log("🔍 Fetching product details for IDs:", productIds);
+      // console.log("🔍 Fetching product details for IDs:", productIds);
 
       // Fetch product details
       const { data: products, error } = await supabase
@@ -67,8 +66,6 @@ const useCartDataStorage = () => {
         if (active) setLoading(false);
         return;
       }
-
-      console.log("✅ Products fetched:", products);
 
       // Merge cart items with product details
       const hydratedItems = rawItems
@@ -88,8 +85,6 @@ const useCartDataStorage = () => {
         return acc + item.product.price * item.qty;
       }, 0);
 
-      console.log("💰 Cart items hydrated:", hydratedItems.length, "items, total:", total);
-
       if (active) {
         setCartItems(hydratedItems);
         setTotalPrice(total);
@@ -103,7 +98,7 @@ const useCartDataStorage = () => {
       active = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.id, user?.guest_id, user?.type, user?.loadingState, trigger]);
+  }, [user?.id, user?.guest_id, trigger, fetchCart]); // Added fetchCart to dependencies logic
 
   // Robust owner-based realtime subscription
   const ownerFilter = user?.id
@@ -117,7 +112,7 @@ const useCartDataStorage = () => {
     "Carts",
     ownerFilter,
     (payload) => {
-      console.log("Real-time cart update received for owner:", payload.eventType);
+      console.log("Real-time cart update received for owner:", payload);
       // Trigger a refetch on any change (insert, update, delete)
       setTrigger((prev) => prev + 1);
     }

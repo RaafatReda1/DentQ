@@ -13,7 +13,7 @@ import HandlePromoCode from './SubComponents/OrderSum/HandlePromoCode';
 function CheckOutPage() {
   const { t, i18n } = useTranslation();
   const [user] = useContext(userContext);
-  const { totalPrice } = useCartDataStorage();
+  const { totalPrice, cartItems } = useCartDataStorage();
   const formatPrice = useFormatPrice();
   const [governorates, setGovernorates] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -140,7 +140,7 @@ function CheckOutPage() {
 
     setIsSubmitting(true);
     try {
-      const result = await confirmOrder(formData);
+      const result = await confirmOrder(formData, cartItems);
 
       if (result) {
         // Reset form and promo code on success
