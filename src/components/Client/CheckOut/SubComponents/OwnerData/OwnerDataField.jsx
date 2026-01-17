@@ -1,6 +1,6 @@
 import React from 'react';
 import { CreditCard, Truck } from 'lucide-react';
-import styles from './OwenerData.module.css';
+import styles from './OwnerData.module.css';
 
 const OwnerDataField = ({ formData, handlePaymentMethodChange, t }) => {
   return (

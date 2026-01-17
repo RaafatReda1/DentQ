@@ -1,7 +1,7 @@
 import React from 'react';
 import { User, Phone, MapPin } from 'lucide-react';
 import ProfileSelect from '../../../Profile/subcomponents/ProfileSelect';
-import styles from './OwenerData.module.css';
+import styles from './OwnerData.module.css';
 
 const Form = ({
     formData,

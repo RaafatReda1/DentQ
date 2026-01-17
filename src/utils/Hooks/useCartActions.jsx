@@ -25,9 +25,24 @@ const useOwnerInfo = () => {
 /* =========================
    Add / Upsert Product to Cart
 ========================= */
+/**
+ * useCartActions Hook
+ * 
+ * Provides methods to interact with the Cart in the database (Supabase).
+ * Handles adding, removing, and updating quantities of products.
+ * 
+ * Key Features:
+ * - Automatically detects if user is Client or Guest.
+ * - Updates the 'Carts' table in Supabase.
+ * - Triggers a full app reload (forceRerender) when creating a new cart to ensure state synchronization.
+ */
 export const useCartActions = () => {
   const { ownerId, ownerField } = useOwnerInfo();
 
+  /**
+   * Fetches the current user's cart from Supabase.
+   * Memoized with useCallback to be safe for dependency arrays.
+   */
   const fetchCart = useCallback(async () => {
     // ... code ...
     if (!ownerId || !ownerField) return null;
@@ -47,6 +62,11 @@ export const useCartActions = () => {
     return data;
   }, [ownerId, ownerField]);
 
+  /**
+   * Adds a product to the cart or updates its quantity if it already exists.
+   * @param {Object} currentProduct - The product object to add.
+   * @param {boolean} singleIncrease - If true, increments qty by 1 only.
+   */
   const addToCart = useCallback(
     async (currentProduct, singleIncrease) => {
       //if we passed singleIncrease with true it willonly add 1 to that specific product
@@ -66,6 +86,7 @@ export const useCartActions = () => {
 
       let ownerCart = await fetchCart();
 
+      // CASE 1: No Cart Exists - Create New Cart
       if (!ownerCart) {
         const { error } = await supabase.from("Carts").insert({
           [ownerField]: ownerId,
@@ -80,12 +101,16 @@ export const useCartActions = () => {
 
         toast.success("Added to cart");
 
-        // Trigger app reload on first cart creation as requested
+        // Trigger app reload logic for the very first cart creation
+        // This ensures the global app state (likely provided by Context) realizes the cart exists immediately
+        if (window.forceRerender) {
+          window.forceRerender();
+        }
 
-        window.forceRerender()
         return true;
       }
 
+      // CASE 2: Cart Exists - Update Items
       const items = [...ownerCart.items];
       const wasEmpty = items.length === 0; // Check if it was empty before adding
 
@@ -115,7 +140,9 @@ export const useCartActions = () => {
 
       toast.success("Cart updated successfully");
 
-      if (wasEmpty) {
+      // If the cart was effectively empty (items: []), adding an item is like creating a new cart.
+      // Trigger reload to ensure sync.
+      if (wasEmpty && window.forceRerender) {
         window.forceRerender();
       }
 
@@ -124,6 +151,10 @@ export const useCartActions = () => {
     [ownerId, ownerField, fetchCart]
   );
 
+  /**
+   * Decreases the quantity of a product in the cart.
+   * Removes the product if quantity reaches 0.
+   */
   const decreaseCartQty = useCallback(
     async (product) => {
       if (!ownerId || !ownerField) return;
@@ -157,6 +188,9 @@ export const useCartActions = () => {
     [ownerId, ownerField, fetchCart]
   );
 
+  /**
+   * Removes a product completely from the cart.
+   */
   const deleteProductFromCart = useCallback(
     async (product) => {
       if (!ownerId || !ownerField) return;

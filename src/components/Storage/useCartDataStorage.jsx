@@ -4,6 +4,16 @@ import { useCartActions } from "../../utils/Hooks/useCartActions";
 import useRealtimeSubscription from "../../utils/useRealtimeSubscription";
 import { supabase } from "../../utils/SupabaseClient";
 
+/**
+ * useCartDataStorage Hook
+ * 
+ * Central state management for the user's Shopping Cart.
+ * 
+ * Responsibilities:
+ * 1. Initial Load: Fetches cart data from Supabase when the user logs in or page loads.
+ * 2. Real-time Sync: Listens for changes in the 'Carts' table and auto-updates local state.
+ * 3. Data Hydration: Merges raw cart items with full product details (name, price, images) from 'Products' table.
+ */
 const useCartDataStorage = () => {
   const contextValue = useContext(userContext);
   const user = Array.isArray(contextValue) ? contextValue[0] : contextValue;
@@ -101,6 +111,8 @@ const useCartDataStorage = () => {
   }, [user?.id, user?.guest_id, trigger, fetchCart]); // Added fetchCart to dependencies logic
 
   // Robust owner-based realtime subscription
+  // This listener ensures that if the cart is updated from another tab/device 
+  // (or via the 'empty cart' action on checkout), this component hears it and refetches.
   const ownerFilter = user?.id
     ? `client_id=eq.${user.id}`
     : user?.guest_id

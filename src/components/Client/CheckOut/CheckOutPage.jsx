@@ -1,179 +1,32 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { userContext } from '../../../utils/AppContexts';
-import { fetchGovernorates, calculateShipping, confirmOrder } from './Actions';
-import OwnerData from './SubComponents/OwenerData/OwenerData';
+import React from 'react';
+import { useCheckout } from './hooks/useCheckout';
+import OwnerData from './SubComponents/OwnerData/OwnerData';
 import OrderSum from './SubComponents/OrderSum/OrderSum';
 import styles from './CheckOut.module.css';
-import { useTranslation } from 'react-i18next';
-import toast from 'react-hot-toast';
-import useCartDataStorage from '../../Storage/useCartDataStorage';
-import { useFormatPrice } from '../../../utils/Hooks/useFormatPrice';
-import HandlePromoCode from './SubComponents/OrderSum/HandlePromoCode';
 
+/**
+ * CheckOutPage Component
+ * 
+ * Uses useCheckout hook to handle logic.
+ * Renders the checkout layout with OwnerData and OrderSum subcomponents.
+ */
 function CheckOutPage() {
-  const { t, i18n } = useTranslation();
-  const [user] = useContext(userContext);
-  const { totalPrice, cartItems } = useCartDataStorage();
-  const formatPrice = useFormatPrice();
-  const [governorates, setGovernorates] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  // Promo code state
-  const [promoCode, setPromoCode] = useState({
-    code: '',
-    isApplied: false,
-    discountAmount: 0,
-    discountType: null,
-    discountValue: null,
-    isLoading: false
-  });
-
-  // Form state
-  const [formData, setFormData] = useState({
-    full_name: '', //from the From.jsx input values directly
-    phone_number: '',//from the From.jsx input values directly
-    address: '',//from the From.jsx input values directly
-    payment_method: 'cash_on_delivery', //static
-    governorate_id: '',//from the From.jsx input values directly
-    ...(user.id
-      ? { client_id: user.id }
-      : { guest_id: user.guest_id }
-    ),
-    total_amount: 0, //calculated down here in line 119 i suppose if no code edits
-    promocode_id: null // from apply promocode function
-  });
-
-  useEffect(() => {
-    const loadCheckoutData = async () => {
-      const govs = await fetchGovernorates();
-      setGovernorates(govs);
-
-      // Pre-fill user data if logged in
-      if (user && user.session) {
-        setFormData(prev => ({
-          ...prev,
-          full_name: user.fullName || '',
-          phone_number: user.phone || '',
-          governorate_id: user.governorateId || '',
-          address: user.address || ''
-        }));
-      }
-
-      setLoading(false);
-    };
-
-    loadCheckoutData();
-  }, [user]);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handlePaymentMethodChange = (method) => {
-    setFormData(prev => ({ ...prev, payment_method: method }));
-  };
-
-  // Promo code handlers
-  const handleApplyPromoCode = async (code) => {
-    setPromoCode(prev => ({ ...prev, isLoading: true }));
-
-    const result = await HandlePromoCode(code, user?.id, totalPrice);
-
-    if (result.success) {
-      setPromoCode({
-        code: result.code,
-        isApplied: true,
-        discountAmount: result.discountAmount,
-        discountType: result.discountType,
-        discountValue: result.discountValue,
-        isLoading: false
-      });
-      setFormData(prev => ({ ...prev, promocode_id: result.id }));
-      toast.success(i18n.language === 'ar' ? result.message : result.messageEn);
-    } else {
-      setPromoCode(prev => ({ ...prev, isLoading: false }));
-      setFormData(prev => ({ ...prev, promocode_id: null }));
-      toast.error(i18n.language === 'ar' ? result.message : result.messageEn);
-    }
-  };
-
-  const handleRemovePromoCode = () => {
-    setPromoCode({
-      code: '',
-      isApplied: false,
-      discountAmount: 0,
-      discountType: null,
-      discountValue: null,
-      isLoading: false
-    });
-    setFormData(prev => ({ ...prev, promocode_id: null }));
-    toast.success(t('checkout.promo_removed') || 'Promo code removed');
-  };
-
-  // Calculate totals
-  const subtotal = formatPrice(totalPrice);
-  const shippingCost = calculateShipping(formData.governorate_id, governorates);
-  const shipping = formatPrice(shippingCost);
-  const discount = formatPrice(promoCode.discountAmount);
-  const total = formatPrice(totalPrice + shippingCost - promoCode.discountAmount);
-  useEffect(() => {
-    setFormData(prev => ({
-      ...prev,
-      total_amount: totalPrice + shippingCost - promoCode.discountAmount,
-      discount: promoCode.discountAmount
-    }));
-  }, [totalPrice, shippingCost, promoCode.discountAmount]);
-  const localizedGovernorates = governorates.map(g => ({
-    id: g.id,
-    label: i18n.language === 'ar' ? g.governorateAr : g.governorateEn
-  }));
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleConfirmOrder = async () => {
-    // Validation
-    if (!formData.full_name || !formData.phone_number || !formData.governorate_id || !formData.address) {
-      toast.error(t('checkout.fill_all_fields') || 'Please fill all required fields');
-      return;
-    }
-
-    setIsSubmitting(true);
-    try {
-      const result = await confirmOrder(formData, cartItems);
-
-      if (result) {
-        // Reset form and promo code on success
-        setPromoCode({
-          code: '',
-          isApplied: false,
-          discountAmount: 0,
-          discountType: null,
-          discountValue: null,
-          isLoading: false
-        });
-
-        // Reset ALL form fields to empty state
-        setFormData(prev => ({
-          ...prev,
-          full_name: '',
-          phone_number: '',
-          governorate_id: '',
-          address: '',
-          payment_method: 'cash_on_delivery',
-          promocode_id: null,
-          // total_amount updates via useEffect
-        }));
-
-        // Navigation could go here, e.g., router.push('/order-success')
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error(t('checkout.error_generic') || 'Something went wrong');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  const {
+    user,
+    loading,
+    formData,
+    promoCode,
+    isSubmitting,
+    governorates,
+    localizedGovernorates,
+    handleChange,
+    handlePaymentMethodChange,
+    handleApplyPromoCode,
+    handleRemovePromoCode,
+    handleConfirmOrder,
+    displayValues,
+    t
+  } = useCheckout();
 
   if (loading) {
     return (
@@ -197,10 +50,10 @@ function CheckOutPage() {
         />
 
         <OrderSum
-          subtotal={subtotal}
-          shipping={shipping}
-          discount={discount}
-          total={total}
+          subtotal={displayValues.subtotal}
+          shipping={displayValues.shipping}
+          discount={displayValues.discount}
+          total={displayValues.total}
           formData={formData}
           handleConfirmOrder={handleConfirmOrder}
           promoCode={promoCode}

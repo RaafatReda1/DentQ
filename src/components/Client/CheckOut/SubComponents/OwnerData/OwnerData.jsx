@@ -1,8 +1,7 @@
-import React from 'react';
 import { User } from 'lucide-react';
 import Form from './Form';
-import OwnerDataField from './OwnerDataFeild';
-import styles from './OwenerData.module.css';
+import OwnerDataField from './OwnerDataField';
+import styles from './OwnerData.module.css';
 
 const OwnerData = ({
   user,
