@@ -11,7 +11,7 @@ import { useBadgeNumberCounter } from "../../../../utils/Hooks/useBadgeNumberCou
  */
 const Links = ({ menuIsOpened }) => {
   const { t } = useTranslation();
-  const { cartCount } = useBadgeNumberCounter();
+  const { cartCount, ordersCount } = useBadgeNumberCounter();
   const location = useLocation();
 
   const navLinks = [
@@ -33,7 +33,7 @@ const Links = ({ menuIsOpened }) => {
       to: "/myorders",
       icon: Boxes,
       label: t('navbar.my_orders'),
-      badge: 2,
+      badge: ordersCount,
       badgeColor: "primary"
     },
     {

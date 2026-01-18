@@ -1,6 +1,7 @@
 import { GetCookie, MakeCookie, DeleteCookie } from "./GuestIdCookie";
 import { supabase } from "./SupabaseClient";
 import { transferGuestCart } from "./TransferGuestCart";
+import { transferGuestOrders } from "./TransferGuestOrders";
 
 
 const UserTypeRouter = async (user, setUser) => {
@@ -89,7 +90,8 @@ const UserTypeRouter = async (user, setUser) => {
     if (clientData) {
       console.log("✅ Client found:", clientData);
 
-      // Attempt Cart Transfer
+      // Transfer guest cart and orders
+      await transferGuestOrders(clientData.id);
       await transferGuestCart(clientData.id);
 
       setUser((prev) => ({
@@ -140,7 +142,8 @@ const UserTypeRouter = async (user, setUser) => {
     if (newClient) {
       console.log("✅ New client registered:", newClient);
 
-      // Attempt Cart Transfer for new client too
+      // Transfer guest cart and orders for new client
+      await transferGuestOrders(newClient.id);
       await transferGuestCart(newClient.id);
 
       setUser((prev) => ({

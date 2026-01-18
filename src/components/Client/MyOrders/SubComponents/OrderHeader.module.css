@@ -1,0 +1,145 @@
+/* Order Header */
+.orderHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-bottom: 2px solid #e5e7eb;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    user-select: none;
+    cursor: pointer;
+}
+
+.orderHeader:hover {
+    background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+}
+
+.headerRight {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Expand Icon */
+.expandIcon {
+    color: #667eea;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    flex-shrink: 0;
+}
+
+.expandIcon.expanded {
+    transform: rotate(180deg);
+}
+
+.orderMeta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.orderIdRow {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.orderIdLabel {
+    font-size: 0.85rem;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.orderId {
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #1f2937;
+    background: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+}
+
+.orderDate {
+    font-size: 0.85rem;
+    color: #9ca3af;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.calendarIcon {
+    color: #9ca3af;
+}
+
+/* Status Badges */
+.statusBadge {
+    padding: 0.5rem 1.25rem;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: capitalize;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.statusDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    animation: statusPulse 2s ease-in-out infinite;
+}
+
+@keyframes statusPulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.statusPending {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    color: #92400e;
+}
+
+.statusPending .statusDot {
+    background: #f59e0b;
+}
+
+.statusCompleted,
+.statusDelivered {
+    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+    color: #065f46;
+}
+
+.statusCompleted .statusDot,
+.statusDelivered .statusDot {
+    background: #10b981;
+}
+
+.statusCancelled {
+    background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+    color: #991b1b;
+}
+
+.statusCancelled .statusDot {
+    background: #ef4444;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .orderHeader {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1.25rem;
+    }
+}

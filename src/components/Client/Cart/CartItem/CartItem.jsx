@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useFormatPrice } from '../../../../utils/Hooks/useFormatPrice';
 
 const CartItem = ({ item, onUpdate }) => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const product = item.product;
     const formatPrice = useFormatPrice();
 
@@ -23,7 +23,7 @@ const CartItem = ({ item, onUpdate }) => {
             <div className={styles.productInfo}>
                 <div className={styles.imgWrapper}>
                     {mainImage ? (
-                        <img src={mainImage} alt={RenderProductNameOrDesc(product, "name")} className={styles.productImg} />
+                        <img src={mainImage} alt={RenderProductNameOrDesc(product, "name", i18n.language)} className={styles.productImg} />
                     ) : (
                         <div className={styles.placeholderImg}>
                             <span>{t("cart.no_image")}</span>
@@ -33,7 +33,7 @@ const CartItem = ({ item, onUpdate }) => {
 
                 <div className={styles.details}>
                     <Link to={`/${product.nameEn.replace(/\s+/g, '-')}/dp/${product.id}`} className={styles.productName}>
-                        {RenderProductNameOrDesc(product, "name")}
+                        {RenderProductNameOrDesc(product, "name", i18n.language)}
                         <ExternalLink size={14} className={styles.linkIcon} />
                     </Link>
 

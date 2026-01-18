@@ -7,6 +7,7 @@ import { Route, Routes } from "react-router-dom";
 import CartPage from "./Cart/CartPage";
 import ProductPage from "./Products/ProductPage/ProductPage";
 import CheckOut from "./CheckOut/CheckOutPage";
+import MyOrders from "./MyOrders/MyOrders";
 const Client = () => {
   // eslint-disable-next-line no-unused-vars
   const [user, setUser] = useContext(userContext);
@@ -19,6 +20,7 @@ const Client = () => {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/:productNameEn/dp/:productId" element={<ProductPage />} />
         <Route path="/checkout" element={<CheckOut />} />
+        <Route path="/myorders" element={<MyOrders />} />
       </Routes>
     </>
   );

@@ -15,7 +15,7 @@ import useRealtimeSubscription from "../../../../utils/useRealtimeSubscription";
 import RenderProductNameOrDesc from "../../../../utils/RenderProductNameOrDesc";
 
 const ProductPage = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { productId } = useParams();
   const [products] = useContext(productsContext);
   const navigate = useNavigate();
@@ -63,7 +63,7 @@ const ProductPage = () => {
         <ArrowLeft /> {t("product_page.back")}
       </button>
 
-      <h1 className={styles.productName}>{RenderProductNameOrDesc(liveProduct, "name")}</h1>
+      <h1 className={styles.productName}>{RenderProductNameOrDesc(liveProduct, "name", i18n.language)}</h1>
 
       <div className={styles.mainContent}>
         <div className={styles.leftColumn}>

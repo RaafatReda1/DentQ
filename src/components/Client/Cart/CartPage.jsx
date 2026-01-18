@@ -1,14 +1,18 @@
 import { useTranslation } from 'react-i18next';
+import { useContext } from 'react';
 import { ArrowLeft, ShoppingBag, ShoppingCart, Package, Sparkles } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { userContext } from '../../../utils/AppContexts';
 import styles from './CartPage.module.css';
 import { useCartData } from './hooks/useCartData';
 import CartItem from './CartItem/CartItem';
 import { useFormatPrice } from '../../../utils/Hooks/useFormatPrice';
+import GuestWarningBanner from '../../Shared/GuestWarningBanner/GuestWarningBanner';
 
 const CartPage = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
+    const [user] = useContext(userContext);
     const { cartItems, loading, totalPrice, refreshCart } = useCartData();
     const formatPrice = useFormatPrice();
 
@@ -60,6 +64,9 @@ const CartPage = () => {
             </div>
 
             <div className={styles.content}>
+                {/* Guest Warning Banner */}
+                {user?.type === 'guest' && !loading && <GuestWarningBanner />}
+
                 {loading ? (
                     <LoadingSkeleton />
                 ) : cartItems.length === 0 ? (

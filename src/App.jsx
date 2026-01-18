@@ -31,6 +31,7 @@ function App() {
               </>
             )}
           </Routes>
+          <GoogleBtn />
         </CartProvider>
       </productsContext.Provider>
     </userContext.Provider>

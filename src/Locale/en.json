@@ -98,6 +98,7 @@
         "no_image": "No Image",
         "size": "Size",
         "unit_price": "Unit Price",
+        "quantity": "Quantity",
         "remove_item": "Remove item"
     },
     "profile": {
@@ -143,5 +144,30 @@
         "confirm_order": "Confirm Order",
         "fill_all_fields": "Please fill all required fields",
         "order_confirmed": "Order confirmed successfully!"
+    },
+    "guest_warning": {
+        "title": "⚠️ Guest Account - Data May Be Lost",
+        "description": "Sign in with Google to save your cart and orders permanently. Guest data is temporary and may be lost at any time."
+    },
+    "auth": {
+        "sign_in_google": "Sign in with Google"
+    },
+    "orders": {
+        "no_orders": "No orders yet",
+        "start_shopping": "Looks like you haven't placed any orders yet. Start shopping to see your orders here!",
+        "shop_now": "Start Shopping",
+        "loading": "Loading your orders...",
+        "order_id": "Order ID",
+        "order": "order",
+        "orders": "orders",
+        "items": "Items",
+        "payment_method": "Payment Method",
+        "view_product": "View Product"
+    },
+    "status": {
+        "pending": "Pending",
+        "completed": "Completed",
+        "delivered": "Delivered",
+        "cancelled": "Cancelled"
     }
 }

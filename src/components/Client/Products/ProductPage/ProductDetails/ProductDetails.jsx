@@ -8,8 +8,8 @@ import Actions from "../Actions/Actions";
 import { useFormatPrice } from '../../../../../utils/Hooks/useFormatPrice';
 
 function ProductDetails({ product, selectedSize, selectedColor, qty, setQty }) {
-  const { t } = useTranslation();
-  const  formatPrice = useFormatPrice();
+  const { t, i18n } = useTranslation();
+  const formatPrice = useFormatPrice();
 
   return (
     <div className={styles.detailsContainer}>
@@ -44,7 +44,7 @@ function ProductDetails({ product, selectedSize, selectedColor, qty, setQty }) {
       {/* Description */}
       <div className={styles.description}>
         <MDEditor.Markdown
-          source={RenderProductNameOrDesc(product, "fullDesc") || t("product_page.no_description")}
+          source={RenderProductNameOrDesc(product, "fullDesc", i18n.language) || t("product_page.no_description")}
           style={{
             background: "transparent",
             color: "inherit",

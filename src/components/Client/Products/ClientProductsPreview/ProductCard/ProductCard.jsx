@@ -16,7 +16,7 @@ import { useFormatPrice } from "../../../../../utils/Hooks/useFormatPrice";
 
 const ProductCard = ({ product, scrollToTop }) => {
   const [isAdded, setIsAdded] = useState(false);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const renderProductPage = useRenderProductPage();
   const { addToCart } = useCartActions();
   const formatPrice = useFormatPrice(); // Use the custom hook that gives us an arrow function that needs a name and a number parameter 
@@ -59,8 +59,8 @@ const ProductCard = ({ product, scrollToTop }) => {
           {is_trending
             ? t("product.trending")
             : is_featured
-            ? t("product.featured")
-            : t("product.new_arrival")}
+              ? t("product.featured")
+              : t("product.new_arrival")}
         </span>
         {discount > 0 && (
           <span className={styles.discountBadge}>
@@ -76,7 +76,7 @@ const ProductCard = ({ product, scrollToTop }) => {
           {mainImage ? (
             <img
               src={mainImage}
-              alt={RenderProductNameOrDesc(product, "name")}
+              alt={RenderProductNameOrDesc(product, "name", i18n.language)}
               className={styles.productImage}
               loading="lazy"
             />
@@ -125,7 +125,7 @@ const ProductCard = ({ product, scrollToTop }) => {
         {/* Product Details (Always visible but styled) */}
         <div className={styles.productInfo}>
           <h3 className={styles.productTitle}>
-            {RenderProductNameOrDesc(product, "name")}
+            {RenderProductNameOrDesc(product, "name", i18n.language)}
           </h3>
 
           <div className={styles.ratingRow}>
@@ -145,8 +145,8 @@ const ProductCard = ({ product, scrollToTop }) => {
           </div>
 
           <p className={styles.productDescription}>
-            {RenderProductNameOrDesc(product, "desc")?.substring(0, 60)}
-            {RenderProductNameOrDesc(product, "desc")?.length > 60 ? "..." : ""}
+            {RenderProductNameOrDesc(product, "desc", i18n.language)?.substring(0, 60)}
+            {RenderProductNameOrDesc(product, "desc", i18n.language)?.length > 60 ? "..." : ""}
           </p>
 
           <div className={styles.priceRow}>
@@ -162,9 +162,8 @@ const ProductCard = ({ product, scrollToTop }) => {
 
       {/* Bottom Label (Name repeated or extra info - tailored to the design request which had a bottom subCard) */}
       <div
-        className={`${styles.subCard} ${styles.bottomBar} ${
-          isAdded ? styles.added : ""
-        }`}
+        className={`${styles.subCard} ${styles.bottomBar} ${isAdded ? styles.added : ""
+          }`}
         onClick={async (e) => {
           const success = await addToCart(product);
           if (success) {
