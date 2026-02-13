@@ -8,6 +8,7 @@ import CartPage from "./Cart/CartPage";
 import ProductPage from "./Products/ProductPage/ProductPage";
 import CheckOut from "./CheckOut/CheckOutPage";
 import MyOrders from "./MyOrders/MyOrders";
+import MainViewer from "./Products/ClientProductsPreview/Main/MainViewer/MainViewer";
 const Client = () => {
   // eslint-disable-next-line no-unused-vars
   const [user, setUser] = useContext(userContext);
@@ -15,7 +16,7 @@ const Client = () => {
     <>
       <Header />
       <Routes>
-        <Route path="/" element={<ProdcutsParent />} />
+        <Route path="/" element={<MainViewer />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/:productNameEn/dp/:productId" element={<ProductPage />} />

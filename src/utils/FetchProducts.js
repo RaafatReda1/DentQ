@@ -2,13 +2,15 @@ import { supabase } from "./SupabaseClient";
 
 const FetchProducts = async (products, setProducts) => {
   try {
-    const { data, error } = await supabase.from("Products").select("*");
-    if (error) {
-      console.log("Error fetching products:", error);
-    } else if (data) {
-      console.log("Prdouct's Fetched:", data);
+    const {data: productsData, error: productsError } = await supabase.from("Products").select("*");
+    const {data: categoriesData, error: categoriesError } = await supabase.from("Categories").select("*");
+    if (productsError || categoriesError) {
+      console.log("Error fetching products:", productsError);
+    } else if (productsData && categoriesData) {
+      console.log("Prdouct's Fetched:", productsData);
       setProducts({
-        productsList: data,
+        productsList: productsData,
+        CategoriesList: categoriesData,
         productsLoadingState: false,
       });
     }

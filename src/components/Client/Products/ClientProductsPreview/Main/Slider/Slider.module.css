@@ -1,0 +1,253 @@
+/* ============================================
+   Slider.module.css — Editorial Magazine Style
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap');
+
+/* ---- Root Variables ---- */
+.slider {
+  --clr-bg: #faf9f6;
+  --clr-ink: #1a1a1a;
+  --clr-muted: #8a8a8a;
+  --clr-accent: #c8a96e;
+  --clr-accent-dim: rgba(200, 169, 110, 0.15);
+  --clr-border: rgba(26, 26, 26, 0.08);
+  --clr-card-bg: #ffffff;
+  --clr-card-shadow: rgba(26, 26, 26, 0.07);
+
+  --radius: 4px;
+  --gap: clamp(14px, 2vw, 24px);
+  --card-w: clamp(220px, 28vw, 300px);
+
+  font-family: 'DM Sans', sans-serif;
+  background: var(--clr-bg);
+  padding: clamp(32px, 5vw, 64px) clamp(20px, 5vw, 56px);
+  position: relative;
+  overflow: hidden;
+}
+
+/* ---- Decorative rule behind title ---- */
+.slider::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--clr-accent) 0%, transparent 70%);
+}
+
+/* ---- Section Title ---- */
+.sliderTitle {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(1.5rem, 3vw, 2.4rem);
+  font-weight: 700;
+  color: var(--clr-ink);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin: 0 0 clamp(20px, 3vw, 40px) 0;
+  position: relative;
+  display: inline-block;
+}
+
+/* Animated underline on title */
+.sliderTitle::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 100%;
+  height: 2px;
+  background: var(--clr-accent);
+  transform-origin: left center;
+  transform: scaleX(0.28);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.slider:hover .sliderTitle::after {
+  transform: scaleX(1);
+}
+
+/* ---- Products Container (horizontal scroll) ---- */
+.productsContainer {
+  display: flex;
+  gap: var(--gap);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding-bottom: 16px;
+  cursor: grab;
+
+  /* Styled scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: var(--clr-accent) transparent;
+}
+
+.productsContainer:active {
+  cursor: grabbing;
+}
+
+.productsContainer::-webkit-scrollbar {
+  height: 3px;
+}
+
+.productsContainer::-webkit-scrollbar-track {
+  background: var(--clr-border);
+  border-radius: 99px;
+}
+
+.productsContainer::-webkit-scrollbar-thumb {
+  background: var(--clr-accent);
+  border-radius: 99px;
+}
+
+/* Breathing room at end of scroll */
+.productsContainer::after {
+  content: '';
+  flex: 0 0 1px;
+}
+
+/* ---- Product Card wrapper (direct children = ProductCard) ---- */
+.productsContainer > * {
+  flex: 0 0 var(--card-w);
+  scroll-snap-align: start;
+  transition:
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.25s ease;
+  will-change: transform;
+  overflow: hidden;
+
+  /* Staggered entrance */
+  animation: cardReveal 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.productsContainer > *:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(26, 26, 26, 0.12);
+}
+
+/* Staggered delay per card */
+.productsContainer > *:nth-child(1) { animation-delay: 0.05s; }
+.productsContainer > *:nth-child(2) { animation-delay: 0.10s; }
+.productsContainer > *:nth-child(3) { animation-delay: 0.15s; }
+.productsContainer > *:nth-child(4) { animation-delay: 0.20s; }
+.productsContainer > *:nth-child(5) { animation-delay: 0.25s; }
+.productsContainer > *:nth-child(6) { animation-delay: 0.30s; }
+.productsContainer > *:nth-child(7) { animation-delay: 0.35s; }
+.productsContainer > *:nth-child(8) { animation-delay: 0.40s; }
+
+@keyframes cardReveal {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---- Empty state ---- */
+.productsContainer:empty::before {
+  content: 'No products available.';
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 48px 0;
+  color: var(--clr-muted);
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+  font-style: italic;
+}
+
+/* ---- RTL support (Arabic) ---- */
+[dir='rtl'] .slider::before {
+  background: linear-gradient(270deg, var(--clr-accent) 0%, transparent 70%);
+}
+
+[dir='rtl'] .sliderTitle::after {
+  right: 0;
+  left: auto;
+  transform-origin: right center;
+}
+
+[dir='rtl'] .productsContainer {
+  flex-direction: row-reverse;
+}
+
+/* ---- Scroll Arrows ---- */
+.sliderContainer{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    overflow: hidden;
+}
+
+.Arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border: 1.5px solid var(--clr-border);
+  border-radius: 50%;
+  background: var(--clr-card-bg);
+  color: var(--clr-ink);
+  font-size: 1rem;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease,
+    transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.Arrow:hover {
+  background: var(--clr-accent);
+  border-color: var(--clr-accent);
+  color: #fff;
+  transform: scale(1.1);
+}
+
+.Arrow:active {
+  transform: scale(0.95);
+}
+
+.Arrow:focus-visible {
+  outline: 2px solid var(--clr-accent);
+  outline-offset: 3px;
+}
+
+/* Hiding Scrollbar */
+/* Chrome, Edge, Safari */
+.slider > :not(.sliderTitle)::-webkit-scrollbar {
+  display: none;
+}
+
+/* Firefox */
+.slider, .sliderContainer > :not(.sliderTitle) {
+  scrollbar-width: none;
+}
+
+/* IE / old Edge */
+.slider > :not(.sliderTitle) {
+  -ms-overflow-style: none;
+}
+
+/* ---- Reduced motion ---- */
+@media (prefers-reduced-motion: reduce) {
+  .productsContainer > *,
+  .sliderTitle::after {
+    animation: none;
+    transition: none;
+  }
+
+  .productsContainer > *:hover {
+    transform: none;
+  }
+}

@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import FetchProducts from '../../utils/FetchProducts'
+import { Category } from '@mui/icons-material';
 function useProductsData() {
     const [products, setProducts] = useState({
         productsList: null, //stores a list of products' objects from the DB
+        CategoriesList: null, //stores a list of categories' objects from the DB
         productsLoadingState: true //initiate a loading state for products
     })
     useEffect(() => {
