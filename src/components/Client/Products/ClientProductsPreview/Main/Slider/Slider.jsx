@@ -17,7 +17,7 @@ const Slider = ({ CatId = "c046e2cd-e96b-44e3-93e2-8dadbe2d74b9" }) => {
   const category = products?.CategoriesList?.find((c) => c.id === CatId);
 
   return (
-    <div className={styles.slider}>
+    <div className={styles.slider} id="home">
       <h2 className={styles.sliderTitle}>
         {category &&
           (i18n.language === "en" ? category.name_en : category.name_ar)}

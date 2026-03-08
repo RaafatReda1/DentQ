@@ -6,30 +6,28 @@
   justify-content: center;
   gap: 1.2rem;
 
-  background: linear-gradient(
-    135deg,
-    #0f2027,
-    #203a43,
-    #2c5364
-  );
 
-  color: #ffffff;
+  color: #0ccebe;
   text-align: center;
   position: relative;
   overflow: hidden;
+
 }
 
 /* soft glow background */
-.heroSection::before {
-  content: "";
+.heroSection::before{
+ content: "";
   position: absolute;
-  inset: -50%;
-  background: radial-gradient(
-    circle,
-    rgba(255, 255, 255, 0.08),
-    transparent 70%
-  );
-  animation: floatGlow 12s linear infinite;
+  inset: 0;
+  background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+
+  background-image: var(--bg);
+  background-size: cover;
+  background-position: center;
+  filter: blur(8px);
+  transform: scale(1.1);
+
+  z-index: -1;
 }
 
 @keyframes floatGlow {
@@ -65,25 +63,20 @@
   padding: 0.9rem 2.4rem;
   border-radius: 999px;
 
-  background: linear-gradient(
-    135deg,
-    #00c6ff,
-    #0072ff
-  );
-
+  background: var(--cta-bg);
   color: #fff;
   font-weight: 600;
   font-size: 1rem;
   text-decoration: none;
 
-  box-shadow: 0 10px 25px rgba(0, 114, 255, 0.35);
+  box-shadow: 0 2px 20px var(--cta-bg);
   transition: all 0.3s ease;
   z-index: 1;
 }
 
 .ctaBtn:hover {
   transform: translateY(-3px) scale(1.03);
-  box-shadow: 0 15px 35px rgba(0, 114, 255, 0.55);
+  box-shadow: 0 4px 30px  var(--cta-bg);
 }
 
 .ctaBtn:active {
