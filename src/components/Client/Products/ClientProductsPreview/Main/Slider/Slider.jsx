@@ -4,52 +4,54 @@ import { productsContext } from "../../../../../../utils/AppContexts";
 import ProductCard from "../../ProductCard/ProductCard";
 import { useTranslation } from "react-i18next";
 
-const Slider = ({ CatId = "c046e2cd-e96b-44e3-93e2-8dadbe2d74b9" }) => {
+const Slider = ({ CatId }) => {
   const [products] = useContext(productsContext);
   const { i18n } = useTranslation();
+  const sliderRef = useRef(null);
 
   const filteredProducts =
-    products?.productsList?.filter(
-      (product) => product.category_id === CatId,
-    ) || [];
-  const sliderRef = useRef(null);
+    products?.productsList?.filter((product) => product.category_id === CatId) || [];
 
   const category = products?.CategoriesList?.find((c) => c.id === CatId);
 
+  const scroll = (direction) => {
+    const isLTR = i18n.language === "en";
+    const amount = direction === "left" ? (isLTR ? -300 : 300) : (isLTR ? 300 : -300);
+    sliderRef.current?.scrollBy({ left: amount, behavior: "smooth" });
+  };
+
+  if (!filteredProducts.length) return null;
+
   return (
-    <div className={styles.slider} id="home">
-      <h2 className={styles.sliderTitle}>
-        {category &&
-          (i18n.language === "en" ? category.name_en : category.name_ar)}
-      </h2>
-      <div className= {styles.sliderContainer}>
+    <div className={styles.sliderWrapper} id= {"category/" + CatId}>
+      {category && (
+        <h2 className={styles.sliderTitle}>
+          {i18n.language === "en" ? category.name_en : category.name_ar}
+        </h2>
+      )}
+      
+      <div className={styles.sliderContainer}>
         <button
-        className={styles.Arrow}
-        onClick={() =>
-          sliderRef.current?.scrollBy({
-            left: i18n.language === "en" ? -300 : 300,
-            behavior: "smooth",
-          })
-        }
-      >
-        {"<"}
-      </button>
-      <div className={styles.productsContainer} ref={sliderRef}>
-        {filteredProducts.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
-      </div>
-      <button
-        className={styles.Arrow}
-        onClick={() =>
-          sliderRef.current?.scrollBy({
-            left: i18n.language === "en" ? 300 : -300,
-            behavior: "smooth",
-          })
-        }
-      >
-        {">"}
-      </button>
+          className={styles.arrowButton}
+          onClick={() => scroll("left")}
+          aria-label="Scroll left"
+        >
+          &#10094;
+        </button>
+        
+        <div className={styles.productsContainer} ref={sliderRef}>
+          {filteredProducts.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+        
+        <button
+          className={styles.arrowButton}
+          onClick={() => scroll("right")}
+          aria-label="Scroll right"
+        >
+          &#10095;
+        </button>
       </div>
     </div>
   );

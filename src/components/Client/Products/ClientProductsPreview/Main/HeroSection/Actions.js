@@ -17,5 +17,15 @@ const fetchBanners = async (slugName) => {
   return data;
 };
 
+const fetchCategories = async () => {
+  const { data, error } = await supabase.from("Categories").select("*");
+  if (error) {
+    console.log("Error fetching categories:", error);
+    return null;
+  }
+  console.log("Categories Fetched:", data);
+  return data;
+}
 
-export default fetchBanners
+export default fetchBanners;
+export { fetchCategories };
