@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from "react";
+import React, { useContext, useRef, useMemo } from "react";
 import styles from "./Slider.module.css";
 import { productsContext } from "../../../../../../utils/AppContexts";
 import ProductCard from "../../ProductCard/ProductCard";
@@ -9,10 +9,32 @@ const Slider = ({ CatId }) => {
   const { i18n } = useTranslation();
   const sliderRef = useRef(null);
 
-  const filteredProducts =
-    products?.productsList?.filter((product) => product.category_id === CatId) || [];
-
   const category = products?.CategoriesList?.find((c) => c.id === CatId);
+
+  // Recursively fetch all nested category branch items (children, grandchildren, etc.)
+  const getCategoryDescendants = (categoryId, allCategories) => {
+    let descendants = [categoryId];
+    const children = allCategories.filter((c) => c.parent_id === categoryId);
+    
+    for (let child of children) {
+      descendants = [
+        ...descendants,
+        ...getCategoryDescendants(child.id, allCategories),
+      ];
+    }
+    return descendants;
+  };
+
+  const filteredProducts = useMemo(() => {
+    if (!products?.CategoriesList || !products?.productsList) return [];
+
+    const validCategoryIds = getCategoryDescendants(CatId, products.CategoriesList);
+
+    return products.productsList.filter((product) => 
+      validCategoryIds.includes(product.category_id)
+    );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [CatId, products]);
 
   const scroll = (direction) => {
     const isLTR = i18n.language === "en";
@@ -23,7 +45,7 @@ const Slider = ({ CatId }) => {
   if (!filteredProducts.length) return null;
 
   return (
-    <div className={styles.sliderWrapper} id= {"category/" + CatId}>
+    <div className={styles.sliderWrapper} id={"category/" + CatId}>
       {category && (
         <h2 className={styles.sliderTitle}>
           {i18n.language === "en" ? category.name_en : category.name_ar}

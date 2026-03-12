@@ -56,7 +56,7 @@ const MainViewer = () => {
       cat.is_active !== false
     ).sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
   }, [categories, banners]);
-
+  console.log("Categories without banner:", catsWithoutBanner);
   if (isLoading) {
     return (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh', color: 'var(--primary-hover, #0096c7)' }}>
