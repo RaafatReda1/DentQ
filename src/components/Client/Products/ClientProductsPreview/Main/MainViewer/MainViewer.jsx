@@ -3,19 +3,18 @@ import HeroSection from "../HeroSection/HeroSection";
 import Slider from "../Slider/Slider";
 import fetchBanners, { fetchCategories } from "../HeroSection/Actions";
 import CategoriesPreview from "../CategoriesPreview/CategoriesPreview";
+import DefaultHeroSection from "../HeroSection/DefaultHeroSection";
 import { Loader2 } from "lucide-react";
 
 const MainViewer = () => {
   const [banners, setBanners] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     let isMounted = true;
     
     const loadContent = async () => {
-      setIsLoading(true);
       setError(null);
       
       try {
@@ -33,9 +32,7 @@ const MainViewer = () => {
           console.error("Error loading MainViewer content:", err);
           setError("Failed to load store content. Please try again.");
         }
-      } finally {
-        if (isMounted) setIsLoading(false);
-      }
+      } 
     };
 
     loadContent();
@@ -57,13 +54,7 @@ const MainViewer = () => {
     ).sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
   }, [categories, banners]);
   console.log("Categories without banner:", catsWithoutBanner);
-  if (isLoading) {
-    return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh', color: 'var(--primary-hover, #0096c7)' }}>
-        <Loader2 size={48} className="animate-spin" style={{ animation: 'spin 1.5s linear infinite' }} />
-      </div>
-    );
-  }
+
 
   if (error) {
     return (
@@ -81,12 +72,12 @@ const MainViewer = () => {
       <CategoriesPreview categories={categories} />
 
       {/* Main banner */}
-      {mainBanner && (
+      {mainBanner ? (
         <>
           <HeroSection Banner={mainBanner} />
           {mainBanner.related_cat_id && <Slider CatId={mainBanner.related_cat_id} />}
         </>
-      )}
+      ) : (<DefaultHeroSection/>)}
 
       {/* Other banners */}
       {otherBanners.map(banner => (
