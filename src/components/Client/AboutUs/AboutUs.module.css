@@ -1,0 +1,28 @@
+.aboutContainer {
+    width: 100%;
+    min-height: 80vh;
+    background-color: #fafdfc;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+    padding-bottom: 4rem;
+}
+
+.contentGrid {
+    max-width: 1200px;
+    width: 100%;
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    margin-top: 2rem;
+}
+
+@media (max-width: 900px) {
+    .contentGrid {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+    }
+}

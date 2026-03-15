@@ -1,0 +1,196 @@
+.contactUsContainer {
+    padding: 4rem 2rem;
+    min-height: 80vh;
+    background-color: #fafdfc;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.header {
+    text-align: center;
+    max-width: 600px;
+    margin-bottom: 3rem;
+    animation: fadeInDown 0.8s ease-out;
+}
+
+.header h1 {
+    font-size: 2.5rem;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.header p {
+    color: #64748b;
+    font-size: 1.125rem;
+}
+
+.gridContainer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    max-width: 1000px;
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .gridContainer {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Contact Form Styling */
+.formContainer {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    animation: slideInUp 0.8s ease-out;
+}
+
+.formContainer h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: #0f172a;
+}
+
+.formGroup {
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.formGroup label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #475569;
+    margin-bottom: 0.5rem;
+}
+
+.inputField,
+.textareaField {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    outline: none;
+    font-size: 1rem;
+    color: #334155;
+    background-color: #f8fafc;
+    transition: all 0.3s ease;
+}
+
+.inputField:focus,
+.textareaField:focus {
+    border-color: #14b8a6;
+    background-color: white;
+    box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);
+}
+
+.textareaField {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.submitBtn {
+    width: 100%;
+    padding: 0.875rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: white;
+    background-color: #14b8a6;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.submitBtn:hover {
+    background-color: #0d9488;
+}
+
+.submitBtn:active {
+    transform: scale(0.98);
+}
+
+.submitBtn:disabled {
+    background-color: #94a3b8;
+    cursor: not-allowed;
+}
+
+/* Contact Info Styling */
+.infoContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    animation: slideInRight 0.8s ease-out;
+}
+
+.infoCard {
+    background: white;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.iconWrapper {
+    background-color: rgba(20, 184, 166, 0.1);
+    color: #14b8a6;
+    padding: 1rem;
+    border-radius: 50%;
+    margin-bottom: 1rem;
+}
+
+.infoCard h3 {
+    font-size: 1.25rem;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+}
+
+.infoCard p {
+    color: #64748b;
+    font-size: 1rem;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* Animations */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}

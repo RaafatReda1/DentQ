@@ -13,7 +13,8 @@ import CategoryPage from "./Products/CategoryPage/CategoryPage";
 import PrivacyPage from "../Shared/PrivacyPage/PrivacyPage";
 import TermsOfUsePage from "../Shared/TermsOfUsePage/TermsOfUsePage";
 import Footer from "./Products/ClientProductsPreview/Footer/Footer";
-
+import ContactUs from "./ContactUs/ContactUs";
+import AboutUs from "./AboutUs/AboutUs";
 const Client = () => {
   // eslint-disable-next-line no-unused-vars
   const [user, setUser] = useContext(userContext);
@@ -30,6 +31,8 @@ const Client = () => {
         <Route path="/category/:slug" element={<CategoryPage />} />
         <Route path="/privacy-policy" element={<PrivacyPage />} />
         <Route path="/terms-and-conditions" element={<TermsOfUsePage/>} />
+        <Route path="/contact" element={<ContactUs />} />
+        <Route path="/about" element={<AboutUs />} />
       </Routes>
       <Footer />
     </>

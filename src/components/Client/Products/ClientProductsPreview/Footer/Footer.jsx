@@ -87,8 +87,8 @@ const Footer = () => {
           <div className={`${styles.col} ${styles.linkCol}`}>
             <h3>{t("footer.help_info")}</h3>
             <ul>
-              <li><Link to="/contact">{t("footer.contact_us")}</Link></li>
-              <li><Link to="/about">{t("footer.about_us")}</Link></li>
+              <li><Link to="/contact" target="_blank" rel="noopener noreferrer">{t("footer.contact_us")}</Link></li>
+              <li><Link to="/about" target="_blank" rel="noopener noreferrer">{t("footer.about_us")}</Link></li>
             </ul>
           </div>
 

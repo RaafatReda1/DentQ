@@ -508,5 +508,36 @@
                 "text": "The Privacy Policy may change from time to time. Any updated version will be posted on this page, and we encourage you to review it regularly. In case of significant changes, we may send you an additional notice (such as an in-app message or email)."
             }
         ]
+    },
+    "contact_us": {
+        "title": "Contact Us",
+        "subtitle": "We'd love to hear from you. Please fill out the form below.",
+        "get_in_touch": "Get in Touch",
+        "full_name": "Full Name",
+        "email_address": "Email Address",
+        "phone_number": "Phone Number",
+        "message": "Your Message",
+        "send_message": "Send Message",
+        "sending": "Sending...",
+        "success_message": "Thank you! Your message has been sent successfully.",
+        "error_message": "An error occurred. Please try again later.",
+        "phones": "Phone Numbers",
+        "emails": "Email Addresses",
+        "support_info": "Support Information"
+    },
+    "about_us": {
+        "title": "About DentQ",
+        "subtitle": "Bridging the gap between premier dental distributors and world-class clinics.",
+        "mission_title": "Our Mission",
+        "mission_text": "DentQ revolutionizes the medical supply chain by acting as the unified platform where clinics can discover, select, and acquire top-tier dental materials from local distributors securely.",
+        "how_it_works_title": "How We Operate",
+        "how_it_works_text": "We empower the entire ecosystem. Independent Pickers package your orders straight from the distributors' warehouses, and our dedicated freelance Drivers ensure swift, secure, and compliant delivery directly to your clinic's door.",
+        "commitment_title": "Our Commitment",
+        "commitment_text": "Transparency, velocity, and quality. We stand by our network of distributors and professionals to guarantee that every piece of medical equipment and supply meets the highest regulatory standards.",
+        "stats": {
+            "clinics": "Partner Clinics",
+            "distributors": "Top Distributors",
+            "deliveries": "Successful Deliveries"
+        }
     }
 }
