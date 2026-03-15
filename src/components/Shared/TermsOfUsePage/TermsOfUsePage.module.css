@@ -1,0 +1,74 @@
+.pageContainer {
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter', 'Roboto', sans-serif;
+    background-color: #fafdfc;
+    padding: 4rem 2rem;
+    color: #334155;
+}
+
+.content {
+    max-width: 800px;
+    text-align: center;
+    background: white;
+    padding: 3rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.logo {
+    max-height: 80px;
+    margin-bottom: 2rem;
+}
+
+h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 1.5rem;
+}
+
+p {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    color: #64748b;
+}
+
+.textContent {
+    text-align: start;
+    margin-top: 2rem;
+}
+
+.textContent h2 {
+    font-size: 1.5rem;
+    color: #0f172a;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.textContent h3 {
+    font-size: 1.25rem;
+    color: #334155;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.textContent p {
+    margin-bottom: 1rem;
+}
+
+.listItem {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    color: #64748b;
+    margin-bottom: 0.5rem;
+    margin-left: 1.5rem;
+    list-style-type: disc;
+}
+
+[dir="rtl"] .listItem {
+    margin-left: 0;
+    margin-right: 1.5rem;
+}

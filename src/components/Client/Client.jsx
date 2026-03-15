@@ -10,6 +10,9 @@ import CheckOut from "./CheckOut/CheckOutPage";
 import MyOrders from "./MyOrders/MyOrders";
 import MainViewer from "./Products/ClientProductsPreview/Main/MainViewer/MainViewer";
 import CategoryPage from "./Products/CategoryPage/CategoryPage";
+import PrivacyPage from "../Shared/PrivacyPage/PrivacyPage";
+import TermsOfUsePage from "../Shared/TermsOfUsePage/TermsOfUsePage";
+import Footer from "./Products/ClientProductsPreview/Footer/Footer";
 
 const Client = () => {
   // eslint-disable-next-line no-unused-vars
@@ -25,7 +28,10 @@ const Client = () => {
         <Route path="/checkout" element={<CheckOut />} />
         <Route path="/myorders" element={<MyOrders />} />
         <Route path="/category/:slug" element={<CategoryPage />} />
+        <Route path="/privacy-policy" element={<PrivacyPage />} />
+        <Route path="/terms-and-conditions" element={<TermsOfUsePage/>} />
       </Routes>
+      <Footer />
     </>
   );
 };

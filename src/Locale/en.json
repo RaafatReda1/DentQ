@@ -179,5 +179,334 @@
         "clinics": "Clinics",
         "doctors": "Doctors",
         "patients": "Patients"
+    },
+    "footer": {
+        "shop_by": "Shop By",
+        "all_products": "All Products",
+        "all_categories": "All Categories",
+        "account": "Account",
+        "my_account": "My Account",
+        "my_orders": "My Orders",
+        "notifications": "Notifications",
+        "help_info": "Help & Info",
+        "contact_us": "Contact Us",
+        "about_us": "About Us",
+        "all_rights_reserved": "All Rights Reserved to DentQ Company",
+        "terms_of_use": "Terms of Use",
+        "privacy_policy": "Privacy Policy"
+    },
+    "terms_page": {
+        "title": "Terms and Conditions",
+        "content": [
+            {
+                "type": "p",
+                "text": "Thank you for using the DentQ website! These Terms and Conditions (\"Terms\") govern your use of DentQ's services, including the website, mobile applications, and any other websites or applications operated by DentQ (collectively referred to as the \"Services\"). By using the Services, you agree to be bound by these Terms and consent to the collection, use, and disclosure of your personal information in accordance with our Privacy Policy."
+            },
+            {
+                "type": "p",
+                "text": "DentQ services provide a platform to display local distributors of dental supplies and equipment, through which products can be selected to be picked up, prepared, and delivered to your location by independent staff (\"Pickers\") and (\"Drivers\"). In some cases, pick-up, preparation, or delivery services may be performed by third parties, including the distributor or independent logistics companies (referred to as \"Third-Party Providers\"). Delivery can be made using the mode of transport chosen by the driver. You acknowledge that transportation or logistics services are provided by independent contractors and not employees of DentQ."
+            },
+            {
+                "type": "p",
+                "text": "When you use the Services to order products, you authorize the purchase and delivery of those products from your chosen distributors. Unless otherwise stated, you agree that DentQ, the Picker, and the Driver act as your agents in picking up, preparing, and delivering the products, and that they are not the actual sellers of these products. The purchase is officially made from the distributor you select, and the distributor becomes the merchant of record, and ownership of any products passes to you upon their purchase from the distributor's store."
+            },
+            {
+                "type": "p",
+                "text": "You agree that DentQ or the relevant distributor will collect the amount due (cash or card) upon receipt of the products. This amount includes the cost of the products and any additional fees from DentQ, and may differ from the amount shown at checkout due to changes such as special requests, out-of-stock items, addition or replacement of products, or weight adjustments."
+            },
+            {
+                "type": "p",
+                "text": "You agree that DentQ does not create any employment or agency relationship between you and it, and does not retain ownership of any products you order through the Services, unless explicitly agreed otherwise. All prices and amounts are typically in the currency adopted in the delivery area."
+            },
+            {
+                "type": "p",
+                "text": "The Services may occasionally contain errors or inaccuracies regarding pricing, product descriptions, or offers. DentQ reserves the right to correct any errors, update information, or refuse/cancel orders if there is any inaccurate information, even after the order has been submitted or paid."
+            },
+            {
+                "type": "h2",
+                "text": "1. Your Use of the Services"
+            },
+            {
+                "type": "p",
+                "text": "DentQ grants you a limited, non-exclusive, non-transferable license to use the Services for their intended purposes, subject to these Terms and our policies. You may not copy, modify, distribute, or sell any part of the Services or attempt to extract their source code without written permission."
+            },
+            {
+                "type": "p",
+                "text": "You may download the app to your device for personal, non-commercial use only. The unique UI design of the website and app is protected by international property rights and may not be copied or used without DentQ's written permission."
+            },
+            {
+                "type": "p",
+                "text": "Some of our services may allow you to upload or submit content (text, images, other materials). You retain full rights to this content but grant DentQ a worldwide, non-exclusive license to use, operate, and improve the Services. DentQ reserves the right to remove any content if it violates the Terms."
+            },
+            {
+                "type": "p",
+                "text": "Automatic updates to the application may be provided. Some parts of the software may be licensed under open-source licenses, which prevail over these Terms only for those parts."
+            },
+            {
+                "type": "p",
+                "text": "If you use DentQ on behalf of a company or entity, you warrant that you have the necessary authority to bind that entity to these Terms."
+            },
+            {
+                "type": "p",
+                "text": "You may need to create a user account to use the Services. You are responsible for all activity and financial transactions executed through your account, and you must maintain the security of your data and follow laws when using the Services. DentQ has the right to refuse or cancel orders or terminate accounts at its discretion."
+            },
+            {
+                "type": "h2",
+                "text": "2. Communicating with DentQ"
+            },
+            {
+                "type": "p",
+                "text": "By using the account, you agree to receive messages from DentQ, Pickers, or Drivers, whether via email, SMS, calls, or notifications. Automated systems may be used to send messages, and data or message rates may apply."
+            },
+            {
+                "type": "h2",
+                "text": "3. DentQ Coupons"
+            },
+            {
+                "type": "p",
+                "text": "DentQ coupons are offers applied automatically at purchase to save money. They are valid for a limited time and may be subject to restrictions. They cannot be sold, copied, or transferred, and have no cash value. Any sales tax associated with coupon use must be paid."
+            },
+            {
+                "type": "h2",
+                "text": "4. Third-Party Products and Content"
+            },
+            {
+                "type": "p",
+                "text": "DentQ is not responsible for products, content, services, or ads provided by third parties. Your use of these elements is at your own risk."
+            },
+            {
+                "type": "h2",
+                "text": "5. Services \"As Is\" – Disclaimer of Claims"
+            },
+            {
+                "type": "p",
+                "text": "The Services are provided \"as is\" and \"as available\". DentQ makes no warranties regarding the quality of products, or the services of Pickers, Drivers, or third parties, or the accuracy or continuity of the Services."
+            },
+            {
+                "type": "p",
+                "text": "Any risks arising from the use of the Services, products, or services provided by third parties remain solely with you."
+            },
+            {
+                "type": "h2",
+                "text": "6. Limitation of Liability"
+            },
+            {
+                "type": "p",
+                "text": "DentQ and its partners shall not be liable for any indirect, special, or consequential damages, including loss of data or service interruption. The maximum liability to you shall not exceed the amount you paid in the last 12 months or $100, whichever is greater."
+            },
+            {
+                "type": "h2",
+                "text": "7. Indemnification"
+            },
+            {
+                "type": "p",
+                "text": "You agree to protect and indemnify DentQ, its employees, and partners against any losses or claims arising from your unauthorized use of the Services or breach of these Terms."
+            },
+            {
+                "type": "h2",
+                "text": "8. Termination"
+            },
+            {
+                "type": "p",
+                "text": "You may stop using the Services at any time. DentQ may terminate your access or suspend the Services partially or entirely without prior notice. After termination, certain provisions of these Terms (such as 1 and 4-12) will survive."
+            },
+            {
+                "type": "h2",
+                "text": "9. Entire Agreement and Severability"
+            },
+            {
+                "type": "p",
+                "text": "These Terms constitute the entire agreement between you and DentQ. If a court finds any provision invalid, the remaining terms shall remain in effect."
+            },
+            {
+                "type": "h2",
+                "text": "10. No Waiver"
+            },
+            {
+                "type": "p",
+                "text": "DentQ's failure to monitor or enforce any provision does not constitute a waiver of its rights."
+            },
+            {
+                "type": "h2",
+                "text": "11. Assignment"
+            },
+            {
+                "type": "p",
+                "text": "You may not assign your rights or obligations under these Terms. DentQ may assign its rights and obligations freely."
+            },
+            {
+                "type": "h2",
+                "text": "12. Amendments to Terms"
+            },
+            {
+                "type": "p",
+                "text": "We may update these Terms from time to time. The latest version will be posted on the DentQ website, and if changes are material, you will be notified. Continued use of the Services after modification constitutes your acceptance of the new Terms."
+            },
+            {
+                "type": "h2",
+                "text": "13. Copyright Policy"
+            },
+            {
+                "type": "p",
+                "text": "DentQ respects the intellectual property rights of others. We will respond to legal notices of infringement and may suspend accounts of repeat infringers. If you believe any content infringes your rights, you may send a notice to the designated agent with all necessary details."
+            }
+        ]
+    },
+    "privacy_page": {
+        "title": "Privacy Policy",
+        "content": [
+            {
+                "type": "p",
+                "text": "Thank you for using DentQ services! We are committed to providing the best online shopping and delivery experience possible. This Privacy Policy explains the type of information we collect, how we use it, the circumstances under which we may share this information, and the choices available to you regarding your information."
+            },
+            {
+                "type": "p",
+                "text": "This policy applies whether you access DentQ services via the browser, mobile app, or any other means."
+            },
+            {
+                "type": "h2",
+                "text": "Information We Collect"
+            },
+            {
+                "type": "h3",
+                "text": "Information you provide to us or allow others to provide"
+            },
+            {
+                "type": "p",
+                "text": "During your experience with DentQ, you may provide us with personal information such as name, email, phone number, and address when creating an account or placing an order. Account data can be updated or corrected through account settings."
+            },
+            {
+                "type": "p",
+                "text": "If you log in using a third-party service (like a Facebook account), we may obtain information about you from that service, such as name, email, public profile, and contact information. We advise reviewing the privacy policies and your settings on those services."
+            },
+            {
+                "type": "p",
+                "text": "If you wish to invite your friends to use the Services, we will allow you to enter contact information manually or import it from contacts on third-party services. This information is only used to send invitations, track if friends use the Services after the invitation, and remind them of the invitation."
+            },
+            {
+                "type": "p",
+                "text": "Our partners may allow the collection and sharing of information about your use of their websites or apps with us, such as your use of DentQ buttons or tools on other sites."
+            },
+            {
+                "type": "h3",
+                "text": "Technical Information About the Use of Services"
+            },
+            {
+                "type": "p",
+                "text": "When you use the Services via the browser or app, we automatically receive technical information about your device and its software."
+            },
+            {
+                "type": "h3",
+                "text": "Cookies and Other Tracking Tools"
+            },
+            {
+                "type": "p",
+                "text": "We, our partners, and advertisers use various technologies to collect information, including cookies, pixels, scripts, and device identifiers. These technologies are used to understand how you use the Services, customize your experience, measure ads, and remember you when you log in. You can manage cookie settings through your browser."
+            },
+            {
+                "type": "p",
+                "text": "We may use third-party services like Google Analytics to understand how users interact with the Services in a non-personally identifiable manner."
+            },
+            {
+                "type": "h3",
+                "text": "Log Information"
+            },
+            {
+                "type": "p",
+                "text": "Our servers log information about your use of the Services, such as IP address, browser type, operating system, device ID, pages you view, links you click, searches, and how you interact with the Services. If you are registered, this information is linked to your account."
+            },
+            {
+                "type": "h2",
+                "text": "How We Use Your Information"
+            },
+            {
+                "type": "p",
+                "text": "We use the information we collect for purposes such as:"
+            },
+            {
+                "type": "li",
+                "text": "Providing and improving the Services and developing new products."
+            },
+            {
+                "type": "li",
+                "text": "Enabling Pickers and Drivers to prepare and deliver your order and contact you when needed."
+            },
+            {
+                "type": "li",
+                "text": "Providing customized content, including ads, coupons, and offers."
+            },
+            {
+                "type": "li",
+                "text": "Understanding how users use the Services, testing new features, and improving the experience."
+            },
+            {
+                "type": "li",
+                "text": "Providing technical support and responding to your inquiries and requests."
+            },
+            {
+                "type": "h2",
+                "text": "Who We Share Information With"
+            },
+            {
+                "type": "p",
+                "text": "To enable you to order and have products delivered, we share your information with parties involved in order fulfillment, such as:"
+            },
+            {
+                "type": "li",
+                "text": "Pickers who prepare your order."
+            },
+            {
+                "type": "li",
+                "text": "Drivers who deliver your order."
+            },
+            {
+                "type": "li",
+                "text": "Payment processing partners to verify your card and process payment."
+            },
+            {
+                "type": "li",
+                "text": "Distributors or selling partners from whom you purchase products."
+            },
+            {
+                "type": "p",
+                "text": "Credit card information is seen only by payment processing partners."
+            },
+            {
+                "type": "h3",
+                "text": "Other Cases for Sharing"
+            },
+            {
+                "type": "li",
+                "text": "With your consent or at your direction: We share information when you give us explicit consent."
+            },
+            {
+                "type": "li",
+                "text": "For processing or providing service: We may use third parties to process information or provide services, subject to confidentiality obligations."
+            },
+            {
+                "type": "li",
+                "text": "For legal purposes: When necessary to comply with laws or protect safety, property rights, or individuals."
+            },
+            {
+                "type": "li",
+                "text": "Non-personally or in aggregate: We share non-personally identifiable or aggregated information to analyze usage."
+            },
+            {
+                "type": "li",
+                "text": "To purchase specific products under the law: Such as tobacco, we may share certain information with the distributor as required by law."
+            },
+            {
+                "type": "li",
+                "text": "For business purposes: We may share information during mergers, company sales, financing, or ownership changes between DentQ and its affiliates."
+            },
+            {
+                "type": "h2",
+                "text": "Policy Changes"
+            },
+            {
+                "type": "p",
+                "text": "The Privacy Policy may change from time to time. Any updated version will be posted on this page, and we encourage you to review it regularly. In case of significant changes, we may send you an additional notice (such as an in-app message or email)."
+            }
+        ]
     }
 }

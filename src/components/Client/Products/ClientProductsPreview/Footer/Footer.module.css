@@ -1,0 +1,175 @@
+.footer {
+    background-color: #fafdfc;
+    border-top: 1px solid #e2e8f0;
+    padding: 4rem 0 0 0;
+    font-family: 'Inter', 'Roboto', sans-serif;
+    color: #334155;
+    width: 100%;
+}
+
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+/* Base column styles */
+.col {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Logo Column (Takes up slightly more space if needed) */
+.logoCol {
+    align-items: flex-start;
+}
+
+[dir="rtl"] .logoCol {
+    align-items: flex-end;
+}
+
+.logoImage {
+    max-height: 80px;
+    margin-bottom: 1.5rem;
+}
+
+.slogan {
+    font-size: 1rem;
+    color: #64748b;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    max-width: 250px;
+}
+
+[dir="rtl"] .slogan {
+    text-align: right;
+}
+
+.socials {
+    display: flex;
+    gap: 1rem;
+}
+
+.socialIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #f1f5f9;
+    color: #43D7B5;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.socialIcon:hover {
+    background-color: #43D7B5;
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+/* Link Columns */
+.linkCol h3 {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 1.5rem;
+}
+
+.linkCol ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.linkCol li a {
+    color: #64748b;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.3s ease;
+}
+
+.linkCol li a:hover {
+    color: #43D7B5;
+}
+
+/* Bottom Bar */
+.bottomBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 0;
+    border-top: 1px solid #e2e8f0;
+    font-size: 0.875rem;
+    color: #94a3b8;
+}
+
+.bottomLinks {
+    display: flex;
+    gap: 2rem;
+}
+
+.bottomLink {
+    color: #94a3b8;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.bottomLink:hover {
+    color: #43D7B5;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 3rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+    }
+
+    .logoCol {
+        align-items: center;
+        text-align: center;
+    }
+
+    [dir="rtl"] .logoCol {
+        align-items: center;
+        text-align: center;
+    }
+
+    .slogan {
+        text-align: center;
+    }
+
+    [dir="rtl"] .slogan {
+        text-align: center;
+    }
+
+    .linkCol {
+        align-items: center;
+        text-align: center;
+    }
+
+    .bottomBar {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+}

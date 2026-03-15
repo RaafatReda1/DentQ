@@ -258,10 +258,13 @@
   object-fit: cover;
   object-position: top;
   border-radius: 30px 30px 371px 415px;
+  transform: scaleX(-1);
 }
 
 [dir="rtl"] .doctorsImage {
   border-radius: 30px 30px 371px 415px;
+  transform: scaleX(1);
+
 }
 
 .floatingCircle {

@@ -16,6 +16,13 @@ export default async function validatePromoCode(code, userId) {
   const result = await response.json()
   return result
 }
+
+
+
+
+
+
+
 // دلوقت يسطا الفانكشن ده بتروح لل ايدج فانكشن ف السوبا بيز وبتاخد اليوزر اي دي والبروموكود اللي هوا دخله وبعد كدهربتدور في جدول البروموكودز ف السوبا بيز وترجع نتيجه 
 // عباره عن نوع البروموكود وصلاحيته وشكل النتايج بتاعته هتلاقيها في فايل ال Exacalidraw of the checkout comp
 // THE RESULT OBJECT OF THIS FUNCTION WILL BE ONE OF THESE CASES:
