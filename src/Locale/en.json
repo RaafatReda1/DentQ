@@ -170,5 +170,14 @@
         "completed": "Completed",
         "delivered": "Delivered",
         "cancelled": "Cancelled"
+    },
+    "hero": {
+        "headline": "Putting your health first with empathy and skill",
+        "subText": "We are leading healthcare facility across the States dedicated to providing exceptional service for all patients",
+        "getStarted": "Get Started",
+        "callUs": "Call us now!",
+        "clinics": "Clinics",
+        "doctors": "Doctors",
+        "patients": "Patients"
     }
 }

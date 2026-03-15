@@ -13,16 +13,16 @@ const MainViewer = () => {
 
   useEffect(() => {
     let isMounted = true;
-    
+
     const loadContent = async () => {
       setError(null);
-      
+
       try {
         const [bannersData, categoriesData] = await Promise.all([
           fetchBanners(),
           fetchCategories()
         ]);
-        
+
         if (isMounted) {
           if (bannersData) setBanners(bannersData);
           if (categoriesData) setCategories(categoriesData);
@@ -32,7 +32,7 @@ const MainViewer = () => {
           console.error("Error loading MainViewer content:", err);
           setError("Failed to load store content. Please try again.");
         }
-      } 
+      }
     };
 
     loadContent();
@@ -41,14 +41,14 @@ const MainViewer = () => {
 
   const { mainBanner, otherBanners } = useMemo(() => {
     const main = banners.find(b => b.slug === "main");
-    const others = banners.filter(b => b.slug !== "main").sort((a,b) => a.id - b.id);
+    const others = banners.filter(b => b.slug !== "main").sort((a, b) => a.id - b.id);
     return { mainBanner: main, otherBanners: others };
   }, [banners]);
 
   const catsWithoutBanner = useMemo(() => {
     const usedCatIds = new Set(banners.filter(b => b.related_cat_id).map(b => b.related_cat_id));
-    return categories.filter(cat => 
-      !cat.parent_id && 
+    return categories.filter(cat =>
+      !cat.parent_id &&
       !usedCatIds.has(cat.id) &&
       cat.is_active !== false
     ).sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
@@ -72,12 +72,8 @@ const MainViewer = () => {
       <CategoriesPreview categories={categories} />
 
       {/* Main banner */}
-      {mainBanner ? (
-        <>
-          <HeroSection Banner={mainBanner} />
-          {mainBanner.related_cat_id && <Slider CatId={mainBanner.related_cat_id} />}
-        </>
-      ) : (<DefaultHeroSection/>)}
+      <DefaultHeroSection banner={mainBanner} />
+      {mainBanner?.related_cat_id && <Slider CatId={mainBanner.related_cat_id} />}
 
       {/* Other banners */}
       {otherBanners.map(banner => (
