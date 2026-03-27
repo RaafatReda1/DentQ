@@ -39,7 +39,7 @@ export const ResetPasswordForm = () => {
     const isLTR = i18n.language && i18n.language.startsWith("en");
 
     return (
-        <div className={styles.container} dir={isLTR ? "ltr" : "rtl"}>
+        <div className={[styles.container, 'authForm'].join(' ')} dir={isLTR ? "ltr" : "rtl"}>
             <div className={styles.header}>
                 <h1 className={styles.title}>{t("auth.resetPassword") || "Reset Password"}</h1>
                 <p className={styles.subtitle}>{t("auth.enterNewPassword") || "Enter your new password below"}</p>

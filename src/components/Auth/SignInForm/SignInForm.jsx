@@ -39,7 +39,7 @@ export const SignInForm = () => {
   const isLTR = i18n.language.startsWith("en");
 
   return (
-    <div className={styles.container} dir={isLTR ? "ltr" : "rtl"}>
+    <div className={[styles.container, 'authForm'].join(' ')} dir={isLTR ? "ltr" : "rtl"}>
       <div className={styles.header}>
         <h1 className={styles.title}>{t("auth.signIn")}</h1>
         <p className={styles.subtitle}>DentQ Dental Clinic</p>

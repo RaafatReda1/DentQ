@@ -122,3 +122,8 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+.authForm{
+  margin-top: 20px !important;
+  background: #000 
+}
