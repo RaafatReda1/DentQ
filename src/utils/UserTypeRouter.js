@@ -7,7 +7,7 @@ import { transferGuestOrders } from "./TransferGuestOrders";
 const UserTypeRouter = async (user, setUser) => {
   try {
     // set loading state
-    setUser({ ...user, loadingState: true });
+    setUser((prev) => ({ ...prev, loadingState: true }));
     // 1️⃣ Get current session
     const { data, error } = await supabase.auth.getSession();
 

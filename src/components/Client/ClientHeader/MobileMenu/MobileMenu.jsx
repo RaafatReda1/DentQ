@@ -105,7 +105,7 @@ const MobileMenu = ({ menuIsOpened, setMenuIsOpened }) => {
           </div>
 
           <div className={styles.drawerFooter}>
-            <p className={styles.footerText}>DentQ &copy; 2025</p>
+            <p className={styles.footerText}>DentQ &copy; {new Date().getFullYear()}</p>
           </div>
         </Box>
       </Drawer>

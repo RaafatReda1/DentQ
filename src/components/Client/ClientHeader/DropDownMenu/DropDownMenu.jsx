@@ -77,10 +77,10 @@ const DropDownMenu = ({ menuIsOpened }) => {
       >
         {user.session ? (
           <img
-          src={user.avatarUrl || "/blank-user.png"}
-          alt="Profile"
-          className={styles.profileImage}
-        />
+            src={user.avatarUrl || "/blank-user.png"}
+            alt="Profile"
+            className={styles.profileImage}
+          />
         ) : (
           <User2Icon className={styles.menuIcon} />
         )}
@@ -114,14 +114,15 @@ const DropDownMenu = ({ menuIsOpened }) => {
               </span>
             </>
           ) : (
-            <span
-              style={{ textDecoration: "none", cursor: "pointer" }}
-              className={`${styles.menuItem}`}
-            >
-              <Login className={styles.menuIcon} />
-              <SignInForm />{" "}
-              {/*this is the signin component which includes login span as normal text which opens a popup inside the component once clicked */}
-            </span>
+            <Link to="/signin" style={{textDecoration: "none"}}>
+              <span
+                style={{ textDecoration: "none", cursor: "pointer" }}
+                className={`${styles.menuItem}`}
+              >
+                <Login className={styles.menuIcon} />
+                <span>{t("menu.login")}</span>
+              </span>
+            </Link>
           )}
         </div>
       )}

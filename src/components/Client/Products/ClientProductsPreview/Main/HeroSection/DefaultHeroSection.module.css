@@ -75,6 +75,10 @@
   margin: 0;
 }
 
+.headLineSpan {
+  color: #43D7B5;
+}
+
 .subText {
   font-size: clamp(1rem, 2vw, 1.125rem);
   color: #64748b;

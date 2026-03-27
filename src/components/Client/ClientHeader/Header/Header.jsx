@@ -31,9 +31,10 @@ const Header = () => {
   }, [handleScroll]);
 
   const headerClasses = `${styles.Header} ${isScrolled ? styles.scrolled : ""}`;
+  const checkMainPage = () => window.location.pathname === "/";
 
   return (
-    <header className={headerClasses}>
+    <header className={headerClasses} {...(checkMainPage() ? ({ style: { marginBottom: '0' } }) : ({style: { marginBottom: '20px' }}))}>
       <div className={styles.container}>
         <div className={styles.leftSection}>
           <Logo />
