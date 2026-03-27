@@ -3,7 +3,6 @@ import { supabase } from "./SupabaseClient";
 import { transferGuestCart } from "./TransferGuestCart";
 import { transferGuestOrders } from "./TransferGuestOrders";
 
-
 const UserTypeRouter = async (user, setUser) => {
   try {
     // set loading state
@@ -21,8 +20,16 @@ const UserTypeRouter = async (user, setUser) => {
 
     // 2️⃣ Handle no session (logged out)
     if (!session) {
-      if (!GetCookie()) { MakeCookie(30) }//make a guest_id cookie that persists for 30 days
-      setUser({ type: "guest", fullName: "", email: "", session: false, guest_id: GetCookie() });//Storing the guest_id in the user object as a cookie
+      if (!GetCookie()) {
+        MakeCookie(30);
+      } //make a guest_id cookie that persists for 30 days
+      setUser({
+        type: "guest",
+        fullName: "",
+        email: "",
+        session: false,
+        guest_id: GetCookie(),
+      }); //Storing the guest_id in the user object as a cookie
       return;
     }
 
@@ -36,33 +43,40 @@ const UserTypeRouter = async (user, setUser) => {
         fullName: session.user.user_metadata?.name || "",
         email: "",
         session,
-        avatarUrl: session.user.user_metadata?.avatarUrl || ""
+        avatarUrl: session.user.user_metadata?.avatarUrl || "",
       }));
       return;
     }
 
-    const avatarUrl = session.user.user_metadata?.avatar_url ||
+    const avatarUrl =
+      session.user.user_metadata?.avatar_url ||
       session.user.user_metadata?.avatarUrl ||
       "";
-    const fullName = session.user.user_metadata?.full_name ||
+    const fullName =
+      session.user.user_metadata?.full_name ||
       session.user.user_metadata?.name ||
       "";
 
     console.log("Session found for:", email);
 
     // 4️⃣ Check Admins first
-    const { data: adminData, error: adminError } = await supabase
-      .from("Admins")
-      .select("fullName, email, avatarUrl")
-      .eq("email", email)
-      .maybeSingle();
+    // In UserTypeRouter.js — replace the adminData block with:
 
-    if (adminError) {
-      console.error("Admin check error:", adminError);
-    }
+    const adminResponse = await fetch(
+      `https://yevtqhevspsgfhzfonlo.supabase.co/functions/v1/CheckIsAdmin`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.access_token}`, // pass the user's JWT
+        },
+        body: JSON.stringify({ email }),
+      },
+    );
 
-    if (adminData) {
-      console.log("✅ Admin found:", adminData);
+    const { isAdmin, admin: adminData } = await adminResponse.json();
+
+    if (isAdmin && adminData) {
       setUser((prev) => ({
         ...prev,
         type: "admin",
@@ -119,7 +133,7 @@ const UserTypeRouter = async (user, setUser) => {
         id: session.user.id,
         fullName: fullName,
         email: email,
-        avatarUrl: avatarUrl
+        avatarUrl: avatarUrl,
       })
       .select("id, fullName, email, avatarUrl")
       .single();
@@ -168,14 +182,13 @@ const UserTypeRouter = async (user, setUser) => {
       session,
       avatarUrl: avatarUrl,
     }));
-
   } catch (unexpectedError) {
     console.error("💥 Unexpected error in UserTypeRouter:", unexpectedError);
     setUser((prev) => ({
       ...prev,
       type: "error",
       error: unexpectedError.message,
-      session: false
+      session: false,
     }));
   } finally {
     // 8️⃣ Set loading state to false

@@ -5,7 +5,7 @@ import { Globe, ChevronDown, Check } from "lucide-react";
 
 const LangDropDown = ({ menuIsOpened }) => {
   const { i18n } = useTranslation();
-  const [currentLang, setCurrentLang] = useState(i18n.language || "en");
+  const [currentLang, setCurrentLang] = useState(i18n.language || "ar");
 
   useEffect(() => {
     setCurrentLang(i18n.language);
