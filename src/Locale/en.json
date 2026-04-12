@@ -567,5 +567,21 @@
             "distributors": "Top Distributors",
             "deliveries": "Successful Deliveries"
         }
+    },
+    "admin": {
+        "sidebar": {
+            "dashboard": "Dashboard",
+            "products": "Products",
+            "orders": "Orders",
+            "marketing": "Marketing",
+            "cms": "CMS Settings"
+        },
+        "search": {
+            "placeholder": "Search settings, orders, users...",
+            "no_results": "No records found."
+        },
+        "header": {
+            "super_admin": "Super Admin"
+        }
     }
 }

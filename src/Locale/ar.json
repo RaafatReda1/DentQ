@@ -567,5 +567,21 @@
             "distributors": "أبرز الموزعين",
             "deliveries": "الطلبات الناجحة"
         }
+    },
+    "admin": {
+        "sidebar": {
+            "dashboard": "لوحة القيادة",
+            "products": "المنتجات",
+            "orders": "الطلبات",
+            "marketing": "التسويق",
+            "cms": "إعدادات النظام"
+        },
+        "search": {
+            "placeholder": "ابحث عن إعدادات، طلبات، مستخدمين...",
+            "no_results": "لا توجد نتائج."
+        },
+        "header": {
+            "super_admin": "مدير النظام"
+        }
     }
 }

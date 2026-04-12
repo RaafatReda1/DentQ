@@ -1,0 +1,155 @@
+.sidebar {
+    width: 200px;
+    background-color: transparent;
+    /* Driven by parent AdminLayout deep blue */
+    display: flex;
+    flex-direction: column;
+    /* Give space on the left, flush on the right */
+    color: rgba(255, 255, 255, 0.7);
+    z-index: 10;
+}
+
+[dir="rtl"] .sidebar {
+    padding: 2rem 2rem 2rem 0;
+    /* Flip padding for RTL */
+}
+
+.logoContainer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 3rem;
+    padding-right: 2rem;
+}
+
+.logoCircle {
+    width: 40px;
+    height: 40px;
+    background-color: var(--accent-color);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 800;
+    color: white;
+    font-size: 1.2rem;
+}
+
+.logoText {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+    letter-spacing: 1px;
+}
+
+.navMenu {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+}
+
+/* Base item style */
+.navItem {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 14px 20px;
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    border-radius: 30px 0 0 30px;
+    /* Rounded only on the left side */
+    position: relative;
+    /* Pushes past the wrapper border to perfectly touch the grey dashboard area */
+    margin-right: -1px;
+    
+}
+
+[dir="rtl"] .navItem {
+    border-radius: 0 30px 30px 0;
+    margin-right: 0;
+    margin-left: -1px;
+}
+
+.navItem:hover {
+    color: white;
+}
+
+/* THE MAGIC ACTIVE STATE EFFECT */
+.navItem.active {
+    background-color: var(--background-light);
+    /* EXACT match to Dashboard area */
+    color: var(--primary-hover);
+    /* Deep blue text when active */
+    font-weight: 600;
+    animation: active 0.4s ease 0s 1  forwards;
+}
+
+/* Top notch */
+.navItem.active::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    background: transparent;
+    border-bottom-right-radius: 20px;
+    box-shadow: 8px 8px 0 8px var(--background-light);
+}
+
+/* Bottom notch */
+.navItem.active::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    background: transparent;
+    border-top-right-radius: 20px;
+    box-shadow: 8px -8px 0 8px var(--background-light);
+}
+
+/* Small visual flare on the active icon */
+.navItem.active .icon {
+    color: var(--accent-color);
+}
+
+.icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.3s ease;
+}
+
+.bottomLink {
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-right: 2rem;
+}
+
+[dir="rtl"] .bottomLink {
+    padding-right: 0;
+    padding-left: 2rem;
+}
+
+.bottomLink .navItem {
+    border-radius: 30px;
+    margin-right: 0;
+}
+@keyframes active {
+    0% {
+        transform: translateX(0);
+    }
+    50% {
+        transform: translateX(.5);
+    }
+    100% {
+        transform: translateX(1);
+    }
+}
