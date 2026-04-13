@@ -6,8 +6,13 @@ import useUserData  from '../../../Storage/UserDataStorage';
 import styles from './Header.module.css';
 
 const Header = () => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const { user } = useUserData(); // Extract for avatar loading
+
+    const toggleLanguage = () => {
+        const nextLang = i18n.language === 'ar' ? 'en' : 'ar';
+        i18n.changeLanguage(nextLang);
+    };
 
     return (
         <header className={styles.header}>
@@ -19,6 +24,9 @@ const Header = () => {
             <div className={styles.rightSection}>
                 {/* Communication and Alerts */}
                 <div className={styles.iconGroup}>
+                    <button className={styles.iconBtn} onClick={toggleLanguage} style={{fontWeight: 800, fontSize: '14px', color:'var(--primary-hover)'}}>
+                        {i18n.language === 'ar' ? 'EN' : 'AR'}
+                    </button>
                     <button className={styles.iconBtn}>
                         <MessageSquare size={20} />
                         <span className={styles.badge}>2</span>
