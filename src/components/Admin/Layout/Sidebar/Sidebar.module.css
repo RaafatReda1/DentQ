@@ -9,6 +9,11 @@
   z-index: 10;
   padding: 10px 0 0 10px;
   overflow: hidden;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar.collapsed {
+  width: 75px; 
 }
 
 [dir="rtl"] .sidebar {
@@ -19,29 +24,65 @@
 .logoContainer {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 12px;
   margin-bottom: 3rem;
-  padding-right: 2rem;
+  padding-right: 1.5rem;
+  height: 60px;
 }
 
-.logoCircle {
-  width: 40px;
-  height: 40px;
-  background-color: var(--accent-color);
-  border-radius: 50%;
+.logoWrapper {
+  background: white;
+  padding: 8px 12px;
+  border-radius: 50px;
+  box-shadow: 0 4px 30px 70px rgba(228, 227, 227, 0.15);
   display: flex;
-  justify-content: center;
   align-items: center;
-  font-weight: 800;
-  color: white;
-  font-size: 1.2rem;
+  justify-content: center;
+  transition: opacity 0.3s ease;
 }
 
-.logoText {
-  font-size: 1.5rem;
-  font-weight: 700;
+.logoImage {
+  height: 25px;
+  object-fit: contain;
+  
+}
+
+.sidebar.collapsed .logoContainer {
+  justify-content: center;
+  padding-right: 0;
+  padding-left: 2px;
+  margin-bottom: 2rem;
+}
+
+.sidebar.collapsed .logoWrapper {
+  display: none;
+}
+
+.toggleBtn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255,255,255,0.05);
   color: white;
-  letter-spacing: 1px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.toggleBtn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+.toggleIcon {
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar.collapsed .toggleIcon {
+  transform: rotate(-180deg);
 }
 
 .navMenu {
@@ -67,7 +108,16 @@
   position: relative;
   /* Pushes past the wrapper border to perfectly touch the grey dashboard area */
   margin-right: -1px;
-  
+}
+
+.label {
+  white-space: nowrap;
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+.sidebar.collapsed .label {
+  display: none;
 }
 
 [dir="rtl"] .navItem {
@@ -99,7 +149,8 @@
   height: 20px;
   background: transparent;
   border-bottom-right-radius: 20px;
-  box-shadow: 8px 8px 0 8px var(--background-light);
+  box-shadow: 8px 8px 0 5px var(--background-light);
+
 }
 
 /* Bottom notch */
@@ -112,13 +163,14 @@
   height: 20px;
   background: transparent;
   border-top-right-radius: 20px;
-  box-shadow: 8px -8px 0 8px var(--background-light);
+  box-shadow: 8px -8px 0 5px var(--background-light);
 }
 
 /* Small visual flare on the active icon */
 .navItem.active .icon {
   color: var(--accent-color);
-  scale: 1.1;
+  scale: 1.3;
+  animation: shake 0.4s ease 1;
 }
 
 .icon {
@@ -156,7 +208,7 @@
     border-radius: 30px 0 0 30px;
 
     transform: translateX(200px); /* بره */
-    transition: transform .45s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: transform .3s ease-out;
     z-index: -1000;
 }
 
@@ -165,5 +217,12 @@
     transform: translateX(0); /* يدخل */
 }
 
-
+@keyframes shake {
+  0% { transform: translateX(0); }
+  20% { transform: translateX(-3px); }
+  40% { transform: translateX(3px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(3px); }
+  100% { transform: translateX(0); }
+}
 
