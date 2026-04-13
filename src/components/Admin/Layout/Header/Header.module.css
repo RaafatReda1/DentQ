@@ -124,3 +124,20 @@
     border: 2px solid var(--background-light);
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
+
+@media (max-width: 768px) {
+    .header { padding: 1rem; gap: 10px; }
+    .profileInfo { display: none; }
+    .leftSection { gap: 15px; flex: 1; }
+    .rightSection { gap: 10px; }
+}
+
+@media (max-width: 480px) {
+    .header { flex-wrap: wrap; padding: 0.8rem; gap: 0; }
+    .leftSection { order: 2; width: 100%; margin-top: 10px; justify-content: center; }
+    .rightSection { order: 1; width: 100%; justify-content: flex-end; gap: 5px; }
+    .divider { display: none; }
+    .iconGroup { gap: 5px; }
+    .iconBtn { width: 36px; height: 36px; font-size: 11px !important; }
+    .avatar { width: 36px; height: 36px; }
+}

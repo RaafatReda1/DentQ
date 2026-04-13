@@ -112,3 +112,12 @@
     from { opacity: 0; transform: translateY(-5px); }
     to { opacity: 1; transform: translateY(0); }
 }
+
+@media (max-width: 768px) {
+    .searchContainer { width: auto; flex: 1; max-width: 180px; }
+}
+
+@media (max-width: 480px) {
+    .searchContainer { max-width: 100%; width: 100%; flex: none; }
+    .inputWrapper { padding: 0.6rem 1rem; border-radius: 12px; }
+}
