@@ -33,6 +33,7 @@ const Sidebar = () => {
                     >
                         <span className={styles.icon}>{link.icon}</span>
                         <span className={styles.label}>{link.label}</span>
+                        <span className={styles.notch}></span>
                     </NavLink>
                 ))}
             </nav>

@@ -17,6 +17,7 @@ const Admin = () => {
         <Route path="cms" element={<div>CMS Settings Module loads here...</div>} />
       </Route>
       {/* Catch-all redirect */}
+      <Route path="*" element={<Navigate to="/admin" replace/>} />
     </Routes>
   );
 };
