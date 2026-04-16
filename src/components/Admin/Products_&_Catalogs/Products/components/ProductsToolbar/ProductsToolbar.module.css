@@ -1,0 +1,227 @@
+.toolbar {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+/* ─── Top Row ─── */
+.topRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.leftGroup {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1;
+    min-width: 0;
+}
+
+.title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-main);
+    white-space: nowrap;
+}
+
+.searchBox {
+    position: relative;
+    max-width: 280px;
+    flex: 1;
+}
+
+.searchIcon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    pointer-events: none;
+}
+
+.searchInput {
+    width: 100%;
+    padding: 9px 12px 9px 36px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-full);
+    font-size: 0.85rem;
+    color: var(--text-main);
+    background: var(--card-bg);
+    outline: none;
+    transition: all var(--transition-fast);
+}
+
+.searchInput:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(0, 180, 216, 0.1);
+}
+
+.rightGroup {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+/* ─── Bulk Actions ─── */
+.bulkActions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background: rgba(0, 180, 216, 0.08);
+    border: 1px solid rgba(0, 180, 216, 0.2);
+    border-radius: var(--radius-md);
+    color: var(--accent-color);
+    font-size: 0.8rem;
+}
+
+.bulkCount {
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.bulkSelect {
+    padding: 4px 8px;
+    border: 1px solid rgba(0, 180, 216, 0.3);
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--accent-color);
+    font-size: 0.78rem;
+    cursor: pointer;
+    outline: none;
+}
+
+/* ─── Add Button ─── */
+.addBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 18px;
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+}
+
+.addBtn:hover {
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 180, 216, 0.3);
+}
+
+/* ─── Filters Row ─── */
+.filtersRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.filterGroup {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.selectWrapper {
+    position: relative;
+}
+
+.filterSelect {
+    appearance: none;
+    padding: 8px 32px 8px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    background: var(--card-bg);
+    cursor: pointer;
+    outline: none;
+    transition: all var(--transition-fast);
+    min-width: 140px;
+}
+
+.filterSelect:focus {
+    border-color: var(--accent-color);
+}
+
+.selectIcon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    pointer-events: none;
+}
+
+.exportBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 14px;
+    border: 1px solid var(--border-color);
+    background: var(--card-bg);
+    color: var(--text-secondary);
+    border-radius: var(--radius-md);
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.exportBtn:hover {
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+}
+
+@media (max-width: 768px) {
+    .topRow {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .leftGroup {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .searchBox {
+        max-width: 100%;
+    }
+
+    .rightGroup {
+        justify-content: space-between;
+    }
+
+    .addBtn span {
+        display: none;
+    }
+
+    .addBtn {
+        padding: 9px 12px;
+    }
+
+    .filtersRow {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filterGroup {
+        flex-direction: column;
+    }
+
+    .filterSelect {
+        width: 100%;
+    }
+}

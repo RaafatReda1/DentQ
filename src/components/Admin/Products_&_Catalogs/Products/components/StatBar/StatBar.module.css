@@ -1,0 +1,99 @@
+.statBar {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+}
+
+.statCard {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    text-align: left;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    position: relative;
+    overflow: hidden;
+}
+
+.statCard::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--stat-color);
+    transform: scaleX(0);
+    transition: transform var(--transition-normal);
+    transform-origin: left;
+}
+
+.statCard:hover:not(:disabled)::before {
+    transform: scaleX(1);
+}
+
+.statCard:hover:not(:disabled) {
+    border-color: var(--stat-color);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    transform: translateY(-1px);
+}
+
+.statCard:disabled {
+    cursor: default;
+}
+
+.activeCard {
+    border-color: var(--stat-color);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.activeCard::before {
+    transform: scaleX(1);
+}
+
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cardLabel {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+.cardIcon {
+    color: var(--stat-color);
+    opacity: 0.7;
+}
+
+.cardValue {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--stat-color);
+}
+
+@media (max-width: 900px) {
+    .statBar {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 500px) {
+    .statBar {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .statCard:last-child {
+        grid-column: span 2;
+    }
+
+    .cardValue {
+        font-size: 1.1rem;
+    }
+}

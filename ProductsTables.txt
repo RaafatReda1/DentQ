@@ -1,0 +1,136 @@
+create table public."ProductRatings" (
+  id uuid not null default gen_random_uuid (),
+  product_id uuid not null,
+  client_id uuid not null,
+  rating smallint not null,
+  created_at timestamp with time zone null default now(),
+  updated_at timestamp with time zone null default now(),
+  constraint ProductRatings_pkey primary key (id),
+  constraint ProductRatings_product_id_client_id_key unique (product_id, client_id),
+  constraint ProductRatings_client_id_fkey foreign KEY (client_id) references auth.users (id) on delete CASCADE,
+  constraint ProductRatings_product_id_fkey foreign KEY (product_id) references "Products" (id) on delete CASCADE,
+  constraint ProductRatings_rating_check check (
+    (
+      (rating >= 1)
+      and (rating <= 5)
+    )
+  )
+) TABLESPACE pg_default;
+
+create index IF not exists idx_productratings_product_id on public."ProductRatings" using btree (product_id) TABLESPACE pg_default;
+
+create index IF not exists idx_productratings_client_id on public."ProductRatings" using btree (client_id) TABLESPACE pg_default;
+
+
+create table public."Categories" (
+  id uuid not null default gen_random_uuid (),
+  name_ar text not null,
+  name_en text null,
+  slug text not null,
+  parent_id uuid null,
+  icon text null,
+  image_url text null,
+  description text null,
+  level integer null default 0,
+  sort_order integer null default 0,
+  is_active boolean null default true,
+  created_at timestamp with time zone null default now(),
+  updated_at timestamp with time zone null default now(),
+  constraint categories_pkey primary key (id),
+  constraint categories_slug_key unique (slug),
+  constraint categories_parent_id_fkey foreign KEY (parent_id) references "Categories" (id) on delete CASCADE
+) TABLESPACE pg_default;
+
+create index IF not exists idx_categories_parent_id on public."Categories" using btree (parent_id) TABLESPACE pg_default;
+
+create index IF not exists idx_categories_slug on public."Categories" using btree (slug) TABLESPACE pg_default;
+
+create index IF not exists idx_categories_level on public."Categories" using btree (level) TABLESPACE pg_default;
+
+create index IF not exists idx_categories_active on public."Categories" using btree (is_active) TABLESPACE pg_default;
+
+create trigger update_categories_updated_at BEFORE
+update on "Categories" for EACH row
+execute FUNCTION update_updated_at_column ();
+
+
+create table public."Products" (
+  id uuid not null default gen_random_uuid (),
+  "nameEn" text not null,
+  "nameAr" text null,
+  "descriptionEn" text null,
+  "descriptionAr" text null,
+  "fullDescriptionEn" text null,
+  price numeric(12, 2) not null,
+  original_price numeric(10, 2) null,
+  discount numeric(5, 2) null,
+  images text[] null default '{}'::text[],
+  "videoUrl" text null,
+  profit numeric(12, 2) null default 0,
+  stock integer null default 0,
+  review_count integer null default 0,
+  views integer null default 0,
+  sales_count integer null default 0,
+  is_featured boolean null default false,
+  is_trending boolean null default false,
+  is_active boolean null default true,
+  category_id uuid null,
+  created_at timestamp with time zone null default now(),
+  updated_at timestamp with time zone null default now(),
+  "fullDescriptionAr" text null,
+  comments jsonb null,
+  rating double precision null,
+  sizes jsonb null,
+  colors jsonb null,
+  constraint products_pkey primary key (id),
+  constraint products_name_ar_key unique ("nameAr"),
+  constraint products_category_id_fkey foreign KEY (category_id) references "Categories" (id) on delete set null
+) TABLESPACE pg_default;
+
+create index IF not exists idx_products_category_id on public."Products" using btree (category_id) TABLESPACE pg_default;
+
+create index IF not exists idx_products_featured on public."Products" using btree (is_featured) TABLESPACE pg_default
+where
+  (is_featured = true);
+
+create index IF not exists idx_products_trending on public."Products" using btree (is_trending) TABLESPACE pg_default
+where
+  (is_trending = true);
+
+create index IF not exists idx_products_active on public."Products" using btree (is_active) TABLESPACE pg_default
+where
+  (is_active = true);
+
+create index IF not exists idx_products_created on public."Products" using btree (created_at desc) TABLESPACE pg_default;
+
+create trigger update_products_updated_at BEFORE
+update on "Products" for EACH row
+execute FUNCTION update_updated_at_column ();
+
+
+
+create table public."Products_backup" (
+  id bigint null,
+  "nameEn" text null,
+  "descriptionEn" text null,
+  "fullDescription" text null,
+  price numeric(12, 2) null,
+  images text[] null,
+  profit numeric(12, 2) null,
+  created_at timestamp with time zone null,
+  updated_at timestamp with time zone null,
+  category_id uuid null,
+  "videoUrl" text null,
+  is_featured boolean null,
+  is_trending boolean null,
+  is_active boolean null,
+  original_price numeric(10, 2) null,
+  discount numeric(5, 2) null,
+  stock integer null,
+  rating numeric(3, 2) null,
+  review_count integer null,
+  views integer null,
+  sales_count integer null,
+  "nameAr" text null,
+  "descriptionAr" text null
+) TABLESPACE pg_default;

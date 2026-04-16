@@ -1,0 +1,158 @@
+.row {
+    transition: background var(--transition-fast);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.row:hover {
+    background: rgba(0, 180, 216, 0.03);
+}
+
+.row.selected {
+    background: rgba(0, 180, 216, 0.06);
+}
+
+/* Cells */
+.checkCell {
+    width: 40px;
+    text-align: center;
+    padding: 12px 8px;
+}
+
+.checkbox {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--accent-color);
+    cursor: pointer;
+}
+
+.imgCell {
+    width: 56px;
+    padding: 8px;
+}
+
+.productImg {
+    width: 42px;
+    height: 42px;
+    border-radius: var(--radius-sm);
+    object-fit: cover;
+    border: 1px solid var(--border-color);
+}
+
+.imgPlaceholder {
+    width: 42px;
+    height: 42px;
+    border-radius: var(--radius-sm);
+    background: var(--background-light);
+    border: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+}
+
+.nameCell {
+    padding: 12px 8px;
+    min-width: 160px;
+}
+
+.productName {
+    display: block;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text-main);
+    line-height: 1.3;
+}
+
+.category {
+    display: block;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+.priceCell {
+    padding: 12px 8px;
+    white-space: nowrap;
+}
+
+.price {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.originalPrice {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-decoration: line-through;
+    margin-left: 6px;
+}
+
+.stockCell {
+    padding: 12px 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.stockGood { color: #22c55e; }
+.stockWarning { color: #f59e0b; }
+.stockDanger { color: #ef4444; }
+
+.statusCell {
+    padding: 12px 8px;
+}
+
+.ratingCell {
+    padding: 12px 8px;
+}
+
+.rating {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-main);
+}
+
+.noRating {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.actionsCell {
+    padding: 12px 8px;
+    white-space: nowrap;
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+
+.actionBtn {
+    padding: 5px 10px;
+    border: 1px solid var(--border-color);
+    background: var(--card-bg);
+    color: var(--text-secondary);
+    border-radius: var(--radius-sm);
+    font-size: 0.73rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.actionBtn:hover {
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+}
+
+.deleteActionBtn {
+    color: #ef4444;
+    border-color: rgba(239, 68, 68, 0.3);
+}
+
+.deleteActionBtn:hover {
+    background: rgba(239, 68, 68, 0.08);
+    border-color: #ef4444;
+    color: #ef4444;
+}

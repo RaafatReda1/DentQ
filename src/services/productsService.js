@@ -14,7 +14,7 @@ export const fetchProducts = async ({ page = 0, limit = 20, searchTerm = '', cat
 
         // Apply filters
         if (searchTerm) {
-            query = query.ilike('name_en', `%${searchTerm}%`);
+            query = query.ilike('nameEn', `%${searchTerm}%`);
         }
         if (categoryId) {
             query = query.eq('category_id', categoryId);

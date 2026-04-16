@@ -1,0 +1,42 @@
+.detailView {
+    display: flex;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--card-bg);
+    height: calc(100vh - 360px);
+    min-height: 420px;
+    overflow: hidden;
+}
+
+.listPane {
+    width: 35%;
+    min-width: 250px;
+    max-width: 380px;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.detailPane {
+    flex: 1;
+    overflow: hidden;
+}
+
+@media (max-width: 768px) {
+    .detailView {
+        flex-direction: column;
+        height: auto;
+        min-height: auto;
+    }
+
+    .listPane {
+        width: 100%;
+        max-width: none;
+        max-height: 250px;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .detailPane {
+        min-height: 300px;
+    }
+}

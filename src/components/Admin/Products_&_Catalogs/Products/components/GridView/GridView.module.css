@@ -1,0 +1,58 @@
+.gridContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+}
+
+.addCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 280px;
+    border: 2px dashed var(--border-color);
+    border-radius: var(--radius-md);
+    background: transparent;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    color: var(--text-muted);
+}
+
+.addCard:hover {
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+    background: rgba(0, 180, 216, 0.03);
+}
+
+.addIcon {
+    opacity: 0.6;
+}
+
+.addCard:hover .addIcon {
+    opacity: 1;
+}
+
+.addText {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.emptyState {
+    padding: 48px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+@media (max-width: 600px) {
+    .grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 12px;
+    }
+}

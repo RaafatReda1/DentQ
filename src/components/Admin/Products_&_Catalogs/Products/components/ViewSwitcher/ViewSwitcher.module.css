@@ -1,0 +1,59 @@
+.switcher {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.buttonGroup {
+    display: flex;
+    background: var(--background-light);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.viewBtn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 7px 14px;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    border-right: 1px solid var(--border-color);
+}
+
+.viewBtn:last-child {
+    border-right: none;
+}
+
+.viewBtn:hover {
+    color: var(--text-main);
+    background: rgba(0, 0, 0, 0.03);
+}
+
+.viewBtn.active {
+    background: var(--accent-color);
+    color: white;
+}
+
+.btnLabel {
+    white-space: nowrap;
+}
+
+/* Hide switcher on mobile — force detail view */
+@media (max-width: 768px) {
+    .switcher {
+        display: none;
+    }
+}

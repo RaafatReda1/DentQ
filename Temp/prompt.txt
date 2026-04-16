@@ -1,0 +1,314 @@
+Now I have everything I need. Let me build this comprehensive plan as a detailed interactive spec.Here's your complete plan — every pixel and every DB column mapped out. Let me walk you through the key decisions:
+
+**The view switcher** (interactive in the widget) is a 3-button segmented control that lives in the top-right of the header. It persists the choice in `localStorage` so the admin always lands in their preferred view. All 3 views share the same data fetch and filter state — switching never resets a search or filter in progress.
+
+**Plan A (Table)** is your workhorse — the stat bar is clickable to auto-filter, the stock cell color-codes from the DB value, and the status badge is derived from all three boolean flags with a priority order (Featured wins over Active wins over Inactive).
+
+**Plan B (Grid)** adds two things the table can't do: a per-card stock progress bar (visual % of capacity) and inactive card dimming at 65% opacity so the admin's eye skips past them naturally. The dashed "Add" card at the end of the grid is a second entry point to the same Add form.
+
+**Plan C (Master/Detail)** is the fastest for daily ops — the quick toggles (`is_active`, `is_featured`, `is_trending`) each fire a single `PATCH` call with no form needed. No page navigation, just click a product in the list and the right pane updates.
+
+**The Add Product form** has two save modes wired to the same INSERT — "Save draft" just sends `is_active: false`, "Publish" sends `is_active: true`. The bilingual fields map exactly to your schema's `nameEn`/`nameAr` columns, Arabic inputs use `dir="rtl"`, and the sizes/colors tag-chips write directly to the `jsonb` columns as arrays.
+
+Want me to now write the actual React component structure and Supabase query plan for any of these?
+
+
+
+
+
+Plan A — Sidebar + Data Table
+Products
+Search products...
+☰ Bulk actions
++ Add product
+Total
+284
+Active
+261
+Low stock
+18
+Featured
+36
+Avg rating
+4.2 ★
+All categories
+All status
+Sort: Newest
+Export CSV
+	img	Name	Price	Stock	Status	Rating	Actions
+	
+Smart Watch X2
+Wearables
+$199$249	5 ⚠	Featured	4.5 ★	
+Edit
+View
+Dup
+Del
+	
+Wireless Earbuds Pro
+Electronics
+$89.99	142	Active	4.7 ★	
+Edit
+View
+Dup
+Del
+	
+USB-C Hub 7-in-1
+Accessories
+$45.00	0 ✕	Inactive	3.9 ★	
+Edit
+View
+Dup
+Del
+Showing 1–20 of 284
+‹ Prev
+1
+2
+3
+Next ›
+1
+Stat bar — pulls directly from DB: COUNT(*), WHERE is_active, WHERE stock < 10, AVG(rating). Clickable to auto-filter the table below.
+2
+Row checkboxes — enables bulk operations: activate, deactivate, delete selected, export selected as CSV.
+3
+Stock cell — color-coded: green >20, orange ≤20, red 0. Maps to Products.stock column. Threshold configurable in settings.
+4
+Status badge — derived from is_active, is_featured, is_trending. Priority: Featured > Trending > Active > Inactive. Clickable to toggle inline.
+5
+Dup button — duplicates the row in DB with a new UUID, appending "(copy)" to both name fields. Useful for variant products.
+Plan B — Card Grid View
+Products
+Search products...
+⊞ Grid
+☰ List
++ Add product
+Total
+284
+Active
+261
+Low stock
+18
+Featured
+36
+Avg rating
+4.2 ★
+Featured
+Trending
+img
+Smart Watch X2
+Wearables · 4.5 ★
+$199
+5 left
+Edit
+View
+Del
+Active
+img
+Wireless Earbuds Pro
+Electronics · 4.7 ★
+$89.99
+142 left
+Edit
+View
+Del
+Inactive
+img
+USB-C Hub 7-in-1
+Accessories · 3.9 ★
+$45.00
+0 left
+Edit
+View
+Del
+img
+Mechanical Keyboard TKL
+Peripherals · 4.8 ★
+$129
+38 left
+Edit
+View
+Del
+img
+Portable SSD 1TB
+Storage · 4.6 ★
+$110
+67 left
+Edit
+View
+Del
++
+Add new product
+1
+Stock progress bar — shows stock as % of max stock (you store max in settings or derive from historical peak). Color: green ≥30%, orange 10–29%, red <10%, empty bar for 0.
+2
+Featured border — 1.5px blue border on cards where is_featured = true. Instantly scannable across 20+ cards.
+3
+Inactive dimming — inactive cards render at 65% opacity. Admin can still edit them but they're visually de-prioritized.
+4
+Dashed "Add" card — always last in grid. Same click target as the top "+ Add product" button. Opens the Add Product modal/drawer.
+5
+Grid/List toggle — stores preference in localStorage. Switching is instant, no page reload. List mode = Plan A table layout.
+Plan C — Master / Detail Drawer
+Products
+Search...
+All categories
+▾
++ Add product
+284
+total  · 
+261
+active  · 
+18
+low stock
+img
+Smart Watch X2
+Wearables · ★ 4.5
+$199 · 5 left
+img
+Earbuds Pro
+Electronics · ★ 4.7
+$89.99 · 142
+img
+Mech. Keyboard TKL
+Peripherals · ★ 4.8
+$129 · 38
+img
+USB-C Hub 7-in-1
+Accessories · ★ 3.9
+$45 · 0 left
+img
+Portable SSD 1TB
+Storage · ★ 4.6
+$110 · 67
+img
+Smart Watch X2
+Wearables · ID: 9f3a…
+$199.00
+$249
+−20%
+Edit product
+Duplicate
+Delete
+Quick toggles
+Active (is_active)
+Featured (is_featured)
+Trending (is_trending)
+Inventory & stats
+Stock
+5 units (low)
+Sales count
+1,204
+Views
+8,741
+Rating
+★★★★★
+4.5
+(312)
+1
+Quick toggles — each toggle fires a single PATCH call: PATCH /products/:id { is_active: true }. No full edit form needed for common ops. Saves on average 4 clicks per operation.
+2
+Selected state — highlighted list item with blue thumb background. Clicking any list item replaces the right pane content without page navigation.
+3
+Stats panel — shows stock, sales_count, views, rating, review_count from DB in real time. Low stock threshold highlighted in amber.
+4
+Duplicate button — creates a copy with new UUID. All fields cloned except id, created_at, sales_count, views, and review_count (reset to 0).
+View switcher — how the admin picks between plans
+View:
+☰
+Table
+⊞
+Grid
+⊟
+Detail
+Table view — best for bulk ops, filtering, and CSV exports. Shows all columns. Supports row checkboxes for multi-select actions.
+1
+Where it lives — top-right of the Products page header, always visible. 3 icon+label buttons in a segmented control.
+2
+Persistence — store the chosen view in localStorage('adminProductView'). On next visit, the admin lands in the same view automatically.
+3
+Shared state — all 3 views share the same data fetch, filters, search query, and pagination state. Switching views never resets filters.
+4
+Mobile fallback — on screens <768px, the switcher is hidden and the view is forced to Plan C (master/detail), since table and grid need horizontal space.
+Add Product form — full spec
+Add new product
+All fields marked * are required
+Save as draft
+Publish product
+Basic info
+Name (English) *
+e.g. Wireless Earbuds Pro
+Name (Arabic)
+اسم المنتج بالعربي
+Short description (EN)
+Brief product description...
+Short description (AR)
+وصف المنتج...
+Pricing & inventory
+Price * / Original price / Discount %
+$0.00
+$0.00
+0%
+Profit (auto-calculated or manual)
+Calculated from price − cost
+Stock quantity *
+0
+Organization
+Category *
+Select category
+▾
+Sizes (JSON tags)
+S
+×
+M
+×
+L
+×
++ Add size
+Colors (JSON tags)
+Red
+×
+Blue
+×
++ Add color
+Media
+⬆
+Drop images here
+PNG, JPG, WEBP · max 5MB
+Images stored as array in Products.images[]
+Video URL
+https://...
+Flags
+is_active
+is_featured
+is_trending
+New products start as Active by default. Toggle is_featured to show on homepage hero.
+Full description
+Full desc. (EN)
+Detailed product copy...
+Full desc. (AR)
+وصف تفصيلي...
+Cancel
+Save as draft
+Publish product
+1
+Two save modes — "Save as draft" sets is_active = false and saves. "Publish" sets is_active = true. Both call the same INSERT, just different flag values.
+2
+Bilingual fields — nameEn + nameAr, descriptionEn + descriptionAr, fullDescriptionEn + fullDescriptionAr. Arabic inputs use dir="rtl". Only EN name is required (schema constraint).
+3
+Pricing trio — price (required), original_price (optional), discount % (optional, auto-computes if both price + original set). Maps exactly to schema columns.
+4
+Sizes + Colors — stored as jsonb in Products.sizes and Products.colors. Tag-chip UI writes to an array like ["S","M","L"] and [{"name":"Red","hex":"#E24B4A"}].
+5
+Image upload — drag-drop or click, uploads to storage bucket, appends public URL to images[] text array. Show thumbnail previews inline after upload. Max 10 images recommended.
+6
+Where it opens — in Plans A and B, "+ Add product" opens this form as a full-page route (/admin/products/new). In Plan C, it opens as a right-side drawer pushing the list pane left, keeping the URL clean via a query param ?action=add.
+
+
+
+Here's your complete plan — every pixel and every DB column mapped out. Let me walk you through the key decisions:
+The view switcher (interactive in the widget) is a 3-button segmented control that lives in the top-right of the header. It persists the choice in localStorage so the admin always lands in their preferred view. All 3 views share the same data fetch and filter state — switching never resets a search or filter in progress.
+Plan A (Table) is your workhorse — the stat bar is clickable to auto-filter, the stock cell color-codes from the DB value, and the status badge is derived from all three boolean flags with a priority order (Featured wins over Active wins over Inactive).
+Plan B (Grid) adds two things the table can't do: a per-card stock progress bar (visual % of capacity) and inactive card dimming at 65% opacity so the admin's eye skips past them naturally. The dashed "Add" card at the end of the grid is a second entry point to the same Add form.
+Plan C (Master/Detail) is the fastest for daily ops — the quick toggles (is_active, is_featured, is_trending) each fire a single PATCH call with no form needed. No page navigation, just click a product in the list and the right pane updates.
+The Add Product form has two save modes wired to the same INSERT — "Save draft" just sends is_active: false, "Publish" sends is_active: true. The bilingual fields map exactly to your schema's nameEn/nameAr columns, Arabic inputs use dir="rtl", and the sizes/colors tag-chips write directly to the jsonb columns as arrays.
+Want me to now write the actual React component structure and Supabase query plan for any of these?

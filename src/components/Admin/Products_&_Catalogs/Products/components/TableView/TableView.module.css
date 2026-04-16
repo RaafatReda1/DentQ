@@ -1,0 +1,62 @@
+.tableContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.tableWrapper {
+    overflow-x: auto;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--card-bg);
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto;
+}
+
+.headerRow {
+    border-bottom: 2px solid var(--border-color);
+}
+
+.checkHeader {
+    width: 40px;
+    text-align: center;
+    padding: 12px 8px;
+}
+
+.checkbox {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--accent-color);
+    cursor: pointer;
+}
+
+.colHeader {
+    padding: 12px 8px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.emptyState {
+    padding: 48px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    margin-top: -1px;
+}
+
+@media (max-width: 768px) {
+    .tableWrapper {
+        font-size: 0.82rem;
+    }
+}
