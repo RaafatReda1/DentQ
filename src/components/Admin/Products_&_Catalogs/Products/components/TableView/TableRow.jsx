@@ -1,35 +1,41 @@
 import React from 'react';
 import { Star } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import StatusBadge from '../StatusBadge/StatusBadge';
 import styles from './TableRow.module.css';
 
 /**
  * TableRow — Single row in the products data table.
- * 
- * Props:
- *   - product (object)
- *   - isSelected (bool)
- *   - onSelect(id) — toggle checkbox
- *   - onEdit(product)
- *   - onView(product)
- *   - onDuplicate(product)
- *   - onDelete(product)
+ * Supports bilingual name display and i18n.
  */
-const TableRow = ({ product, isSelected, onSelect, onEdit, onView, onDuplicate, onDelete }) => {
-    // Stock color: green > 20, orange ≤ 20, red = 0
+const TableRow = ({
+    product,
+    isSelected,
+    onSelect,
+    onEdit,
+    onView,
+    onDelete
+}) => {
+    const { t, i18n } = useTranslation();
+    const tp = (key) => t(`admin.products.${key}`);
+    const currentLang = i18n.language;
+
+    const name = currentLang === 'ar' ? (product.nameAr || product.nameEn) : (product.nameEn || product.nameAr);
+    const categoryName = currentLang === 'ar' ? (product.Categories?.name_ar || product.Categories?.name_en) : (product.Categories?.name_en || product.Categories?.name_ar);
+
+    // Stock color logic
     const getStockClass = (stock) => {
-        if (stock === 0) return styles.stockDanger;
-        if (stock <= 20) return styles.stockWarning;
-        return styles.stockGood;
+        if (stock <= 0) return styles.stockOut;
+        if (stock <= 20) return styles.stockLow;
+        return styles.stockOk;
     };
 
-    const getStockIcon = (stock) => {
-        if (stock === 0) return '✕';
-        if (stock <= 20) return '⚠';
-        return '';
+    // Derived status
+    const getStatus = () => {
+        if (product.is_featured) return 'featured';
+        if (product.is_trending) return 'trending';
+        return product.is_active ? 'active' : 'inactive';
     };
-
-    const categoryName = product.Categories?.name_en || product.Categories?.name_ar || '—';
 
     return (
         <tr className={`${styles.row} ${isSelected ? styles.selected : ''}`}>
@@ -43,60 +49,71 @@ const TableRow = ({ product, isSelected, onSelect, onEdit, onView, onDuplicate, 
                 />
             </td>
 
-            {/* Image */}
-            <td className={styles.imgCell}>
-                {product.images?.length > 0 ? (
-                    <img src={product.images[0]} alt={product.nameEn} className={styles.productImg} />
-                ) : (
-                    <div className={styles.imgPlaceholder}>img</div>
-                )}
-            </td>
-
-            {/* Name + Category */}
-            <td className={styles.nameCell}>
-                <span className={styles.productName}>{product.nameEn}</span>
-                <span className={styles.category}>{categoryName}</span>
+            {/* Product Image & Info */}
+            <td className={styles.productCell}>
+                <div className={styles.productWrapper}>
+                    <div className={styles.imageBox}>
+                        {product.images?.[0] ? (
+                            <img 
+                                src={product.images[0]} 
+                                alt={name} 
+                                className={styles.thumb} 
+                                onError={(e) => { e.target.onerror = null; e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
+                            />
+                        ) : null}
+                        <div className={styles.imagePlaceholder} style={{ display: product.images?.[0] ? 'none' : 'flex' }}></div>
+                    </div>
+                    <div className={styles.info}>
+                        <div className={styles.nameRow}>
+                            <span className={styles.name} title={name}>{name}</span>
+                            {product.is_featured && <Star size={12} className={styles.featuredIcon} fill="currentColor" />}
+                        </div>
+                        <span className={styles.category}>{categoryName || '—'}</span>
+                    </div>
+                </div>
             </td>
 
             {/* Price */}
             <td className={styles.priceCell}>
-                <span className={styles.price}>${Number(product.price).toFixed(2)}</span>
-                {product.original_price && Number(product.original_price) > Number(product.price) && (
-                    <span className={styles.originalPrice}>${Number(product.original_price).toFixed(0)}</span>
-                )}
+                <div className={styles.priceWrapper}>
+                    <span className={styles.price}>${Number(product.price).toLocaleString()}</span>
+                    {product.original_price && (
+                        <span className={styles.originalPrice}>${Number(product.original_price).toLocaleString()}</span>
+                    )}
+                </div>
             </td>
 
             {/* Stock */}
             <td className={`${styles.stockCell} ${getStockClass(product.stock)}`}>
-                <span>{product.stock} {getStockIcon(product.stock)}</span>
+                {product.stock} {tp('units')}
             </td>
 
             {/* Status */}
             <td className={styles.statusCell}>
-                <StatusBadge
-                    is_active={product.is_active}
-                    is_featured={product.is_featured}
-                    is_trending={product.is_trending}
-                />
+                <StatusBadge status={getStatus()} />
             </td>
 
             {/* Rating */}
             <td className={styles.ratingCell}>
-                {product.rating ? (
-                    <span className={styles.rating}>
-                        {Number(product.rating).toFixed(1)} <Star size={12} fill="#f59e0b" color="#f59e0b" />
-                    </span>
-                ) : (
-                    <span className={styles.noRating}>—</span>
-                )}
+                <div className={styles.ratingBox}>
+                    <Star size={14} className={styles.starIcon} fill="currentColor" />
+                    <span>{product.rating || '0.0'}</span>
+                </div>
             </td>
 
             {/* Actions */}
-            <td className={styles.actionsCell}>
-                <button className={styles.actionBtn} onClick={() => onEdit(product)} title="Edit">Edit</button>
-                <button className={styles.actionBtn} onClick={() => onView(product)} title="View">View</button>
-                <button className={styles.actionBtn} onClick={() => onDuplicate(product)} title="Duplicate">Dup</button>
-                <button className={`${styles.actionBtn} ${styles.deleteActionBtn}`} onClick={() => onDelete(product)} title="Delete">Del</button>
+            <td className={styles.actionCell}>
+                <div className={styles.actionGroup}>
+                    <button className={styles.actionBtn} onClick={() => onEdit(product)} title={tp('btn_edit')}>
+                        {tp('btn_edit')}
+                    </button>
+                    <button className={styles.actionBtn} onClick={() => onView(product)} title={tp('btn_view')}>
+                        {tp('btn_view')}
+                    </button>
+                    <button className={`${styles.actionBtn} ${styles.deleteBtn}`} onClick={() => onDelete(product)} title={tp('btn_delete')}>
+                        {tp('btn_delete')}
+                    </button>
+                </div>
             </td>
         </tr>
     );

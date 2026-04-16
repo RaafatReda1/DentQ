@@ -1,12 +1,13 @@
 .gridContainer {
     display: flex;
     flex-direction: column;
+    gap: 20px;
 }
 
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
 }
 
 .addCard {
@@ -14,10 +15,10 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    min-height: 280px;
+    gap: 16px;
+    min-height: 400px;
     border: 2px dashed var(--border-color);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
     background: transparent;
     cursor: pointer;
     transition: all var(--transition-fast);
@@ -27,32 +28,27 @@
 .addCard:hover {
     border-color: var(--accent-color);
     color: var(--accent-color);
-    background: rgba(0, 180, 216, 0.03);
+    background: rgba(0, 180, 216, 0.02);
+    transform: translateY(-4px);
 }
 
-.addIcon {
-    opacity: 0.6;
+.addCard span {
+    font-size: 0.95rem;
+    font-weight: 600;
 }
 
-.addCard:hover .addIcon {
-    opacity: 1;
-}
-
-.addText {
-    font-size: 0.9rem;
-    font-weight: 500;
-}
-
-.emptyState {
-    padding: 48px;
+.emptyGrid {
+    padding: 80px 20px;
     text-align: center;
     color: var(--text-muted);
-    font-size: 0.95rem;
+    font-size: 1rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
 }
 
-@media (max-width: 600px) {
+@media (max-width: 640px) {
     .grid {
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 12px;
+        grid-template-columns: 1fr;
     }
 }

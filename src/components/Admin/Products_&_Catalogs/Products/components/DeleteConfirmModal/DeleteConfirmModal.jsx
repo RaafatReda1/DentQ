@@ -1,18 +1,15 @@
 import React from 'react';
 import { AlertTriangle, X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import styles from './DeleteConfirmModal.module.css';
 
 /**
- * DeleteConfirmModal — Confirmation dialog before deleting a product.
- * 
- * Props:
- *   - isOpen (bool)
- *   - productName (string) — displayed in the message
- *   - onConfirm() — fires the delete
- *   - onCancel() — closes the modal
- *   - loading (bool) — shows spinner on confirm button
+ * DeleteConfirmModal — Localized confirmation dialog.
  */
 const DeleteConfirmModal = ({ isOpen, productName, onConfirm, onCancel, loading }) => {
+    const { t } = useTranslation();
+    const tp = (key) => t(`admin.products.${key}`);
+
     if (!isOpen) return null;
 
     return (
@@ -26,18 +23,19 @@ const DeleteConfirmModal = ({ isOpen, productName, onConfirm, onCancel, loading 
                     <AlertTriangle size={32} />
                 </div>
 
-                <h3 className={styles.title}>Delete Product</h3>
+                <h3 className={styles.title}>{tp('delete_title')}</h3>
                 <p className={styles.message}>
-                    Are you sure you want to delete <strong>"{productName}"</strong>?
-                    This action cannot be undone.
+                    {tp('delete_confirm')} <strong>"{productName}"</strong>?
+                    <br />
+                    {tp('delete_warning')}
                 </p>
 
                 <div className={styles.actions}>
                     <button className={styles.cancelBtn} onClick={onCancel} disabled={loading}>
-                        Cancel
+                        {tp('cancel')}
                     </button>
                     <button className={styles.deleteBtn} onClick={onConfirm} disabled={loading}>
-                        {loading ? 'Deleting...' : 'Delete'}
+                        {loading ? tp('deleting') : tp('delete')}
                     </button>
                 </div>
             </div>

@@ -1,62 +1,82 @@
 .tableContainer {
     display: flex;
     flex-direction: column;
+    gap: 16px;
 }
 
 .tableWrapper {
+    width: 100%;
     overflow-x: auto;
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
     background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    scrollbar-width: thin;
 }
 
 .table {
     width: 100%;
     border-collapse: collapse;
-    table-layout: auto;
+    min-width: 800px;
 }
 
-.headerRow {
+.table thead tr {
     border-bottom: 2px solid var(--border-color);
+    background: rgba(0, 0, 0, 0.01);
 }
 
-.checkHeader {
-    width: 40px;
-    text-align: center;
-    padding: 12px 8px;
-}
-
-.checkbox {
-    width: 16px;
-    height: 16px;
-    accent-color: var(--accent-color);
-    cursor: pointer;
-}
-
-.colHeader {
-    padding: 12px 8px;
-    font-size: 0.78rem;
-    font-weight: 600;
+.table th {
+    padding: 16px 12px;
+    font-size: 0.72rem;
+    font-weight: 700;
     color: var(--text-muted);
-    text-align: left;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.05em;
+    text-align: start;
     white-space: nowrap;
 }
 
-.emptyState {
-    padding: 48px;
-    text-align: center;
-    color: var(--text-muted);
-    font-size: 0.95rem;
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-    margin-top: -1px;
+/* Specific column widths */
+.checkCol {
+    width: 48px;
+    text-align: center !important;
 }
 
-@media (max-width: 768px) {
+.productCol {
+    min-width: 280px;
+}
+
+.priceCol {
+    width: 140px;
+}
+
+.stockCol {
+    width: 120px;
+}
+
+.statusCol {
+    width: 130px;
+}
+
+.ratingCol {
+    width: 100px;
+}
+
+.actionCol {
+    width: 180px;
+    text-align: end !important;
+}
+
+.emptyTable {
+    padding: 60px 20px;
+    text-align: center;
+    color: var(--text-muted);
+    background: var(--card-bg);
+}
+
+@media (max-width: 1024px) {
     .tableWrapper {
-        font-size: 0.82rem;
+        border-radius: 0;
+        border-inline: none;
     }
 }

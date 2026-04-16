@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 // Services
 import { fetchProducts, createProduct, updateProduct, deleteProduct, toggleProductStatus } from '../../../../services/productsService';
@@ -19,20 +20,19 @@ import styles from './Products.module.css';
 /**
  * Products — Main orchestrator component.
  * Manages all shared state (data, filters, pagination, view mode)
- * and passes it into the active view.
- * 
- * All 3 views share the same data/filter state — switching views
- * never resets a search or filter in progress.
+ * and handles multi-level category inheritance filtering.
  */
 const PAGE_SIZE = 20;
 
 const getInitialView = () => {
-    // Mobile fallback → force detail view
     if (typeof window !== 'undefined' && window.innerWidth < 768) return 'detail';
     return localStorage.getItem('adminProductView') || 'table';
 };
 
 const Products = () => {
+    const { t } = useTranslation();
+    const tp = (key, params = {}) => t(`admin.products.${key}`, params);
+
     // ─── Data state ───
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
@@ -48,10 +48,10 @@ const Products = () => {
     // ─── Pagination ───
     const [currentPage, setCurrentPage] = useState(0);
 
-    // ─── View mode (persisted in localStorage) ───
+    // ─── View mode ───
     const [activeView, setActiveView] = useState(getInitialView);
 
-    // ─── Selection state (for table checkboxes / bulk actions) ───
+    // ─── Selection state ───
     const [selectedIds, setSelectedIds] = useState([]);
 
     // ─── Detail view: selected product ───
@@ -66,14 +66,30 @@ const Products = () => {
     const [deleteTarget, setDeleteTarget] = useState(null);
     const [deleteLoading, setDeleteLoading] = useState(false);
 
-    // ─── All products for stats (separate fetch without pagination for stats) ───
+    // ─── Smart search data ───
     const [allProducts, setAllProducts] = useState([]);
+
+    // ────────────────────────────────────────────────
+    // HELPERS
+    // ────────────────────────────────────────────────
+
+    /**
+     * Recursive helper to find all descendant IDs of a category
+     */
+    const getAllDescendantIds = useCallback((parentId) => {
+        if (!parentId) return [];
+        const children = categories.filter((c) => c.parent_id === parentId);
+        let ids = children.map((c) => c.id);
+        for (const child of children) {
+            ids = [...ids, ...getAllDescendantIds(child.id)];
+        }
+        return ids;
+    }, [categories]);
 
     // ────────────────────────────────────────────────
     // DATA FETCHING
     // ────────────────────────────────────────────────
 
-    // Fetch categories once
     useEffect(() => {
         const loadCategories = async () => {
             const { data } = await fetchCategories();
@@ -82,26 +98,33 @@ const Products = () => {
         loadCategories();
     }, []);
 
-    // Fetch products when filters/page change
     const loadProducts = useCallback(async () => {
         setLoading(true);
+
+        // Multi-level category inheritance logic
+        let categoryFilterValue = categoryFilter;
+        if (categoryFilter) {
+            const descendantIds = getAllDescendantIds(categoryFilter);
+            categoryFilterValue = [categoryFilter, ...descendantIds];
+        }
+
         const { data, count, error } = await fetchProducts({
             page: currentPage,
             limit: PAGE_SIZE,
             searchTerm: searchTerm,
-            categoryId: categoryFilter,
+            categoryId: categoryFilterValue,
         });
 
         if (error) {
-            toast.error('Failed to load products');
+            toast.error(tp('toast_load_fail'));
             setLoading(false);
             return;
         }
 
         let filtered = data || [];
 
-        // Client-side status filtering (since the service doesn't support it)
-        if (statusFilter === 'active') filtered = filtered.filter((p) => p.is_active && !p.is_featured && !p.is_trending);
+        // Client-side status filtering
+        if (statusFilter === 'active') filtered = filtered.filter((p) => p.is_active);
         else if (statusFilter === 'inactive') filtered = filtered.filter((p) => !p.is_active);
         else if (statusFilter === 'featured') filtered = filtered.filter((p) => p.is_featured);
         else if (statusFilter === 'trending') filtered = filtered.filter((p) => p.is_trending);
@@ -110,41 +133,31 @@ const Products = () => {
         // Client-side sorting
         if (sortBy === 'price_asc') filtered.sort((a, b) => Number(a.price) - Number(b.price));
         else if (sortBy === 'price_desc') filtered.sort((a, b) => Number(b.price) - Number(a.price));
-        else if (sortBy === 'name_asc') filtered.sort((a, b) => (a.nameEn || '').localeCompare(b.nameEn || ''));
-        // 'newest' is already sorted by the service
+        else if (sortBy === 'name_asc') {
+            filtered.sort((a, b) => (a.nameEn || '').localeCompare(b.nameEn || ''));
+        }
 
         setProducts(filtered);
         setTotalCount(count || 0);
 
-        // For stats, store unfiltered data
-        if (statusFilter === 'all' && !searchTerm && !categoryFilter) {
-            setAllProducts(data || []);
-        }
-
-        // Auto-select first product in detail view
         if (filtered.length > 0 && !selectedProduct) {
             setSelectedProduct(filtered[0]);
         }
 
         setLoading(false);
-    }, [currentPage, searchTerm, categoryFilter, statusFilter, sortBy]);
+    }, [currentPage, searchTerm, categoryFilter, statusFilter, sortBy, getAllDescendantIds, selectedProduct]);
 
     useEffect(() => {
         loadProducts();
     }, [loadProducts]);
 
-    // Also fetch all products for accurate stats
     useEffect(() => {
-        const loadAllForStats = async () => {
+        const loadAllProducts = async () => {
             const { data } = await fetchProducts({ page: 0, limit: 1000 });
             if (data) setAllProducts(data);
         };
-        loadAllForStats();
+        loadAllProducts();
     }, []);
-
-    // ────────────────────────────────────────────────
-    // COMPUTED STATS (derived from allProducts)
-    // ────────────────────────────────────────────────
 
     const stats = useMemo(() => {
         const total = allProducts.length;
@@ -160,17 +173,13 @@ const Products = () => {
     }, [allProducts]);
 
     // ────────────────────────────────────────────────
-    // VIEW MANAGEMENT
+    // HANDLERS
     // ────────────────────────────────────────────────
 
     const handleViewChange = (view) => {
         setActiveView(view);
         localStorage.setItem('adminProductView', view);
     };
-
-    // ────────────────────────────────────────────────
-    // SELECTION (for table checkboxes)
-    // ────────────────────────────────────────────────
 
     const handleSelectId = (id) => {
         setSelectedIds((prev) =>
@@ -186,107 +195,25 @@ const Products = () => {
         }
     };
 
-    // ────────────────────────────────────────────────
-    // FILTER HANDLERS
-    // ────────────────────────────────────────────────
-
-    const handleStatClick = (filterKey) => {
-        setStatusFilter(filterKey);
-        setCurrentPage(0);
-    };
-
-    const handleSearchChange = (term) => {
-        setSearchTerm(term);
-        setCurrentPage(0);
-    };
-
-    const handleCategoryChange = (catId) => {
-        setCategoryFilter(catId);
-        setCurrentPage(0);
-    };
-
-    const handleStatusChange = (status) => {
-        setStatusFilter(status);
-        setCurrentPage(0);
-    };
-
-    const handleSortChange = (sort) => {
-        setSortBy(sort);
-    };
-
-    // ────────────────────────────────────────────────
-    // CRUD OPERATIONS
-    // ────────────────────────────────────────────────
-
-    const handleSaveProduct = async (data, isDraft) => {
+    const handleSaveProduct = async (data, isPublish) => {
         setFormLoading(true);
         try {
             if (editingProduct) {
-                // UPDATE
                 const { error } = await updateProduct(editingProduct.id, data);
                 if (error) throw error;
-                toast.success('Product updated!');
+                toast.success(tp('toast_updated'));
             } else {
-                // CREATE
                 const { error } = await createProduct(data);
                 if (error) throw error;
-                toast.success(isDraft ? 'Draft saved!' : 'Product published!');
+                toast.success(isPublish ? tp('toast_published') : tp('toast_draft_saved'));
             }
             setShowForm(false);
             setEditingProduct(null);
             loadProducts();
         } catch (err) {
-            toast.error(err.message || 'Failed to save product');
+            toast.error(tp('toast_save_fail'));
         }
         setFormLoading(false);
-    };
-
-    const handleEdit = (product) => {
-        setEditingProduct(product);
-        setShowForm(true);
-    };
-
-    const handleView = (product) => {
-        // Switch to detail view and select the product
-        setActiveView('detail');
-        localStorage.setItem('adminProductView', 'detail');
-        setSelectedProduct(product);
-    };
-
-    const handleDuplicate = async (product) => {
-        const cloneData = {
-            nameEn: (product.nameEn || '') + ' (copy)',
-            nameAr: product.nameAr || null,
-            descriptionEn: product.descriptionEn || null,
-            descriptionAr: product.descriptionAr || null,
-            fullDescriptionEn: product.fullDescriptionEn || null,
-            fullDescriptionAr: product.fullDescriptionAr || null,
-            price: product.price,
-            original_price: product.original_price,
-            discount: product.discount,
-            profit: product.profit,
-            stock: product.stock,
-            category_id: product.category_id,
-            sizes: product.sizes,
-            colors: product.colors,
-            images: product.images,
-            videoUrl: product.videoUrl,
-            is_active: product.is_active,
-            is_featured: product.is_featured,
-            is_trending: product.is_trending,
-        };
-
-        const { error } = await createProduct(cloneData);
-        if (error) {
-            toast.error('Failed to duplicate product');
-        } else {
-            toast.success('Product duplicated!');
-            loadProducts();
-        }
-    };
-
-    const handleDeleteClick = (product) => {
-        setDeleteTarget(product);
     };
 
     const handleDeleteConfirm = async () => {
@@ -294,12 +221,10 @@ const Products = () => {
         setDeleteLoading(true);
         const { error } = await deleteProduct(deleteTarget.id);
         if (error) {
-            toast.error('Failed to delete product');
+            toast.error(tp('toast_delete_fail'));
         } else {
-            toast.success('Product deleted');
-            if (selectedProduct?.id === deleteTarget.id) {
-                setSelectedProduct(null);
-            }
+            toast.success(tp('toast_deleted'));
+            if (selectedProduct?.id === deleteTarget.id) setSelectedProduct(null);
             loadProducts();
         }
         setDeleteTarget(null);
@@ -309,145 +234,124 @@ const Products = () => {
     const handleToggle = async (id, fieldName, currentValue) => {
         const { error } = await toggleProductStatus(id, fieldName, currentValue);
         if (error) {
-            toast.error(`Failed to toggle ${fieldName}`);
+            toast.error(tp('toast_toggle_fail'));
         } else {
-            toast.success(`${fieldName} toggled`);
-            // Update local state immediately for responsiveness
+            toast.success(`${fieldName} ${tp('toast_toggled')}`);
             setProducts((prev) =>
                 prev.map((p) => (p.id === id ? { ...p, [fieldName]: !currentValue } : p))
             );
             if (selectedProduct?.id === id) {
                 setSelectedProduct((prev) => ({ ...prev, [fieldName]: !currentValue }));
             }
-            // Refresh stats
-            setAllProducts((prev) =>
-                prev.map((p) => (p.id === id ? { ...p, [fieldName]: !currentValue } : p))
-            );
         }
     };
 
-    // ────────────────────────────────────────────────
-    // BULK ACTIONS
-    // ────────────────────────────────────────────────
-
     const handleBulkAction = async (action) => {
         if (selectedIds.length === 0) return;
+        setLoading(true);
 
-        if (action === 'delete') {
-            const promises = selectedIds.map((id) => deleteProduct(id));
-            await Promise.all(promises);
-            toast.success(`${selectedIds.length} products deleted`);
-        } else if (action === 'activate') {
-            const promises = selectedIds.map((id) => updateProduct(id, { is_active: true }));
-            await Promise.all(promises);
-            toast.success(`${selectedIds.length} products activated`);
-        } else if (action === 'deactivate') {
-            const promises = selectedIds.map((id) => updateProduct(id, { is_active: false }));
-            await Promise.all(promises);
-            toast.success(`${selectedIds.length} products deactivated`);
+        try {
+            if (action === 'delete') {
+                await Promise.all(selectedIds.map((id) => deleteProduct(id)));
+                toast.success(`${selectedIds.length} ${tp('toast_bulk_deleted')}`);
+            } else if (action === 'activate') {
+                await Promise.all(selectedIds.map((id) => updateProduct(id, { is_active: true })));
+                toast.success(`${selectedIds.length} ${tp('toast_bulk_activated')}`);
+            } else if (action === 'deactivate') {
+                await Promise.all(selectedIds.map((id) => updateProduct(id, { is_active: false })));
+                toast.success(`${selectedIds.length} ${tp('toast_bulk_deactivated')}`);
+            }
+        } catch (err) {
+            toast.error(tp('toast_bulk_fail'));
         }
 
         setSelectedIds([]);
         loadProducts();
     };
 
-    // ────────────────────────────────────────────────
-    // EXPORT CSV
-    // ────────────────────────────────────────────────
-
     const handleExportCSV = () => {
         if (products.length === 0) {
-            toast.error('No products to export');
+            toast.error(tp('toast_no_export'));
             return;
         }
-
-        const headers = ['Name', 'Price', 'Original Price', 'Stock', 'Category', 'Status', 'Rating'];
+        const headers = ['Name EN', 'Name AR', 'Price', 'Original Price', 'Stock', 'Status'];
         const rows = products.map((p) => [
             p.nameEn,
+            p.nameAr || '',
             p.price,
             p.original_price || '',
             p.stock,
-            p.Categories?.name_en || '',
-            p.is_active ? 'Active' : 'Inactive',
-            p.rating || '',
+            p.is_active ? 'Active' : 'Inactive'
         ]);
-
         const csv = [headers, ...rows].map((r) => r.join(',')).join('\n');
         const blob = new Blob([csv], { type: 'text/csv' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'products_export.csv';
+        a.download = `products_${Date.now()}.csv`;
         a.click();
-        URL.revokeObjectURL(url);
-        toast.success('CSV exported!');
-    };
-
-    // ────────────────────────────────────────────────
-    // RENDER
-    // ────────────────────────────────────────────────
-
-    const sharedViewProps = {
-        products,
-        totalCount,
-        currentPage,
-        pageSize: PAGE_SIZE,
-        onPageChange: setCurrentPage,
-        onEdit: handleEdit,
-        onView: handleView,
-        onDuplicate: handleDuplicate,
-        onDelete: handleDeleteClick,
+        toast.success(tp('toast_csv_exported'));
     };
 
     return (
         <div className={styles.productsPage}>
-            {/* Toolbar: search + filters + view switcher + add button */}
             <ProductsToolbar
                 searchTerm={searchTerm}
-                onSearchChange={handleSearchChange}
+                onSearchChange={setSearchTerm}
                 categoryFilter={categoryFilter}
-                onCategoryChange={handleCategoryChange}
+                onCategoryChange={setCategoryFilter}
                 statusFilter={statusFilter}
-                onStatusChange={handleStatusChange}
+                onStatusChange={setStatusFilter}
                 sortBy={sortBy}
-                onSortChange={handleSortChange}
+                onSortChange={setSortBy}
                 activeView={activeView}
                 onViewChange={handleViewChange}
                 categories={categories}
+                allProducts={allProducts}
                 onAddProduct={() => { setEditingProduct(null); setShowForm(true); }}
                 selectedCount={selectedIds.length}
                 onBulkAction={handleBulkAction}
                 onExportCSV={handleExportCSV}
             />
 
-            {/* Stat bar */}
             <StatBar
                 stats={stats}
                 activeFilter={statusFilter}
-                onStatClick={handleStatClick}
+                onStatClick={setStatusFilter}
             />
 
-            {/* Loading state */}
             {loading ? (
                 <div className={styles.loadingState}>
                     <div className={styles.spinner}></div>
-                    <p>Loading products...</p>
+                    <p>{tp('loading')}</p>
                 </div>
             ) : (
                 <>
-                    {/* Active view */}
                     {activeView === 'table' && (
                         <TableView
-                            {...sharedViewProps}
+                            products={products}
+                            totalCount={totalCount}
+                            currentPage={currentPage}
+                            pageSize={PAGE_SIZE}
+                            onPageChange={setCurrentPage}
                             selectedIds={selectedIds}
                             onSelectId={handleSelectId}
                             onSelectAll={handleSelectAll}
+                            onEdit={handleEdit => { setEditingProduct(handleEdit); setShowForm(true); }}
+                            onView={p => { setSelectedProduct(p); handleViewChange('detail'); }}
+                            onDelete={setDeleteTarget}
                         />
                     )}
 
                     {activeView === 'grid' && (
                         <GridView
-                            {...sharedViewProps}
+                            products={products}
+                            totalCount={totalCount}
+                            currentPage={currentPage}
+                            pageSize={PAGE_SIZE}
+                            onPageChange={setCurrentPage}
+                            onEdit={handleEdit => { setEditingProduct(handleEdit); setShowForm(true); }}
+                            onDelete={setDeleteTarget}
                             onAddProduct={() => { setEditingProduct(null); setShowForm(true); }}
                         />
                     )}
@@ -458,16 +362,14 @@ const Products = () => {
                             selectedProduct={selectedProduct}
                             onSelectProduct={setSelectedProduct}
                             stats={stats}
-                            onEdit={handleEdit}
-                            onDuplicate={handleDuplicate}
-                            onDelete={handleDeleteClick}
+                            onEdit={handleEdit => { setEditingProduct(handleEdit); setShowForm(true); }}
+                            onDelete={setDeleteTarget}
                             onToggle={handleToggle}
                         />
                     )}
                 </>
             )}
 
-            {/* Product Form (Add / Edit) */}
             <ProductForm
                 isOpen={showForm}
                 product={editingProduct}
@@ -477,7 +379,6 @@ const Products = () => {
                 loading={formLoading}
             />
 
-            {/* Delete confirmation */}
             <DeleteConfirmModal
                 isOpen={!!deleteTarget}
                 productName={deleteTarget?.nameEn || ''}

@@ -1,58 +1,55 @@
 import React from 'react';
 import { Plus } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import ProductCard from './ProductCard';
 import Pagination from '../Pagination/Pagination';
 import styles from './GridView.module.css';
 
 /**
- * GridView (Plan B) — Card grid layout with dashed "Add" card at end.
- * 
- * Props:
- *   - products[] — current page of products
- *   - totalCount / currentPage / pageSize / onPageChange
- *   - onEdit(product) / onView(product) / onDelete(product)
- *   - onAddProduct() — opens the add form
+ * GridView — Plan B: Card grid layout.
+ * Localized and supports bilingual names.
  */
 const GridView = ({
-    products,
+    products = [],
     totalCount,
     currentPage,
     pageSize,
     onPageChange,
     onEdit,
-    onView,
     onDelete,
-    onAddProduct,
+    onAddProduct
 }) => {
+    const { t } = useTranslation();
+    const tp = (key) => t(`admin.products.${key}`);
+
     return (
         <div className={styles.gridContainer}>
             <div className={styles.grid}>
-                {products.map((product) => (
+                {products.map((p) => (
                     <ProductCard
-                        key={product.id}
-                        product={product}
+                        key={p.id}
+                        product={p}
                         onEdit={onEdit}
-                        onView={onView}
                         onDelete={onDelete}
                     />
                 ))}
 
-                {/* Dashed "Add new product" card */}
+                {/* Dashed "Add" card at the end */}
                 <button className={styles.addCard} onClick={onAddProduct}>
-                    <Plus size={28} className={styles.addIcon} />
-                    <span className={styles.addText}>Add new product</span>
+                    <Plus size={32} strokeWidth={1.5} />
+                    <span>{tp('add_new_product')}</span>
                 </button>
             </div>
 
             {products.length === 0 && (
-                <div className={styles.emptyState}>
-                    <p>No products found</p>
+                <div className={styles.emptyGrid}>
+                    <p>{tp('no_products')}</p>
                 </div>
             )}
 
             <Pagination
-                currentPage={currentPage}
                 totalCount={totalCount}
+                currentPage={currentPage}
                 pageSize={pageSize}
                 onPageChange={onPageChange}
             />

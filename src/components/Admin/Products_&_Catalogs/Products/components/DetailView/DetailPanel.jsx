@@ -1,146 +1,173 @@
 import React from 'react';
-import { Edit3, Copy, Trash2, Star } from 'lucide-react';
+import { Edit3, Trash2, Star, Tag, Eye, ShoppingBag } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import styles from './DetailPanel.module.css';
 
 /**
- * DetailPanel — Right-side detail pane for the selected product.
- * Shows product info, quick toggles, and stats.
- * 
- * Props:
- *   - product (object) — the selected product
- *   - onEdit(product)
- *   - onDuplicate(product)
- *   - onDelete(product)
- *   - onToggle(id, fieldName, currentValue) — quick toggle handler
+ * DetailPanel — Right-side detail pane for Master/Detail view.
+ * Supports bilingual naming, i18n, and removed DUP button.
  */
-const DetailPanel = ({ product, onEdit, onDuplicate, onDelete, onToggle }) => {
+const DetailPanel = ({ 
+    product, 
+    onEdit, 
+    onDelete, 
+    onToggle 
+}) => {
+    const { t, i18n } = useTranslation();
+    const tp = (key) => t(`admin.products.${key}`);
+    const currentLang = i18n.language;
+
     if (!product) {
         return (
             <div className={styles.emptyPanel}>
-                <p>Select a product to view details</p>
+                <p>{tp('select_product')}</p>
             </div>
         );
     }
 
-    const categoryName = product.Categories?.name_en || product.Categories?.name_ar || '';
-    const discount = product.original_price && Number(product.original_price) > Number(product.price)
-        ? Math.round((1 - Number(product.price) / Number(product.original_price)) * 100)
-        : null;
-
-    const getStockClass = () => {
-        if (product.stock === 0) return styles.stockDanger;
-        if (product.stock <= 20) return styles.stockWarning;
-        return styles.stockGood;
-    };
+    const name = currentLang === 'ar' ? (product.nameAr || product.nameEn) : (product.nameEn || product.nameAr);
+    const category = currentLang === 'ar' ? (product.Categories?.name_ar || product.Categories?.name_en) : (product.Categories?.name_en || product.Categories?.name_ar);
+    const description = currentLang === 'ar' ? (product.descriptionAr || product.descriptionEn) : (product.descriptionEn || product.descriptionAr);
 
     return (
         <div className={styles.panel}>
-            {/* Header: image + name */}
+            {/* Header / Main Info */}
             <div className={styles.header}>
-                <div className={styles.headerImage}>
-                    {product.images?.length > 0 ? (
-                        <img src={product.images[0]} alt={product.nameEn} className={styles.mainImg} />
+                <div className={styles.headerLeft}>
+                    <div className={styles.categoryPath}>{category || '—'}</div>
+                    <h2 className={styles.title}>{name}</h2>
+                    <div className={styles.priceRow}>
+                        <span className={styles.price}>${Number(product.price).toLocaleString()}</span>
+                        {product.original_price && (
+                            <span className={styles.originalPrice}>${Number(product.original_price).toLocaleString()}</span>
+                        )}
+                        {product.discount > 0 && (
+                            <span className={styles.discountBadge}>-{product.discount}% OFF</span>
+                        )}
+                    </div>
+                </div>
+                
+                <div className={styles.mainActions}>
+                    <button className={styles.editBtn} onClick={() => onEdit(product)}>
+                        <Edit3 size={18} />
+                        <span>{tp('btn_edit')}</span>
+                    </button>
+                    <button className={styles.deleteBtn} onClick={() => onDelete(product)}>
+                        <Trash2 size={18} />
+                    </button>
+                </div>
+            </div>
+
+            <div className={styles.content}>
+                {/* Images row */}
+                <div className={styles.imagesRow}>
+                    {product.images && product.images.length > 0 ? (
+                        product.images.map((url, i) => (
+                            <div key={i} className={styles.imageBox}>
+                                <img 
+                                    src={url} 
+                                    alt="" 
+                                    className={styles.previewImg} 
+                                    onError={(e) => { e.target.onerror = null; e.target.style.display = 'none'; e.target.parentNode.style.display = 'none'; }}
+                                />
+                            </div>
+                        ))
                     ) : (
-                        <div className={styles.imgPlaceholder}>img</div>
+                        <div className={styles.noImages}>{tp('no_images')}</div>
                     )}
                 </div>
-                <div className={styles.headerInfo}>
-                    <h3 className={styles.productName}>{product.nameEn}</h3>
-                    <p className={styles.productMeta}>
-                        {categoryName && <span>{categoryName}</span>}
-                        {categoryName && <span> · </span>}
-                        <span className={styles.idSnippet}>ID: {product.id?.substring(0, 6)}…</span>
-                    </p>
-                    <div className={styles.priceRow}>
-                        <span className={styles.price}>${Number(product.price).toFixed(2)}</span>
-                        {product.original_price && Number(product.original_price) > Number(product.price) && (
-                            <span className={styles.originalPrice}>${Number(product.original_price).toFixed(0)}</span>
-                        )}
-                        {discount && (
-                            <span className={styles.discountBadge}>−{discount}%</span>
-                        )}
-                    </div>
-                </div>
-            </div>
 
-            {/* Action buttons */}
-            <div className={styles.actions}>
-                <button className={styles.actionBtn} onClick={() => onEdit(product)}>
-                    <Edit3 size={15} /> Edit product
-                </button>
-                <button className={styles.actionBtn} onClick={() => onDuplicate(product)}>
-                    <Copy size={15} /> Duplicate
-                </button>
-                <button className={`${styles.actionBtn} ${styles.deleteActionBtn}`} onClick={() => onDelete(product)}>
-                    <Trash2 size={15} /> Delete
-                </button>
-            </div>
+                <div className={styles.grid}>
+                    {/* 1. Quick Toggles */}
+                    <div className={styles.card}>
+                        <h4 className={styles.cardTitle}>{tp('quick_toggles')}</h4>
+                        <div className={styles.toggleGroup}>
+                            <div className={styles.toggleItem}>
+                                <div className={styles.toggleInfo}>
+                                    <span className={styles.toggleLabel}>{tp('toggle_active')}</span>
+                                </div>
+                                <label className={styles.switch}>
+                                    <input 
+                                        type="checkbox" 
+                                        checked={product.is_active}
+                                        onChange={() => onToggle(product.id, 'is_active', product.is_active)}
+                                    />
+                                    <span className={styles.slider}></span>
+                                </label>
+                            </div>
 
-            {/* Quick Toggles */}
-            <div className={styles.section}>
-                <h4 className={styles.sectionTitle}>QUICK TOGGLES</h4>
-                <div className={styles.toggleList}>
-                    {[
-                        { field: 'is_active', label: 'Active (is_active)' },
-                        { field: 'is_featured', label: 'Featured (is_featured)' },
-                        { field: 'is_trending', label: 'Trending (is_trending)' },
-                    ].map(({ field, label }) => (
-                        <div key={field} className={styles.toggleRow}>
-                            <span className={styles.toggleLabel}>{label}</span>
-                            <label className={styles.toggleSwitch}>
-                                <input
-                                    type="checkbox"
-                                    checked={product[field] || false}
-                                    onChange={() => onToggle(product.id, field, product[field])}
-                                />
-                                <span className={styles.slider}></span>
-                            </label>
+                            <div className={styles.toggleItem}>
+                                <div className={styles.toggleInfo}>
+                                    <span className={styles.toggleLabel}>{tp('toggle_featured')}</span>
+                                </div>
+                                <label className={styles.switch}>
+                                    <input 
+                                        type="checkbox" 
+                                        checked={product.is_featured}
+                                        onChange={() => onToggle(product.id, 'is_featured', product.is_featured)}
+                                    />
+                                    <span className={styles.slider}></span>
+                                </label>
+                            </div>
+
+                            <div className={styles.toggleItem}>
+                                <div className={styles.toggleInfo}>
+                                    <span className={styles.toggleLabel}>{tp('toggle_trending')}</span>
+                                </div>
+                                <label className={styles.switch}>
+                                    <input 
+                                        type="checkbox" 
+                                        checked={product.is_trending}
+                                        onChange={() => onToggle(product.id, 'is_trending', product.is_trending)}
+                                    />
+                                    <span className={styles.slider}></span>
+                                </label>
+                            </div>
                         </div>
-                    ))}
-                </div>
-            </div>
+                    </div>
 
-            {/* Inventory & Stats */}
-            <div className={styles.section}>
-                <h4 className={styles.sectionTitle}>INVENTORY & STATS</h4>
-                <div className={styles.statsGrid}>
-                    <div className={styles.statItem}>
-                        <span className={styles.statLabel}>Stock</span>
-                        <span className={`${styles.statValue} ${getStockClass()}`}>
-                            {product.stock} units{product.stock <= 20 && product.stock > 0 ? ' (low)' : ''}
-                        </span>
+                    {/* 2. Stats Grid */}
+                    <div className={styles.card}>
+                        <h4 className={styles.cardTitle}>{tp('inventory_stats')}</h4>
+                        <div className={styles.statsGrid}>
+                            <div className={styles.miniStat}>
+                                <Tag size={16} className={styles.statIcon} />
+                                <div className={styles.statInfo}>
+                                    <span className={styles.statVal}>{product.stock}</span>
+                                    <span className={styles.statLabel}>{tp('stock_label')}</span>
+                                </div>
+                            </div>
+                            <div className={styles.miniStat}>
+                                <ShoppingBag size={16} className={styles.statIcon} />
+                                <div className={styles.statInfo}>
+                                    <span className={styles.statVal}>{product.sales_count || 0}</span>
+                                    <span className={styles.statLabel}>{tp('sales_count')}</span>
+                                </div>
+                            </div>
+                            <div className={styles.miniStat}>
+                                <Eye size={16} className={styles.statIcon} />
+                                <div className={styles.statInfo}>
+                                    <span className={styles.statVal}>{product.views || 0}</span>
+                                    <span className={styles.statLabel}>{tp('views_label')}</span>
+                                </div>
+                            </div>
+                            <div className={styles.miniStat}>
+                                <Star size={16} className={styles.statIcon} />
+                                <div className={styles.statInfo}>
+                                    <span className={styles.statVal}>{product.rating || '0.0'}</span>
+                                    <span className={styles.statLabel}>{tp('rating_label')}</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div className={styles.statItem}>
-                        <span className={styles.statLabel}>Sales count</span>
-                        <span className={styles.statValue}>{(product.sales_count || 0).toLocaleString()}</span>
-                    </div>
-                    <div className={styles.statItem}>
-                        <span className={styles.statLabel}>Views</span>
-                        <span className={styles.statValue}>{(product.views || 0).toLocaleString()}</span>
-                    </div>
-                    <div className={styles.statItem}>
-                        <span className={styles.statLabel}>Rating</span>
-                        <span className={styles.statValue}>
-                            {product.rating ? (
-                                <span className={styles.ratingDisplay}>
-                                    {[1, 2, 3, 4, 5].map((s) => (
-                                        <Star
-                                            key={s}
-                                            size={14}
-                                            fill={s <= Math.round(product.rating) ? '#f59e0b' : 'none'}
-                                            color="#f59e0b"
-                                        />
-                                    ))}
-                                    <span className={styles.ratingNum}>
-                                        {Number(product.rating).toFixed(1)}
-                                    </span>
-                                    <span className={styles.reviewCount}>
-                                        ({product.review_count || 0})
-                                    </span>
-                                </span>
-                            ) : '—'}
-                        </span>
-                    </div>
+                </div>
+
+                {/* Description */}
+                <div className={styles.card}>
+                    <h4 className={styles.cardTitle}>DESCRIPTION</h4>
+                    <p className={styles.description}>
+                        {description || 'No description provided.'}
+                    </p>
                 </div>
             </div>
         </div>

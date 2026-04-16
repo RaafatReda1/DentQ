@@ -4,44 +4,35 @@ import DetailPanel from './DetailPanel';
 import styles from './DetailView.module.css';
 
 /**
- * DetailView (Plan C) — Master/Detail layout: scrollable list on left, detail pane on right.
- * 
- * Props:
- *   - products[] — all fetched products
- *   - selectedProduct (object | null)
- *   - onSelectProduct(product)
- *   - stats: { total, active, lowStock }
- *   - onEdit(product) / onDuplicate(product) / onDelete(product)
- *   - onToggle(id, fieldName, currentValue)
+ * DetailView — Plan C: Master/Detail 2-column layout.
+ * Localized via sub-components.
  */
-const DetailView = ({
-    products,
-    selectedProduct,
-    onSelectProduct,
+const DetailView = ({ 
+    products, 
+    selectedProduct, 
+    onSelectProduct, 
     stats,
     onEdit,
-    onDuplicate,
     onDelete,
-    onToggle,
+    onToggle
 }) => {
     return (
         <div className={styles.detailView}>
-            {/* Left: Master list */}
+            {/* Left list pane (35%) */}
             <div className={styles.listPane}>
-                <DetailList
-                    products={products}
-                    selectedId={selectedProduct?.id}
+                <DetailList 
+                    products={products} 
+                    selectedId={selectedProduct?.id} 
                     onSelect={onSelectProduct}
                     stats={stats}
                 />
             </div>
 
-            {/* Right: Detail panel */}
+            {/* Right detail pane (65%) */}
             <div className={styles.detailPane}>
-                <DetailPanel
-                    product={selectedProduct}
+                <DetailPanel 
+                    product={selectedProduct} 
                     onEdit={onEdit}
-                    onDuplicate={onDuplicate}
                     onDelete={onDelete}
                     onToggle={onToggle}
                 />

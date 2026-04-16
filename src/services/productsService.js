@@ -17,7 +17,11 @@ export const fetchProducts = async ({ page = 0, limit = 20, searchTerm = '', cat
             query = query.ilike('nameEn', `%${searchTerm}%`);
         }
         if (categoryId) {
-            query = query.eq('category_id', categoryId);
+            if (Array.isArray(categoryId)) {
+                query = query.in('category_id', categoryId);
+            } else {
+                query = query.eq('category_id', categoryId);
+            }
         }
 
         // Apply pagination

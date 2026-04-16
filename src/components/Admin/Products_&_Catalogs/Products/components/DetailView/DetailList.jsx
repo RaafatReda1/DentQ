@@ -1,78 +1,86 @@
 import React from 'react';
 import { Star } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import styles from './DetailList.module.css';
 
 /**
- * DetailList — Left-side scrollable product list for Master/Detail view.
- * Shows compact product entries with thumbnail, name, category, rating, price, stock.
- * 
- * Props:
- *   - products[] — all fetched products
- *   - selectedId (string) — currently selected product ID
- *   - onSelect(product) — selects a product to show in detail panel
- *   - stats: { total, active, lowStock }
+ * DetailList — Left-side scrollable list for Master/Detail view.
+ * Supports bilingual naming and i18n.
  */
-const DetailList = ({ products, selectedId, onSelect, stats }) => {
+const DetailList = ({ 
+    products = [], 
+    selectedId, 
+    onSelect,
+    stats 
+}) => {
+    const { t, i18n } = useTranslation();
+    const tp = (key) => t(`admin.products.${key}`);
+    const currentLang = i18n.language;
+
     return (
         <div className={styles.listContainer}>
-            {/* Compact stats bar */}
+            {/* Compact state summary at top of list */}
             <div className={styles.compactStats}>
-                <span><strong>{stats.total}</strong> total</span>
-                <span className={styles.dot}>·</span>
-                <span className={styles.activeCount}><strong>{stats.active}</strong> active</span>
-                <span className={styles.dot}>·</span>
-                <span className={styles.lowStockCount}><strong>{stats.lowStock}</strong> low stock</span>
+                <div className={styles.statItem}>
+                    <span className={styles.statVal}>{stats.total}</span>
+                    <span className={styles.statLabel}>{tp('total_label')}</span>
+                </div>
+                <div className={styles.divider}></div>
+                <div className={styles.statItem}>
+                    <span className={styles.statVal}>{stats.active}</span>
+                    <span className={styles.statLabel}>{tp('active_label')}</span>
+                </div>
+                <div className={styles.divider}></div>
+                <div className={styles.statItem}>
+                    <span className={`${styles.statVal} ${stats.lowStock > 0 ? styles.alert : ''}`}>
+                        {stats.lowStock}
+                    </span>
+                    <span className={styles.statLabel}>{tp('low_stock_label')}</span>
+                </div>
             </div>
 
-            {/* Product list */}
+            {/* List items */}
             <div className={styles.list}>
-                {products.map((product) => {
-                    const isSelected = product.id === selectedId;
-                    const categoryName = product.Categories?.name_en || product.Categories?.name_ar || '';
+                {products.map((p) => {
+                    const name = currentLang === 'ar' ? (p.nameAr || p.nameEn) : (p.nameEn || p.nameAr);
+                    const category = currentLang === 'ar' ? (p.Categories?.name_ar || p.Categories?.name_en) : (p.Categories?.name_en || p.Categories?.name_ar);
 
                     return (
-                        <button
-                            key={product.id}
-                            className={`${styles.listItem} ${isSelected ? styles.selected : ''}`}
-                            onClick={() => onSelect(product)}
+                        <div
+                            key={p.id}
+                            className={`${styles.item} ${selectedId === p.id ? styles.selected : ''} ${!p.is_active ? styles.dimmed : ''}`}
+                            onClick={() => onSelect(p)}
                         >
-                            {/* Thumbnail */}
-                            <div className={styles.thumb}>
-                                {product.images?.length > 0 ? (
-                                    <img src={product.images[0]} alt="" className={styles.thumbImg} />
-                                ) : (
-                                    <span className={styles.thumbPlaceholder}>img</span>
-                                )}
+                            <div className={styles.thumbBox}>
+                                {p.images?.[0] ? (
+                                    <img 
+                                        src={p.images[0]} 
+                                        alt="" 
+                                        className={styles.thumb} 
+                                        onError={(e) => { e.target.onerror = null; e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
+                                    />
+                                ) : null}
+                                <div className={styles.imagePlaceholder} style={{ display: p.images?.[0] ? 'none' : 'flex' }}></div>
                             </div>
-
-                            {/* Info */}
                             <div className={styles.itemInfo}>
-                                <span className={styles.itemName}>{product.nameEn}</span>
-                                <span className={styles.itemMeta}>
-                                    {categoryName && <span>{categoryName}</span>}
-                                    {product.rating && (
-                                        <>
-                                            <span> · </span>
-                                            <Star size={10} fill="#f59e0b" color="#f59e0b" />
-                                            <span> {Number(product.rating).toFixed(1)}</span>
-                                        </>
-                                    )}
-                                </span>
-                                <span className={styles.itemPrice}>
-                                    ${Number(product.price).toFixed(2)}
-                                    {product.stock !== null && (
-                                        <span className={product.stock <= 10 ? styles.lowStock : ''}>
-                                            {' '}· {product.stock} left
-                                        </span>
-                                    )}
-                                </span>
+                                <div className={styles.itemHeader}>
+                                    <span className={styles.itemName} title={name}>{name}</span>
+                                    {p.is_featured && <Star size={10} className={styles.featuredIcon} fill="currentColor" />}
+                                </div>
+                                <div className={styles.itemSub}>
+                                    <span className={styles.itemCat}>{category || '—'}</span>
+                                    <span className={styles.itemPrice}>${Number(p.price).toLocaleString()}</span>
+                                </div>
                             </div>
-                        </button>
+                            {selectedId === p.id && <div className={styles.activeIndicator} />}
+                        </div>
                     );
                 })}
 
                 {products.length === 0 && (
-                    <div className={styles.emptyState}>No products found</div>
+                    <div className={styles.emptyList}>
+                        <p>{tp('no_products')}</p>
+                    </div>
                 )}
             </div>
         </div>

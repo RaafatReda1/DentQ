@@ -1,83 +1,75 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import TableRow from './TableRow';
 import Pagination from '../Pagination/Pagination';
 import styles from './TableView.module.css';
 
 /**
- * TableView (Plan A) — Full data table with checkboxes, sorting columns, and pagination.
- * 
- * Props:
- *   - products[] — current page of products
- *   - totalCount — total across all pages
- *   - currentPage / pageSize / onPageChange
- *   - selectedIds[] / onSelectId(id) / onSelectAll()
- *   - onEdit(product) / onView(product) / onDuplicate(product) / onDelete(product)
+ * TableView — Plan A: Data table with checkboxes and sortable headers.
+ * Fully localized.
  */
 const TableView = ({
-    products,
+    products = [],
     totalCount,
     currentPage,
     pageSize,
     onPageChange,
-    selectedIds,
+    selectedIds = [],
     onSelectId,
     onSelectAll,
     onEdit,
     onView,
-    onDuplicate,
     onDelete,
 }) => {
-    const allSelected = products.length > 0 && products.every((p) => selectedIds.includes(p.id));
+    const { t } = useTranslation();
+    const tp = (key) => t(`admin.products.${key}`);
 
     return (
         <div className={styles.tableContainer}>
             <div className={styles.tableWrapper}>
                 <table className={styles.table}>
                     <thead>
-                        <tr className={styles.headerRow}>
-                            <th className={styles.checkHeader}>
+                        <tr>
+                            <th className={styles.checkCol}>
                                 <input
                                     type="checkbox"
-                                    checked={allSelected}
+                                    checked={products.length > 0 && products.every((p) => selectedIds.includes(p.id))}
                                     onChange={onSelectAll}
-                                    className={styles.checkbox}
                                 />
                             </th>
-                            <th className={styles.colHeader}>img</th>
-                            <th className={styles.colHeader}>Name</th>
-                            <th className={styles.colHeader}>Price</th>
-                            <th className={styles.colHeader}>Stock</th>
-                            <th className={styles.colHeader}>Status</th>
-                            <th className={styles.colHeader}>Rating</th>
-                            <th className={styles.colHeader}>Actions</th>
+                            <th className={styles.productCol}>{tp('col_name')}</th>
+                            <th className={styles.priceCol}>{tp('col_price')}</th>
+                            <th className={styles.stockCol}>{tp('col_stock')}</th>
+                            <th className={styles.statusCol}>{tp('col_status')}</th>
+                            <th className={styles.ratingCol}>{tp('col_rating')}</th>
+                            <th className={styles.actionCol}>{tp('col_actions')}</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {products.map((product) => (
+                        {products.map((p) => (
                             <TableRow
-                                key={product.id}
-                                product={product}
-                                isSelected={selectedIds.includes(product.id)}
+                                key={p.id}
+                                product={p}
+                                isSelected={selectedIds.includes(p.id)}
                                 onSelect={onSelectId}
                                 onEdit={onEdit}
                                 onView={onView}
-                                onDuplicate={onDuplicate}
                                 onDelete={onDelete}
                             />
                         ))}
                     </tbody>
                 </table>
+
+                {products.length === 0 && (
+                    <div className={styles.emptyTable}>
+                        <p>{tp('no_products')}</p>
+                    </div>
+                )}
             </div>
 
-            {products.length === 0 && (
-                <div className={styles.emptyState}>
-                    <p>No products found</p>
-                </div>
-            )}
-
             <Pagination
-                currentPage={currentPage}
                 totalCount={totalCount}
+                currentPage={currentPage}
                 pageSize={pageSize}
                 onPageChange={onPageChange}
             />

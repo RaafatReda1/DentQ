@@ -1,20 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import TagInput from './TagInput';
 import ImageUploader from './ImageUploader';
 import styles from './ProductForm.module.css';
 
 /**
  * ProductForm — Full Add/Edit product form with bilingual fields, pricing, tags, images.
- * Two save modes: "Save as draft" (is_active: false) and "Publish" (is_active: true).
- * 
- * Props:
- *   - isOpen (bool)
- *   - product (object | null) — null = add mode, object = edit mode
- *   - categories[] — for category dropdown
- *   - onSave(productData, isDraft) callback
- *   - onClose() callback
- *   - loading (bool) — shows spinner on save button
+ * Two save modes: "Save as draft" and "Publish".
+ * Fully localized with i18n.
  */
 const INITIAL_FORM = {
     nameEn: '',
@@ -39,8 +33,12 @@ const INITIAL_FORM = {
 };
 
 const ProductForm = ({ isOpen, product, categories = [], onSave, onClose, loading }) => {
-    const [form, setForm] = useState(INITIAL_FORM);
+    const { t, i18n } = useTranslation();
+    const tp = (key) => t(`admin.products.${key}`);
     const isEditing = !!product;
+    const [form, setForm] = useState(INITIAL_FORM);
+
+    const currentLang = i18n.language;
 
     // Pre-fill form when editing
     useEffect(() => {
@@ -69,7 +67,7 @@ const ProductForm = ({ isOpen, product, categories = [], onSave, onClose, loadin
         } else {
             setForm(INITIAL_FORM);
         }
-    }, [product]);
+    }, [product, isOpen]);
 
     if (!isOpen) return null;
 
@@ -77,12 +75,14 @@ const ProductForm = ({ isOpen, product, categories = [], onSave, onClose, loadin
         setForm((prev) => {
             const updated = { ...prev, [field]: value };
 
-            // Auto-calculate discount when price and original_price change
+            // Auto-calculate discount
             if ((field === 'price' || field === 'original_price') && updated.price && updated.original_price) {
                 const p = Number(updated.price);
                 const op = Number(updated.original_price);
                 if (op > p && op > 0) {
                     updated.discount = ((1 - p / op) * 100).toFixed(0);
+                } else {
+                    updated.discount = '';
                 }
             }
 
@@ -91,7 +91,6 @@ const ProductForm = ({ isOpen, product, categories = [], onSave, onClose, loadin
     };
 
     const handleSubmit = (isDraft) => {
-        // Build the data object matching DB schema
         const data = {
             nameEn: form.nameEn.trim(),
             nameAr: form.nameAr.trim() || null,
@@ -114,7 +113,7 @@ const ProductForm = ({ isOpen, product, categories = [], onSave, onClose, loadin
             is_trending: form.is_trending,
         };
 
-        onSave(data, isDraft);
+        onSave(data, !isDraft && !isEditing ? false : isDraft);
     };
 
     return (
@@ -124,9 +123,9 @@ const ProductForm = ({ isOpen, product, categories = [], onSave, onClose, loadin
                 <div className={styles.formHeader}>
                     <div>
                         <h2 className={styles.formTitle}>
-                            {isEditing ? 'Edit product' : 'Add new product'}
+                            {isEditing ? tp('form_edit_title') : tp('form_add_title')}
                         </h2>
-                        <p className={styles.formSubtitle}>All fields marked * are required</p>
+                        <p className={styles.formSubtitle}>{tp('form_required')}</p>
                     </div>
                     <div className={styles.headerActions}>
                         <button
@@ -134,14 +133,14 @@ const ProductForm = ({ isOpen, product, categories = [], onSave, onClose, loadin
                             onClick={() => handleSubmit(true)}
                             disabled={loading || !form.nameEn.trim() || !form.price}
                         >
-                            {isEditing ? 'Save as draft' : 'Save as draft'}
+                            {tp('form_save_draft')}
                         </button>
                         <button
                             className={styles.publishBtn}
                             onClick={() => handleSubmit(false)}
                             disabled={loading || !form.nameEn.trim() || !form.price}
                         >
-                            {loading ? 'Saving...' : isEditing ? 'Update product' : 'Publish product'}
+                            {loading ? tp('form_saving') : isEditing ? tp('form_update') : tp('form_publish')}
                         </button>
                         <button className={styles.closeBtn} onClick={onClose}>
                             <X size={20} />
@@ -149,55 +148,53 @@ const ProductForm = ({ isOpen, product, categories = [], onSave, onClose, loadin
                     </div>
                 </div>
 
-                {/* Two-column layout */}
                 <div className={styles.formBody}>
-                    {/* ─── Left Column: Main fields ─── */}
                     <div className={styles.mainColumn}>
                         {/* Basic Info */}
                         <section className={styles.section}>
-                            <h3 className={styles.sectionTitle}>BASIC INFO</h3>
+                            <h3 className={styles.sectionTitle}>{tp('form_basic_info')}</h3>
 
                             <div className={styles.formGroup}>
-                                <label className={styles.label}>Name (English) *</label>
+                                <label className={styles.label}>{tp('form_name_en')}</label>
                                 <input
                                     type="text"
                                     value={form.nameEn}
                                     onChange={(e) => updateField('nameEn', e.target.value)}
-                                    placeholder="e.g. Wireless Earbuds Pro"
+                                    placeholder={tp('form_name_en_placeholder')}
                                     className={styles.input}
                                     required
                                 />
                             </div>
 
                             <div className={styles.formGroup}>
-                                <label className={styles.label}>Name (Arabic)</label>
+                                <label className={styles.label}>{tp('form_name_ar')}</label>
                                 <input
                                     type="text"
                                     value={form.nameAr}
                                     onChange={(e) => updateField('nameAr', e.target.value)}
-                                    placeholder="اسم المنتج بالعربي"
+                                    placeholder={tp('form_name_ar_placeholder')}
                                     className={styles.input}
                                     dir="rtl"
                                 />
                             </div>
 
                             <div className={styles.formGroup}>
-                                <label className={styles.label}>Short description (EN)</label>
+                                <label className={styles.label}>{tp('form_desc_en')}</label>
                                 <textarea
                                     value={form.descriptionEn}
                                     onChange={(e) => updateField('descriptionEn', e.target.value)}
-                                    placeholder="Brief product description..."
+                                    placeholder={tp('form_desc_en_placeholder')}
                                     className={styles.textarea}
                                     rows={3}
                                 />
                             </div>
 
                             <div className={styles.formGroup}>
-                                <label className={styles.label}>Short description (AR)</label>
+                                <label className={styles.label}>{tp('form_desc_ar')}</label>
                                 <textarea
                                     value={form.descriptionAr}
                                     onChange={(e) => updateField('descriptionAr', e.target.value)}
-                                    placeholder="وصف المنتج..."
+                                    placeholder={tp('form_desc_ar_placeholder')}
                                     className={styles.textarea}
                                     dir="rtl"
                                     rows={3}
@@ -207,58 +204,56 @@ const ProductForm = ({ isOpen, product, categories = [], onSave, onClose, loadin
 
                         {/* Pricing & Inventory */}
                         <section className={styles.section}>
-                            <h3 className={styles.sectionTitle}>PRICING & INVENTORY</h3>
+                            <h3 className={styles.sectionTitle}>{tp('form_pricing')}</h3>
 
-                            <div className={styles.row3}>
-                                <div className={styles.formGroup}>
-                                    <label className={styles.label}>Price * / Original price / Discount %</label>
-                                    <div className={styles.priceRow}>
-                                        <input
-                                            type="number"
-                                            value={form.price}
-                                            onChange={(e) => updateField('price', e.target.value)}
-                                            placeholder="$0.00"
-                                            className={styles.input}
-                                            step="0.01"
-                                            min="0"
-                                            required
-                                        />
-                                        <input
-                                            type="number"
-                                            value={form.original_price}
-                                            onChange={(e) => updateField('original_price', e.target.value)}
-                                            placeholder="$0.00"
-                                            className={styles.input}
-                                            step="0.01"
-                                            min="0"
-                                        />
-                                        <input
-                                            type="number"
-                                            value={form.discount}
-                                            onChange={(e) => updateField('discount', e.target.value)}
-                                            placeholder="0%"
-                                            className={styles.input}
-                                            min="0"
-                                            max="100"
-                                        />
-                                    </div>
+                            <div className={styles.formGroup}>
+                                <label className={styles.label}>{tp('form_price_label')}</label>
+                                <div className={styles.priceRow}>
+                                    <input
+                                        type="number"
+                                        value={form.price}
+                                        onChange={(e) => updateField('price', e.target.value)}
+                                        placeholder="$0.00"
+                                        className={styles.input}
+                                        step="0.01"
+                                        min="0"
+                                        required
+                                    />
+                                    <input
+                                        type="number"
+                                        value={form.original_price}
+                                        onChange={(e) => updateField('original_price', e.target.value)}
+                                        placeholder="$0.00"
+                                        className={styles.input}
+                                        step="0.01"
+                                        min="0"
+                                    />
+                                    <input
+                                        type="number"
+                                        value={form.discount}
+                                        onChange={(e) => updateField('discount', e.target.value)}
+                                        placeholder="0%"
+                                        className={styles.input}
+                                        min="0"
+                                        max="100"
+                                    />
                                 </div>
                             </div>
 
                             <div className={styles.formGroup}>
-                                <label className={styles.label}>Profit (auto-calculated or manual)</label>
+                                <label className={styles.label}>{tp('form_profit')}</label>
                                 <input
                                     type="number"
                                     value={form.profit}
                                     onChange={(e) => updateField('profit', e.target.value)}
-                                    placeholder="Calculated from price − cost"
+                                    placeholder={tp('form_profit_placeholder')}
                                     className={styles.input}
                                     step="0.01"
                                 />
                             </div>
 
                             <div className={styles.formGroup}>
-                                <label className={styles.label}>Stock quantity *</label>
+                                <label className={styles.label}>{tp('form_stock')}</label>
                                 <input
                                     type="number"
                                     value={form.stock}
@@ -273,56 +268,54 @@ const ProductForm = ({ isOpen, product, categories = [], onSave, onClose, loadin
 
                         {/* Organization */}
                         <section className={styles.section}>
-                            <h3 className={styles.sectionTitle}>ORGANIZATION</h3>
+                            <h3 className={styles.sectionTitle}>{tp('form_organization')}</h3>
 
                             <div className={styles.formGroup}>
-                                <label className={styles.label}>Category *</label>
+                                <label className={styles.label}>{tp('form_category')}</label>
                                 <select
                                     value={form.category_id}
                                     onChange={(e) => updateField('category_id', e.target.value)}
                                     className={styles.select}
                                 >
-                                    <option value="">Select category</option>
+                                    <option value="">{tp('form_select_category')}</option>
                                     {categories.map((cat) => (
                                         <option key={cat.id} value={cat.id}>
-                                            {cat.name_en || cat.name_ar}
+                                            {currentLang === 'ar' ? (cat.name_ar || cat.name_en) : (cat.name_en || cat.name_ar)}
                                         </option>
                                     ))}
                                 </select>
                             </div>
 
                             <TagInput
-                                label="Sizes (JSON tags)"
+                                label={tp('form_sizes')}
                                 tags={form.sizes}
                                 onChange={(tags) => updateField('sizes', tags)}
-                                placeholder="+ Add size"
+                                placeholder={tp('form_add_size')}
                             />
 
                             <TagInput
-                                label="Colors (JSON tags)"
+                                label={tp('form_colors')}
                                 tags={form.colors}
                                 onChange={(tags) => updateField('colors', tags)}
-                                placeholder="+ Add color"
+                                placeholder={tp('form_add_color')}
                                 isColor
                             />
                         </section>
                     </div>
 
-                    {/* ─── Right Column: Media, Flags, Full Description ─── */}
                     <div className={styles.sideColumn}>
                         {/* Media */}
                         <section className={styles.section}>
-                            <h3 className={styles.sectionTitle}>MEDIA</h3>
+                            <h3 className={styles.sectionTitle}>{tp('form_media')}</h3>
                             <ImageUploader
                                 images={form.images}
                                 onChange={(imgs) => updateField('images', imgs)}
+                                productId={product?.id}
                             />
-                            <p className={styles.hint}>
-                                Images stored as array in Products.images[]
-                            </p>
+                            <p className={styles.hint}>{tp('form_images_stored')}</p>
 
                             <div className={styles.formGroup}>
-                                <label className={styles.label}>Video URL</label>
+                                <label className={styles.label}>{tp('form_video_url')}</label>
                                 <input
                                     type="url"
                                     value={form.videoUrl}
@@ -335,12 +328,12 @@ const ProductForm = ({ isOpen, product, categories = [], onSave, onClose, loadin
 
                         {/* Flags */}
                         <section className={styles.section}>
-                            <h3 className={styles.sectionTitle}>FLAGS</h3>
+                            <h3 className={styles.sectionTitle}>{tp('form_flags')}</h3>
                             <div className={styles.flagsList}>
                                 {[
-                                    { field: 'is_active', label: 'is_active' },
-                                    { field: 'is_featured', label: 'is_featured' },
-                                    { field: 'is_trending', label: 'is_trending' },
+                                    { field: 'is_active', label: tp('toggle_active') },
+                                    { field: 'is_featured', label: tp('toggle_featured') },
+                                    { field: 'is_trending', label: tp('toggle_trending') },
                                 ].map(({ field, label }) => (
                                     <div key={field} className={styles.flagRow}>
                                         <span className={styles.flagLabel}>{label}</span>
@@ -355,33 +348,30 @@ const ProductForm = ({ isOpen, product, categories = [], onSave, onClose, loadin
                                     </div>
                                 ))}
                             </div>
-                            <p className={styles.flagsHint}>
-                                New products start as <strong style={{ color: '#22c55e' }}>Active</strong> by default.
-                                Toggle <strong>is_featured</strong> to show on homepage hero.
-                            </p>
+                            <p className={styles.flagsHint}>{tp('form_flags_hint')}</p>
                         </section>
 
                         {/* Full Description */}
                         <section className={styles.section}>
-                            <h3 className={styles.sectionTitle}>FULL DESCRIPTION</h3>
+                            <h3 className={styles.sectionTitle}>{tp('form_full_desc')}</h3>
 
                             <div className={styles.formGroup}>
-                                <label className={styles.label}>Full desc. (EN)</label>
+                                <label className={styles.label}>{tp('form_full_desc_en')}</label>
                                 <textarea
                                     value={form.fullDescriptionEn}
                                     onChange={(e) => updateField('fullDescriptionEn', e.target.value)}
-                                    placeholder="Detailed product copy..."
+                                    placeholder={tp('form_full_desc_en_placeholder')}
                                     className={styles.textarea}
                                     rows={4}
                                 />
                             </div>
 
                             <div className={styles.formGroup}>
-                                <label className={styles.label}>Full desc. (AR)</label>
+                                <label className={styles.label}>{tp('form_full_desc_ar')}</label>
                                 <textarea
                                     value={form.fullDescriptionAr}
                                     onChange={(e) => updateField('fullDescriptionAr', e.target.value)}
-                                    placeholder="وصف تفصيلي..."
+                                    placeholder={tp('form_full_desc_ar_placeholder')}
                                     className={styles.textarea}
                                     dir="rtl"
                                     rows={4}
@@ -393,20 +383,20 @@ const ProductForm = ({ isOpen, product, categories = [], onSave, onClose, loadin
 
                 {/* Footer */}
                 <div className={styles.formFooter}>
-                    <button className={styles.cancelBtn} onClick={onClose}>Cancel</button>
+                    <button className={styles.cancelBtn} onClick={onClose}>{tp('cancel')}</button>
                     <button
                         className={styles.draftBtn}
                         onClick={() => handleSubmit(true)}
                         disabled={loading || !form.nameEn.trim() || !form.price}
                     >
-                        Save as draft
+                        {tp('form_save_draft')}
                     </button>
                     <button
                         className={styles.publishBtn}
                         onClick={() => handleSubmit(false)}
                         disabled={loading || !form.nameEn.trim() || !form.price}
                     >
-                        {loading ? 'Saving...' : isEditing ? 'Update product' : 'Publish product'}
+                        {loading ? tp('form_saving') : isEditing ? tp('form_update') : tp('form_publish')}
                     </button>
                 </div>
             </div>
