@@ -518,6 +518,7 @@
     .formBody {
         flex-direction: column;
         gap: 20px;
+        padding-bottom: 120px; /* Space for both formFooter and potentially the dock */
     }
 
     .headerActions .draftBtn,
@@ -527,10 +528,16 @@
 
     .formFooter {
         flex-wrap: wrap;
+        padding-bottom: 30px; /* Extra breathing room */
+        background: var(--card-bg);
+        z-index: 10;
+        position: sticky; /* Keep it grounded in the scroll flow if preferred, or adjust as needed */
+        bottom: 0;
     }
 
     .cancelBtn, .draftBtn, .publishBtn {
         flex: 1;
         min-width: 100px;
+        padding: 12px;
     }
 }

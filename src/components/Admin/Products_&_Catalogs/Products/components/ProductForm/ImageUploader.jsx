@@ -122,7 +122,7 @@ const ImageUploader = ({ images = [], onChange, maxFiles = 10, productId }) => {
                 {uploading ? (
                     <>
                         <div className={styles.uploadSpinner}></div>
-                        <p className={styles.dropText}>Uploading...</p>
+                        <p className={styles.dropText}>{tp('form_uploading')}</p>
                     </>
                 ) : (
                     <>
@@ -148,7 +148,7 @@ const ImageUploader = ({ images = [], onChange, maxFiles = 10, productId }) => {
                     value={urlInput}
                     onChange={(e) => setUrlInput(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddUrl())}
-                    placeholder="Or paste image URL..."
+                    placeholder={tp('form_paste_url')}
                     className={styles.urlInput}
                 />
                 <button
@@ -157,7 +157,7 @@ const ImageUploader = ({ images = [], onChange, maxFiles = 10, productId }) => {
                     disabled={!urlInput.trim()}
                     className={styles.urlBtn}
                 >
-                    Add
+                    {tp('form_add_btn')}
                 </button>
             </div>
 
@@ -166,7 +166,12 @@ const ImageUploader = ({ images = [], onChange, maxFiles = 10, productId }) => {
                 <div className={styles.previews}>
                     {images.map((url, index) => (
                         <div key={index} className={styles.thumb}>
-                            <img src={url} alt={`Product ${index + 1}`} className={styles.thumbImg} />
+                            <img 
+                                src={url} 
+                                alt={`Product ${index + 1}`} 
+                                className={styles.thumbImg} 
+                                onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.net/1.png'; }}
+                            />
                             <button
                                 type="button"
                                 className={styles.thumbRemove}
@@ -180,7 +185,7 @@ const ImageUploader = ({ images = [], onChange, maxFiles = 10, productId }) => {
             )}
 
             <p className={styles.countHint}>
-                {images.length}/{maxFiles} images
+                {images.length}/{maxFiles} {tp('form_images_label')}
             </p>
         </div>
     );

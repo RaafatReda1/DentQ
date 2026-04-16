@@ -238,7 +238,7 @@ const ProductForm = ({ isOpen, product, categories = [], onSave, onClose, loadin
                                         />
                                     </div>
                                     <div className={styles.formInsideGroup}>
-                                        <small className={styles.inputHint}>{tp('admin.products.col_price')} (Sale)</small>
+                                        <small className={styles.inputHint}>{tp('col_price')} {tp('form_sale_label')}</small>
                                         <input
                                             type="text"
                                             value={form.price}
@@ -248,7 +248,7 @@ const ProductForm = ({ isOpen, product, categories = [], onSave, onClose, loadin
                                         />
                                     </div>
                                     <div className={styles.formInsideGroup}>
-                                        <small className={styles.inputHint}>Orig. Price *</small>
+                                        <small className={styles.inputHint}>{tp('form_original_price_hint')}</small>
                                         <input
                                             type="number"
                                             value={form.original_price}
@@ -261,7 +261,7 @@ const ProductForm = ({ isOpen, product, categories = [], onSave, onClose, loadin
                                         />
                                     </div>
                                     <div className={styles.formInsideGroup}>
-                                        <small className={styles.inputHint}>Disc. %</small>
+                                        <small className={styles.inputHint}>{tp('form_discount_hint')}</small>
                                         <input
                                             type="number"
                                             value={form.discount}

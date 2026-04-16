@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, Plus } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import styles from './TagInput.module.css';
 
 /**
@@ -12,7 +13,9 @@ import styles from './TagInput.module.css';
  *   - isColor (bool) — if true, shows color picker alongside name
  *   - label (string) — section label
  */
-const TagInput = ({ tags = [], onChange, placeholder = 'Add tag...', isColor = false, label }) => {
+const TagInput = ({ tags = [], onChange, placeholder, isColor = false, label }) => {
+    const { t } = useTranslation();
+    const tp = (key) => t(`admin.products.${key}`);
     const [inputValue, setInputValue] = useState('');
     const [colorValue, setColorValue] = useState('#3b82f6');
 
@@ -80,7 +83,7 @@ const TagInput = ({ tags = [], onChange, placeholder = 'Add tag...', isColor = f
                             value={colorValue}
                             onChange={(e) => setColorValue(e.target.value)}
                             className={styles.colorPicker}
-                            title="Pick a color"
+                            title={tp('form_pick_color')}
                         />
                     )}
                     <input
@@ -98,7 +101,7 @@ const TagInput = ({ tags = [], onChange, placeholder = 'Add tag...', isColor = f
                         disabled={!inputValue.trim()}
                     >
                         <Plus size={14} />
-                        <span>Add</span>
+                        <span>{tp('form_add_btn')}</span>
                     </button>
                 </div>
             </div>

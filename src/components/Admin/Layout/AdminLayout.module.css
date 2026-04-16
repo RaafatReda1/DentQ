@@ -33,13 +33,21 @@
 }
 
 @media (max-width: 768px) {
-    .adminWrapper { flex-direction: column; }
+    .adminWrapper { 
+        flex-direction: column; 
+        height: 100vh;
+        overflow: hidden;
+    }
     .mainContainer {
         border-radius: 0;
         margin: 0;
         box-shadow: none;
-        height: calc(100vh - 70px);
+        height: 100%; /* Take full height, we'll use padding for the dock */
+        flex: 1;
     }
     [dir="rtl"] .mainContainer { border-radius: 0; }
-    .contentArea { padding: 1rem; }
+    
+    .contentArea { 
+        padding: 1.5rem 1rem 100px 1rem; /* Extra bottom padding for floating dock */
+    }
 }
