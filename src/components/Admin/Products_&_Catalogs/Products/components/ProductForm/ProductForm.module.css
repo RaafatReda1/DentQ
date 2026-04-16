@@ -167,14 +167,36 @@
     background-position: right 12px center;
 }
 
-/* Price row — 3 inputs side by side */
+/* Price row — 4 inputs side by side with labels */
 .priceRow {
     display: flex;
-    gap: 8px;
+    gap: 12px;
 }
 
-.priceRow .input {
+.formInsideGroup {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.inputHint {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.readOnlyInput {
+    background: rgba(0, 0, 0, 0.03) !important;
+    border-style: dashed !important;
+    color: var(--accent-color);
+    font-weight: 700;
+}
+
+.lossValue {
+    color: #ef4444 !important;
 }
 
 .hint {

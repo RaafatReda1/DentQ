@@ -20,6 +20,7 @@ const INITIAL_FORM = {
     price: '',
     original_price: '',
     discount: '',
+    cost: '',
     profit: '',
     stock: '',
     category_id: '',
@@ -53,6 +54,7 @@ const ProductForm = ({ isOpen, product, categories = [], onSave, onClose, loadin
                 price: product.price || '',
                 original_price: product.original_price || '',
                 discount: product.discount || '',
+                cost: product.cost || '',
                 profit: product.profit || '',
                 stock: product.stock ?? '',
                 category_id: product.category_id || '',
@@ -75,15 +77,21 @@ const ProductForm = ({ isOpen, product, categories = [], onSave, onClose, loadin
         setForm((prev) => {
             const updated = { ...prev, [field]: value };
 
-            // Auto-calculate discount
-            if ((field === 'price' || field === 'original_price') && updated.price && updated.original_price) {
-                const p = Number(updated.price);
-                const op = Number(updated.original_price);
-                if (op > p && op > 0) {
-                    updated.discount = ((1 - p / op) * 100).toFixed(0);
-                } else {
-                    updated.discount = '';
-                }
+            // Auto-calculate Price and Profit
+            const op = Number(updated.original_price || 0);
+            const disc = Number(updated.discount || 0);
+            const c = Number(updated.cost || 0);
+
+            if (op > 0) {
+                // Sale Price = Original - (Original * Discount%)
+                const salePrice = op - (op * (disc / 100));
+                updated.price = salePrice.toFixed(2);
+
+                // Profit = Sale Price - Cost
+                updated.profit = (salePrice - c).toFixed(2);
+            } else {
+                updated.price = '';
+                updated.profit = '';
             }
 
             return updated;
@@ -98,10 +106,11 @@ const ProductForm = ({ isOpen, product, categories = [], onSave, onClose, loadin
             descriptionAr: form.descriptionAr.trim() || null,
             fullDescriptionEn: form.fullDescriptionEn.trim() || null,
             fullDescriptionAr: form.fullDescriptionAr.trim() || null,
-            price: Number(form.price),
+            price: Number(form.price) || 0,
             original_price: form.original_price ? Number(form.original_price) : null,
             discount: form.discount ? Number(form.discount) : null,
-            profit: form.profit ? Number(form.profit) : null,
+            cost: form.cost ? Number(form.cost) : null,
+            profit: form.profit ? Number(form.profit) : 0,
             stock: form.stock !== '' ? Number(form.stock) : 0,
             category_id: form.category_id || null,
             sizes: form.sizes.length > 0 ? form.sizes : null,
@@ -209,48 +218,67 @@ const ProductForm = ({ isOpen, product, categories = [], onSave, onClose, loadin
                             <div className={styles.formGroup}>
                                 <label className={styles.label}>{tp('form_price_label')}</label>
                                 <div className={styles.priceRow}>
-                                    <input
-                                        type="number"
-                                        value={form.price}
-                                        onChange={(e) => updateField('price', e.target.value)}
-                                        placeholder="$0.00"
-                                        className={styles.input}
-                                        step="0.01"
-                                        min="0"
-                                        required
-                                    />
-                                    <input
-                                        type="number"
-                                        value={form.original_price}
-                                        onChange={(e) => updateField('original_price', e.target.value)}
-                                        placeholder="$0.00"
-                                        className={styles.input}
-                                        step="0.01"
-                                        min="0"
-                                    />
-                                    <input
-                                        type="number"
-                                        value={form.discount}
-                                        onChange={(e) => updateField('discount', e.target.value)}
-                                        placeholder="0%"
-                                        className={styles.input}
-                                        min="0"
-                                        max="100"
-                                    />
+                                    <div className={styles.formInsideGroup}>
+                                        <small className={styles.inputHint}>{tp('form_cost')}</small>
+                                        <input
+                                            type="number"
+                                            value={form.cost}
+                                            onChange={(e) => updateField('cost', e.target.value)}
+                                            placeholder="$0.00"
+                                            className={styles.input}
+                                            step="0.01"
+                                            min="0"
+                                            required
+                                        />
+                                    </div>
+                                    <div className={styles.formInsideGroup}>
+                                        <small className={styles.inputHint}>{tp('admin.products.col_price')} (Sale)</small>
+                                        <input
+                                            type="text"
+                                            value={form.price}
+                                            readOnly
+                                            className={`${styles.input} ${styles.readOnlyInput}`}
+                                            placeholder="$0.00"
+                                        />
+                                    </div>
+                                    <div className={styles.formInsideGroup}>
+                                        <small className={styles.inputHint}>Orig. Price *</small>
+                                        <input
+                                            type="number"
+                                            value={form.original_price}
+                                            onChange={(e) => updateField('original_price', e.target.value)}
+                                            placeholder="$0.00"
+                                            className={styles.input}
+                                            step="0.01"
+                                            min="0"
+                                            required
+                                        />
+                                    </div>
+                                    <div className={styles.formInsideGroup}>
+                                        <small className={styles.inputHint}>Disc. %</small>
+                                        <input
+                                            type="number"
+                                            value={form.discount}
+                                            onChange={(e) => updateField('discount', e.target.value)}
+                                            placeholder="0%"
+                                            className={styles.input}
+                                            min="0"
+                                            max="100"
+                                        />
+                                    </div>
                                 </div>
                             </div>
 
                             <div className={styles.formGroup}>
                                 <label className={styles.label}>{tp('form_profit')}</label>
                                 <input
-                                    type="number"
+                                    type="text"
                                     value={form.profit}
-                                    onChange={(e) => updateField('profit', e.target.value)}
+                                    readOnly
+                                    className={`${styles.input} ${styles.readOnlyInput} ${Number(form.profit) < 0 ? styles.lossValue : ''}`}
                                     placeholder={tp('form_profit_placeholder')}
-                                    className={styles.input}
-                                    step="0.01"
                                 />
-                            </div>
+                            </div>v>
 
                             <div className={styles.formGroup}>
                                 <label className={styles.label}>{tp('form_stock')}</label>
@@ -394,7 +422,7 @@ const ProductForm = ({ isOpen, product, categories = [], onSave, onClose, loadin
                     <button
                         className={styles.publishBtn}
                         onClick={() => handleSubmit(false)}
-                        disabled={loading || !form.nameEn.trim() || !form.price}
+                        disabled={loading || !form.nameEn.trim() || !form.original_price || !form.cost}
                     >
                         {loading ? tp('form_saving') : isEditing ? tp('form_update') : tp('form_publish')}
                     </button>

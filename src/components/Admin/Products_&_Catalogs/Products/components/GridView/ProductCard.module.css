@@ -143,16 +143,33 @@
 
 .stockBar {
     width: 100%;
-    height: 6px;
-    background: var(--background-light);
-    border-radius: 10px;
+    height: 8px;
+    background: rgba(0, 0, 0, 0.05); /* Better contrast against card bg */
+    border-radius: var(--radius-full);
     overflow: hidden;
+    position: relative;
 }
 
 .stockFill {
     height: 100%;
-    border-radius: 10px;
-    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: var(--radius-full);
+    transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.card:hover .stockFill {
+    filter: brightness(1.1);
+}
+
+/* Optional: Add a subtle pulse for critical stock */
+.stockFill[style*="var(--danger-color)"] {
+    animation: pulseDanger 2s infinite ease-in-out;
+}
+
+@keyframes pulseDanger {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
 }
 
 /* ─── Actions ─── */

@@ -16,12 +16,12 @@ const ProductCard = ({ product, onEdit, onDelete }) => {
     const name = currentLang === 'ar' ? (product.nameAr || product.nameEn) : (product.nameEn || product.nameAr);
     const categoryName = currentLang === 'ar' ? (product.Categories?.name_ar || product.Categories?.name_en) : (product.Categories?.name_en || product.Categories?.name_ar);
 
-    const MAX_STOCK = 100; // Ref ceiling for the stock bar
+    const MAX_STOCK = 150; // Dynamic scaling ceiling
     const stockPercent = Math.min((product.stock / MAX_STOCK) * 100, 100);
 
     const getStockColor = () => {
         if (product.stock <= 10) return 'var(--danger-color)';
-        if (product.stock <= 30) return 'var(--warning-color)';
+        if (product.stock <= 50) return 'var(--warning-color)';
         return 'var(--success-color)';
     };
 

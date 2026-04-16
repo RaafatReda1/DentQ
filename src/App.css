@@ -9,6 +9,12 @@
   --accent-color: #00b4d8;
   /* لون مميز للأزرار أو الأيقونات */
   --highlight-color: #00b7a8;
+
+  /* 🔔 Status Colors */
+  --danger-color: #ef4444;      /* Red-500 */
+  --warning-color: #f59e0b;     /* Amber-500 */
+  --success-color: #10b981;     /* Emerald-500 */
+
   /* خلفيات ناعمة */
 
   /* ⚪ Neutral Palette */
