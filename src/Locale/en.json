@@ -659,6 +659,8 @@
             "form_publish": "Publish product",
             "form_update": "Update product",
             "form_saving": "Saving...",
+            "form_review_title": "PRODUCT CONTENT REVIEW",
+            "live_preview_status": "LIVE EDITOR SYNC",
             "form_basic_info": "BASIC INFO",
             "form_name_en": "Name (English) *",
             "form_name_en_placeholder": "e.g. Wireless Earbuds Pro",

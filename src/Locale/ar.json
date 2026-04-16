@@ -659,6 +659,8 @@
             "form_publish": "نشر المنتج",
             "form_update": "تحديث المنتج",
             "form_saving": "جاري الحفظ...",
+            "form_review_title": "معاينة محتوى المنتج",
+            "live_preview_status": "مزامنة المحرر المباشر",
             "form_basic_info": "المعلومات الأساسية",
             "form_name_en": "الاسم (إنجليزي) *",
             "form_name_en_placeholder": "مثال: Wireless Earbuds Pro",

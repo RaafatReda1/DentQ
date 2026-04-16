@@ -3,7 +3,12 @@ import { X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import TagInput from './TagInput';
 import ImageUploader from './ImageUploader';
+import MDEditor from '@uiw/react-md-editor';
 import styles from './ProductForm.module.css';
+
+// MDE Styles (can be moved to global if needed)
+import "@uiw/react-md-editor/markdown-editor.css";
+import "@uiw/react-markdown-preview/markdown.css";
 
 /**
  * ProductForm — Full Add/Edit product form with bilingual fields, pricing, tags, images.
@@ -158,7 +163,8 @@ const ProductForm = ({ isOpen, product, categories = [], onSave, onClose, loadin
                 </div>
 
                 <div className={styles.formBody}>
-                    <div className={styles.mainColumn}>
+                    <div className={styles.formColumns}>
+                        <div className={styles.mainColumn}>
                         {/* Basic Info */}
                         <section className={styles.section}>
                             <h3 className={styles.sectionTitle}>{tp('form_basic_info')}</h3>
@@ -278,7 +284,7 @@ const ProductForm = ({ isOpen, product, categories = [], onSave, onClose, loadin
                                     className={`${styles.input} ${styles.readOnlyInput} ${Number(form.profit) < 0 ? styles.lossValue : ''}`}
                                     placeholder={tp('form_profit_placeholder')}
                                 />
-                            </div>v>
+                            </div>
 
                             <div className={styles.formGroup}>
                                 <label className={styles.label}>{tp('form_stock')}</label>
@@ -379,31 +385,64 @@ const ProductForm = ({ isOpen, product, categories = [], onSave, onClose, loadin
                             <p className={styles.flagsHint}>{tp('form_flags_hint')}</p>
                         </section>
 
-                        {/* Full Description */}
+                        {/* Full Description Editor */}
                         <section className={styles.section}>
                             <h3 className={styles.sectionTitle}>{tp('form_full_desc')}</h3>
 
                             <div className={styles.formGroup}>
                                 <label className={styles.label}>{tp('form_full_desc_en')}</label>
-                                <textarea
-                                    value={form.fullDescriptionEn}
-                                    onChange={(e) => updateField('fullDescriptionEn', e.target.value)}
-                                    placeholder={tp('form_full_desc_en_placeholder')}
-                                    className={styles.textarea}
-                                    rows={4}
-                                />
+                                <div className={styles.mdeContainer} data-color-mode="light">
+                                    <MDEditor
+                                        value={form.fullDescriptionEn}
+                                        onChange={(val) => updateField('fullDescriptionEn', val || '')}
+                                        preview="edit"
+                                        height={180}
+                                    />
+                                </div>
                             </div>
 
                             <div className={styles.formGroup}>
                                 <label className={styles.label}>{tp('form_full_desc_ar')}</label>
-                                <textarea
-                                    value={form.fullDescriptionAr}
-                                    onChange={(e) => updateField('fullDescriptionAr', e.target.value)}
-                                    placeholder={tp('form_full_desc_ar_placeholder')}
-                                    className={styles.textarea}
-                                    dir="rtl"
-                                    rows={4}
-                                />
+                                <div className={`${styles.mdeContainer} ${styles.rtlMde}`} data-color-mode="light">
+                                    <MDEditor
+                                        value={form.fullDescriptionAr}
+                                        onChange={(val) => updateField('fullDescriptionAr', val || '')}
+                                        preview="edit"
+                                        height={180}
+                                    />
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+
+                {/* THE PROFESSIONAL REVIEW DASHBOARD (FULL WIDTH) */}
+                    <div className={styles.dashboardSection}>
+                        <section className={styles.section}>
+                            <div className={styles.previewHeader}>
+                                <h3 className={styles.sectionTitle}>{tp('form_review_title') || 'PRODUCT CONTENT REVIEW'}</h3>
+                                <div className={styles.liveBadge}><span className={styles.pulse}></span> {tp('live_preview_status') || 'LIVE EDITOR SYNC'}</div>
+                            </div>
+                            
+                            <div className={styles.visualGrid}>
+                                <div className={styles.visualPane}>
+                                    <div className={styles.visualHeader}>
+                                        <h4 className={styles.visualLabel}>English Visualization</h4>
+                                        <span className={styles.viewMeta}>Global Standard (LTR)</span>
+                                    </div>
+                                    <div className={styles.previewContent} data-color-mode="light">
+                                        <MDEditor.Markdown source={form.fullDescriptionEn} />
+                                    </div>
+                                </div>
+                                <div className={`${styles.visualPane} ${styles.rtlPane}`}>
+                                    <div className={styles.visualHeader}>
+                                        <h4 className={styles.visualLabel}>معاينة المحتوى العربي</h4>
+                                        <span className={styles.viewMeta}>RTL Directional Mockup</span>
+                                    </div>
+                                    <div className={`${styles.previewContent} ${styles.rtlContent}`} data-color-mode="light">
+                                        <MDEditor.Markdown source={form.fullDescriptionAr} />
+                                    </div>
+                                </div>
                             </div>
                         </section>
                     </div>
