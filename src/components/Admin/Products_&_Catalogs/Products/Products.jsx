@@ -14,6 +14,7 @@ import GridView from './components/GridView/GridView';
 import DetailView from './components/DetailView/DetailView';
 import ProductForm from './components/ProductForm/ProductForm';
 import DeleteConfirmModal from './components/DeleteConfirmModal/DeleteConfirmModal';
+import Skeleton from './components/Skeleton/Skeleton';
 
 import styles from './Products.module.css';
 
@@ -139,13 +140,8 @@ const Products = () => {
 
         setProducts(filtered);
         setTotalCount(count || 0);
-
-        if (filtered.length > 0 && !selectedProduct) {
-            setSelectedProduct(filtered[0]);
-        }
-
         setLoading(false);
-    }, [currentPage, searchTerm, categoryFilter, statusFilter, sortBy, getAllDescendantIds, selectedProduct]);
+    }, [currentPage, searchTerm, categoryFilter, statusFilter, sortBy, getAllDescendantIds]);
 
     useEffect(() => {
         loadProducts();
@@ -158,6 +154,13 @@ const Products = () => {
         };
         loadAllProducts();
     }, []);
+
+    // ─── Initial selection logic ───
+    useEffect(() => {
+        if (products.length > 0 && !selectedProduct) {
+            setSelectedProduct(products[0]);
+        }
+    }, [products, selectedProduct]);
 
     const stats = useMemo(() => {
         const total = allProducts.length;
@@ -321,9 +324,24 @@ const Products = () => {
             />
 
             {loading ? (
-                <div className={styles.loadingState}>
-                    <div className={styles.spinner}></div>
-                    <p>{tp('loading')}</p>
+                <div className={styles.skeletonGrid}>
+                    {activeView === 'table' && <Skeleton variant="row" count={10} />}
+                    {activeView === 'grid' && (
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '20px' }}>
+                            <Skeleton variant="card" count={8} />
+                        </div>
+                    )}
+                    {activeView === 'detail' && (
+                        <div style={{ display: 'flex', gap: '24px', height: '100%' }}>
+                            <div style={{ flex: 1, borderEnd: '1px solid var(--border-color)' }}>
+                                <Skeleton variant="detail-list" count={6} />
+                            </div>
+                            <div style={{ flex: 2 }}>
+                                <Skeleton variant="card" />
+                                <Skeleton variant="text" count={4} />
+                            </div>
+                        </div>
+                    )}
                 </div>
             ) : (
                 <>

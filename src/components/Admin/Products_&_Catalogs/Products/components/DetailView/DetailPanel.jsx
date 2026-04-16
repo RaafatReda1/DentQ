@@ -59,7 +59,6 @@ const DetailPanel = ({
             </div>
 
             <div className={styles.content}>
-                {/* Images row */}
                 <div className={styles.imagesRow}>
                     {product.images && product.images.length > 0 ? (
                         product.images.map((url, i) => (
@@ -68,12 +67,18 @@ const DetailPanel = ({
                                     src={url} 
                                     alt="" 
                                     className={styles.previewImg} 
-                                    onError={(e) => { e.target.onerror = null; e.target.style.display = 'none'; e.target.parentNode.style.display = 'none'; }}
+                                    onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.net/1.png'; }}
                                 />
                             </div>
                         ))
                     ) : (
-                        <div className={styles.noImages}>{tp('no_images')}</div>
+                        <div className={styles.imageBox}>
+                            <img 
+                                src="https://placehold.net/1.png" 
+                                alt="Placeholder" 
+                                className={styles.previewImg} 
+                            />
+                        </div>
                     )}
                 </div>
 

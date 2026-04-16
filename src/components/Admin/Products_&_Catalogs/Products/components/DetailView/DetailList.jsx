@@ -52,15 +52,12 @@ const DetailList = ({
                             onClick={() => onSelect(p)}
                         >
                             <div className={styles.thumbBox}>
-                                {p.images?.[0] ? (
-                                    <img 
-                                        src={p.images[0]} 
-                                        alt="" 
-                                        className={styles.thumb} 
-                                        onError={(e) => { e.target.onerror = null; e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
-                                    />
-                                ) : null}
-                                <div className={styles.imagePlaceholder} style={{ display: p.images?.[0] ? 'none' : 'flex' }}></div>
+                                <img 
+                                    src={p.images?.[0] || 'https://placehold.net/1.png'} 
+                                    alt="" 
+                                    className={`${styles.thumb} ${!p.images?.[0] ? styles.noThumb : ''}`} 
+                                    onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.net/1.png'; e.target.classList.add(styles.noThumb); }}
+                                />
                             </div>
                             <div className={styles.itemInfo}>
                                 <div className={styles.itemHeader}>

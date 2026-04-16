@@ -67,6 +67,12 @@
     transition: transform 0.5s ease;
 }
 
+.image.noImage {
+    object-fit: contain;
+    padding: 20px;
+    background: #f9fafb;
+}
+
 .card:hover .image {
     transform: scale(1.05);
 }

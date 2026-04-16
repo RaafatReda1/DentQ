@@ -53,15 +53,12 @@ const TableRow = ({
             <td className={styles.productCell}>
                 <div className={styles.productWrapper}>
                     <div className={styles.imageBox}>
-                        {product.images?.[0] ? (
-                            <img 
-                                src={product.images[0]} 
-                                alt={name} 
-                                className={styles.thumb} 
-                                onError={(e) => { e.target.onerror = null; e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
-                            />
-                        ) : null}
-                        <div className={styles.imagePlaceholder} style={{ display: product.images?.[0] ? 'none' : 'flex' }}></div>
+                        <img 
+                            src={product.images?.[0] || 'https://placehold.net/1.png'} 
+                            alt={name} 
+                            className={`${styles.thumb} ${!product.images?.[0] ? styles.noThumb : ''}`} 
+                            onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.net/1.png'; e.target.classList.add(styles.noThumb); }}
+                        />
                     </div>
                     <div className={styles.info}>
                         <div className={styles.nameRow}>

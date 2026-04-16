@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next';
 import StatusBadge from '../StatusBadge/StatusBadge';
 import styles from './ProductCard.module.css';
 
+const NO_IMAGE_URL = 'https://placehold.net/1.png';
+
 /**
  * ProductCard — Individual product card for Grid view.
  * Supports bilingual naming and i18n.
@@ -42,17 +44,13 @@ const ProductCard = ({ product, onEdit, onDelete }) => {
                 </div>
             </div>
 
-            {/* Image */}
             <div className={styles.imageContainer}>
-                {product.images?.[0] ? (
-                    <img 
-                        src={product.images[0]} 
-                        alt={name} 
-                        className={styles.image} 
-                        onError={(e) => { e.target.onerror = null; e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
-                    />
-                ) : null}
-                <div className={styles.imagePlaceholder} style={{ display: product.images?.[0] ? 'none' : 'flex' }}></div>
+                <img 
+                    src={product.images?.[0] || NO_IMAGE_URL} 
+                    alt={name} 
+                    className={`${styles.image} ${!product.images?.[0] ? styles.noImage : ''}`} 
+                    onError={(e) => { e.target.onerror = null; e.target.src = NO_IMAGE_URL; e.target.classList.add(styles.noImage); }}
+                />
             </div>
 
             {/* Title & Cat */}

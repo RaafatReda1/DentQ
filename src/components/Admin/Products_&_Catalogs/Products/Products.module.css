@@ -30,3 +30,10 @@
 @keyframes spin {
     to { transform: rotate(360deg); }
 }
+
+.skeletonGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px 0;
+}
