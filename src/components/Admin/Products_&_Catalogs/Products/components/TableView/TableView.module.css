@@ -80,3 +80,23 @@
         border-inline: none;
     }
 }
+
+@media (max-width: 768px) {
+    .table {
+        min-width: 0;
+        display: block;
+    }
+    .table thead {
+        display: none; /* Hide headers on mobile */
+    }
+    .table tbody {
+        display: block;
+        width: 100%;
+    }
+    .tableWrapper {
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        padding: 0 10px;
+    }
+}

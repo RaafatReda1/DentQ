@@ -196,3 +196,71 @@
     background: rgba(239, 68, 68, 0.05);
     color: #ef4444;
 }
+
+@media (max-width: 768px) {
+    .row {
+        display: flex;
+        flex-direction: column;
+        background: var(--card-bg, #fff);
+        border: 1px solid var(--border-color, #eee);
+        border-radius: var(--radius-lg, 12px);
+        margin-bottom: 16px;
+        padding: 16px;
+        position: relative;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    
+    .row td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+        width: 100%;
+        border-bottom: 1px dashed var(--border-color, #eee);
+    }
+    .row td:last-child {
+        border-bottom: none;
+    }
+
+    /* Contextual Labels injected dynamically */
+    .priceCell::before { content: "PRICE"; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); }
+    .stockCell::before { content: "STOCK"; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); }
+    .statusCell::before { content: "STATUS"; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); }
+    .ratingCell::before { content: "RATING"; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); }
+
+    .productCell {
+        border-bottom: none !important;
+        padding-bottom: 0px !important;
+        min-width: 0;
+        align-items: flex-start !important;
+    }
+    .productWrapper {
+        padding-inline-start: 0;
+        width: 100%;
+    }
+    
+    /* Position Checkbox absolute top right */
+    .checkCell {
+        position: absolute;
+        top: 20px;
+        right: 16px;
+        width: auto;
+        padding: 0;
+        border: none !important;
+    }
+    
+    .actionCell {
+        justify-content: space-between !important;
+        padding-top: 16px !important;
+    }
+    .actionGroup {
+        width: 100%;
+        display: flex;
+        justify-content: stretch;
+    }
+    .actionBtn {
+        flex: 1;
+        padding: 10px;
+        text-align: center;
+    }
+}

@@ -1,0 +1,173 @@
+Perfect. Since you're not sure about nesting depth yet, I'll design all 3 plans to handle up to 3 levels gracefully, and since you liked a mix, each plan will borrow the best parts from A, B, and C.
+The key challenge categories add over products is visualizing the tree structure (parent → child → grandchild) while still doing CRUD cleanly. Each plan solves that differently.
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation-duration: 0.25s;
+    animation-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+  }
+VvisualizeVvisualize show_widgetPlan A — Tree Table (teal accent). The tree is shown inline with indentation levels — Root → Sub → Deep — each with a colored badge. The "+ Sub" button lets you add a child directly from any row without leaving the page. Drag handles on root rows for sort_order reordering.
+
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation-duration: 0.25s;
+    animation-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+  }
+VvisualizeVvisualize show_widgetPlan B — Column Browser (purple accent, inspired by macOS Finder). Each column is one level of the tree. Clicking a category opens the next column to its right. Breadcrumb at the top always shows where you are. Detail panel on the far right shows full info + quick toggles. A "Move" button lets you re-parent a category by dragging it into another column.
+
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation-duration: 0.25s;
+    animation-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+  }
+VvisualizeVvisualize show_widgetPlan C — Expandable Card Tree + Inline Form (coral accent). Each root category is a collapsible card. Subcategories nest inside with indent lines. Clicking "+ Sub" opens an inline mini-form right inside the card — no page navigation, no modal. The form includes both EN and AR name fields (matching your schema), auto-slug, and status. Inactive root cards are dimmed.
+
+Here's the comparison:
+Plan A — Tree TablePlan B — Column BrowserPlan C — Card TreeBest forDevelopers, familiar patternDeep trees, visual navigationMixed daily use, fast addsNesting displayIndented rows + badgesSide-by-side columnsCollapsible cardsAdd sub-category"+ Sub" button → modal"+" icon per columnInline form inside cardMove / re-parentDrag rowsDrag between columns"Move" in edit modalAR name supportEdit formDetail panelInline formBuild complexityLowHighMedium
+My pick for categories specifically: Plan B is the most intuitive for navigating deep trees, but Plan C is the fastest to build and handles the EN/AR dual-name requirement most cleanly inline. A smart combo would be C's card tree as the main view + B's column browser as an optional "explore" mode.
+
+
+
+
+Looking at your screenshots and schema, I can see you're building a hybrid of Plan A (Tree Table) + Plan C (Card Tree). Let me put together the complete technical plan.Here's the complete technical plan broken into every layer:
+
+---
+
+## Folder & file structure
+
+```
+/admin
+  /categories
+    page.tsx                  ← main page, data fetch, pass to CategoryManager
+    components/
+      CategoryManager.tsx     ← top-level state owner
+      StatsBar.tsx            ← Total / Root / Sub / Deep / Active counts
+      CategoryFilters.tsx     ← level filter + status filter dropdowns
+      CategoryTreeTable.tsx   ← renders the indented rows, drag handles
+      CategoryRow.tsx         ← single row — all variants (root/sub/deep)
+      InlineAddForm.tsx       ← expands below the +Sub row
+      CategoryModal.tsx       ← Edit / Add root modal
+      DeleteConfirm.tsx       ← confirm dialog before cascade delete
+    hooks/
+      useCategories.ts        ← fetch, optimistic updates, refetch
+      useSortable.ts          ← drag-to-reorder (sort_order field)
+    lib/
+      categoryHelpers.ts      ← flatToTree(), computeSlug(), computeLevel()
+      supabase/categories.ts  ← all DB calls (read/create/update/delete)
+    types/
+      category.ts             ← Category interface, TreeNode type
+```
+
+---
+
+## State shape (CategoryManager.tsx)
+
+```ts
+const [categories, setCategories]         = useState<Category[]>([])   // flat from DB
+const [expandedIds, setExpandedIds]       = useState<Set<string>>(new Set())
+const [inlineParentId, setInlineParentId] = useState<string | null>(null)
+const [editTarget, setEditTarget]         = useState<Category | null>(null)
+const [filters, setFilters]               = useState({ level: 'all', status: 'all' })
+const [search, setSearch]                 = useState('')
+```
+
+The tree is **derived** — never stored: `const tree = flatToTree(categories, filters, search)`
+
+---
+
+## Every button — exact behavior
+
+| Button | Where | What it does |
+|---|---|---|
+| `+ Add root category` | top right | opens `CategoryModal` with `parentId=null`, `level=0` |
+| `Edit` | any row | opens `CategoryModal` pre-filled with that category's data |
+| `+ Sub` | root or sub row | sets `inlineParentId` → renders `InlineAddForm` inline below the row; only one can be open at a time |
+| `Del` | any row | opens `DeleteConfirm` modal → on confirm: `DELETE` cascade via FK, refetch |
+| `Save` (inline form) | inline form | `INSERT` with `parent_id`, auto-computed `level`, auto-generated `slug`, then refetch + close form |
+| `Cancel` (inline form) | inline form | clears `inlineParentId`, collapses form |
+| `Save` (modal) | modal | `UPSERT` — if `id` exists → `UPDATE`, else `INSERT`; if `parent_id` changed → recompute `slug` and `level`; refetch |
+| `⠿` drag handle | any row | drag-and-drop sort within same parent group → batch `UPDATE sort_order` |
+| Status dot / badge | any row | clicking toggles `is_active` inline via optimistic update |
+| Row expand toggle `+` | rows with children | toggles `expandedIds` — children render/hide |
+
+---
+
+## Key data logic (categoryHelpers.ts)
+
+```ts
+// Build tree from flat array
+function flatToTree(cats: Category[]): TreeNode[] {
+  const map = new Map(cats.map(c => [c.id, { ...c, children: [] }]))
+  const roots: TreeNode[] = []
+  for (const node of map.values()) {
+    node.parent_id ? map.get(node.parent_id)?.children.push(node) : roots.push(node)
+  }
+  return roots.sort((a, b) => a.sort_order - b.sort_order)
+}
+
+// Auto-generate slug
+function computeSlug(nameEn: string, parentSlug?: string): string {
+  const base = nameEn.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+  return parentSlug ? `${parentSlug}/${base}` : base
+}
+
+// Level is always parent.level + 1 (0 = root)
+function computeLevel(parentId: string | null, cats: Category[]): number {
+  if (!parentId) return 0
+  const parent = cats.find(c => c.id === parentId)
+  return parent ? parent.level + 1 : 0
+}
+```
+
+---
+
+## Supabase calls (lib/supabase/categories.ts)
+
+```ts
+// READ — fetch all + product count via join
+const { data } = await supabase
+  .from('Categories')
+  .select('*, Products(count)')
+  .order('sort_order')
+
+// CREATE
+await supabase.from('Categories').insert({
+  name_en, name_ar, slug, parent_id, level, sort_order, is_active
+})
+
+// UPDATE (also handles re-parent = move)
+await supabase.from('Categories').update({ ...fields, slug, level }).eq('id', id)
+
+// DELETE (cascade handled by FK constraint)
+await supabase.from('Categories').delete().eq('id', id)
+
+// SORT — batch update sort_order
+await supabase.from('Categories').upsert(
+  reorderedIds.map((id, i) => ({ id, sort_order: i + 1 }))
+)
+```
+
+---
+
+## Row visual logic
+
+```
+Level 0 (Root)  → bold name, Root badge (teal), ⠿ drag handle, +Sub button visible
+Level 1 (Sub)   → indented 20px, Sub badge (purple), +Sub button visible
+Level 2 (Deep)  → indented 40px, Deep badge (gray), NO +Sub (max depth), Del only
+```
+
+The `+ Sub` button only appears when `level < 2`. The badge color matches what's in your screenshots already.
+
+---
+
+## UX rules to enforce
+
+- Only **one inline form** open at a time — opening a new +Sub closes the previous one.
+- Slug is **auto-generated but editable** in the modal only. Inline form never shows slug field.
+- **Optimistic update** for toggle active/inactive — flip locally, rollback on error.
+- **Delete** always requires a confirm dialog showing: `"Delete [name]? This will also delete [n] sub-categories and unlink [n] products."`
+- Drag-to-sort is **within the same parent group only** — you can't drag a sub under a different root by dragging in this table (that's a "Move" via the modal's parent dropdown).
+- The **"Move" action** lives inside the Edit modal as a parent dropdown — changing it recomputes slug and level on save.

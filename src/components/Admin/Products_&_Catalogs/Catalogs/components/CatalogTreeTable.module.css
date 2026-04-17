@@ -1,0 +1,46 @@
+.tableWrapper {
+    background: var(--card-bg, #fff);
+    border: 1px solid var(--border-color, #eee);
+    border-radius: var(--radius-lg, 12px);
+    overflow-x: auto;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+    width: 100%;
+}
+
+/* Force minimum width to prevent crushing layout on phones */
+.tableHeader {
+    display: flex;
+    background: var(--background-light, #f8fafc);
+    padding: 14px 20px;
+    border-bottom: 2px solid var(--border-color, #eee);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-muted, #64748b);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    min-width: 800px;
+}
+
+.tableBody {
+    display: flex;
+    flex-direction: column;
+    min-width: 800px;
+}
+
+/* Base columns logic */
+.colName { flex: 3; min-width: 250px; padding-left: 28px; }
+.colSlug { flex: 2; min-width: 150px; }
+.colProducts { flex: 1; min-width: 80px; text-align: center; }
+.colStatus { flex: 1; min-width: 80px; text-align: center; }
+.colActions { flex: 1; min-width: 140px; text-align: right; }
+
+.emptyState {
+    padding: 60px 20px;
+    text-align: center;
+    color: var(--text-muted);
+    background: var(--card-bg, #fff);
+    border: 1px dashed var(--border-color, #ccc);
+    border-radius: var(--radius-lg);
+    font-style: italic;
+    min-width: unset;
+}
