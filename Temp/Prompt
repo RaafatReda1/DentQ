@@ -1,173 +1,473 @@
-Perfect. Since you're not sure about nesting depth yet, I'll design all 3 plans to handle up to 3 levels gracefully, and since you liked a mix, each plan will borrow the best parts from A, B, and C.
-The key challenge categories add over products is visualizing the tree structure (parent → child → grandchild) while still doing CRUD cleanly. Each plan solves that differently.
-  ::view-transition-group(*),
-  ::view-transition-old(*),
-  ::view-transition-new(*) {
-    animation-duration: 0.25s;
-    animation-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+You are building a production-ready Orders Management Admin Panel as a single self-contained React component (or Next.js page). The panel has three view modes that the admin can toggle between freely at any time without losing state. All three views share the same data, filters, and selection state.
+
+────────────────────────────────────────
+TECH STACK
+────────────────────────────────────────
+- React 18 + TypeScript
+- Supabase JS v2 client (@supabase/supabase-js)
+- TailwindCSS for all styling (no external component libraries)
+- React Query (@tanstack/react-query) for data fetching and cache
+- Zustand for shared UI state (selected orders, active view, filters)
+- react-beautiful-dnd for Kanban drag-and-drop (Plan B only)
+- date-fns for date formatting
+- No other dependencies
+
+────────────────────────────────────────
+DATABASE SCHEMA (Supabase / PostgreSQL)
+────────────────────────────────────────
+
+Table: "Orders"
+  id: uuid (PK)
+  client_id: uuid → "Clients"(id) nullable
+  guest_id: uuid nullable
+  full_name: text
+  phone_number: text
+  address: text
+  governorate_id: bigint → "GovernoratesShipping"(id)
+  shipping_price: numeric(10,2)
+  status: varchar(20) — one of: pending | paid | shipped | delivered | cancelled
+  total_amount: numeric(10,2)
+  discount: numeric(10,2)
+  payment_method: varchar(20) — one of: credit_card | paypal | cash_on_delivery
+  promocode_id: integer → promo_codes(id) nullable
+  created_at: timestamptz
+  updated_at: timestamptz
+
+Table: "Order_items"
+  id: bigint (PK)
+  order_id: uuid → "Orders"(id)
+  product_id: uuid → "Products"(id) nullable
+  quantity: integer
+  price: numeric(10,2)
+  color: text nullable
+  size: text nullable
+
+Table: "Clients"
+  id: uuid (PK)
+  fullName: text
+  nickName: text
+  email: text
+  phone: numeric
+  avatarUrl: text
+  address: text
+  governorateId: bigint
+
+Table: "GovernoratesShipping"
+  id: bigint (PK)
+  governorateEn: text
+  governorateAr: text
+  shippingPrice: double precision
+
+Table: "Carts"
+  id: uuid (PK)
+  client_id: uuid nullable → "Clients"(id)
+  guest_id: text nullable
+  items: jsonb (array of {product_id, quantity, price, color, size, name, image})
+  created_at: timestamptz
+  updated_at: timestamptz
+
+────────────────────────────────────────
+GLOBAL SHARED STATE (Zustand store)
+────────────────────────────────────────
+
+Create a single Zustand store called useOrdersStore with:
+
+  activeView: 'table' | 'kanban' | 'detail'  — current view mode
+  selectedIds: Set<string>                     — selected order UUIDs for bulk ops
+  filters: {
+    search: string                             — matches full_name, phone_number, order id
+    status: string                             — '' means all
+    payment: string                            — '' means all
+    governorate: string                        — '' means all
+    dateFrom: string                           — ISO date string
+    dateTo: string                             — ISO date string
   }
-VvisualizeVvisualize show_widgetPlan A — Tree Table (teal accent). The tree is shown inline with indentation levels — Root → Sub → Deep — each with a colored badge. The "+ Sub" button lets you add a child directly from any row without leaving the page. Drag handles on root rows for sort_order reordering.
+  activeOrderId: string | null                 — the order currently open in detail panel
 
-  ::view-transition-group(*),
-  ::view-transition-old(*),
-  ::view-transition-new(*) {
-    animation-duration: 0.25s;
-    animation-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
-  }
-VvisualizeVvisualize show_widgetPlan B — Column Browser (purple accent, inspired by macOS Finder). Each column is one level of the tree. Clicking a category opens the next column to its right. Breadcrumb at the top always shows where you are. Detail panel on the far right shows full info + quick toggles. A "Move" button lets you re-parent a category by dragging it into another column.
+Actions:
+  setView(view)
+  toggleSelect(id)
+  selectAll(ids)
+  clearSelection()
+  setFilter(key, value)
+  resetFilters()
+  setActiveOrder(id)
 
-  ::view-transition-group(*),
-  ::view-transition-old(*),
-  ::view-transition-new(*) {
-    animation-duration: 0.25s;
-    animation-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
-  }
-VvisualizeVvisualize show_widgetPlan C — Expandable Card Tree + Inline Form (coral accent). Each root category is a collapsible card. Subcategories nest inside with indent lines. Clicking "+ Sub" opens an inline mini-form right inside the card — no page navigation, no modal. The form includes both EN and AR name fields (matching your schema), auto-slug, and status. Inactive root cards are dimmed.
+────────────────────────────────────────
+DATA FETCHING (React Query)
+────────────────────────────────────────
 
-Here's the comparison:
-Plan A — Tree TablePlan B — Column BrowserPlan C — Card TreeBest forDevelopers, familiar patternDeep trees, visual navigationMixed daily use, fast addsNesting displayIndented rows + badgesSide-by-side columnsCollapsible cardsAdd sub-category"+ Sub" button → modal"+" icon per columnInline form inside cardMove / re-parentDrag rowsDrag between columns"Move" in edit modalAR name supportEdit formDetail panelInline formBuild complexityLowHighMedium
-My pick for categories specifically: Plan B is the most intuitive for navigating deep trees, but Plan C is the fastest to build and handles the EN/AR dual-name requirement most cleanly inline. A smart combo would be C's card tree as the main view + B's column browser as an optional "explore" mode.
+useOrdersQuery(filters):
+  Fetches from "Orders" joined with:
+    - "GovernoratesShipping" (for governorateEn + shippingPrice)
+    - "Clients" (for fullName, email, phone)
+  Applies filters from the Zustand store
+  Returns: Order[] sorted by created_at desc
+  Cache key: ['orders', filters]
+  Stale time: 30 seconds
 
+useOrderDetailQuery(orderId):
+  Fetches single order with full join:
+    - "Order_items" joined with "Products" (nameEn, images[0])
+    - "Clients"
+    - "GovernoratesShipping"
+    - promo_codes (code, discount_value)
+  Only runs when orderId is not null
+  Cache key: ['order', orderId]
 
+useCartsQuery():
+  Fetches all "Carts" joined with "Clients" (fullName, email)
+  Sorted by updated_at desc
+  Cache key: ['carts']
+  Stale time: 60 seconds
 
+useOrderStatsMemo(orders):
+  A useMemo that derives from the orders array:
+    totalOrders: number
+    totalRevenue: number (sum of total_amount where status !== 'cancelled')
+    pendingCount: number
+    paidCount: number
+    shippedCount: number
+    deliveredCount: number
+    cancelledCount: number
 
-Looking at your screenshots and schema, I can see you're building a hybrid of Plan A (Tree Table) + Plan C (Card Tree). Let me put together the complete technical plan.Here's the complete technical plan broken into every layer:
+useBulkStatusMutation():
+  Takes: { ids: string[], newStatus: string }
+  Runs: supabase.from("Orders").update({ status: newStatus }).in('id', ids)
+  On success: invalidates ['orders'] cache, calls clearSelection()
 
----
+useSingleStatusMutation():
+  Takes: { id: string, newStatus: string }
+  Runs: supabase.from("Orders").update({ status: newStatus }).eq('id', id)
+  On success: invalidates ['orders'] and ['order', id] cache
 
-## Folder & file structure
+────────────────────────────────────────
+STATUS CONSTANTS
+────────────────────────────────────────
 
-```
-/admin
-  /categories
-    page.tsx                  ← main page, data fetch, pass to CategoryManager
-    components/
-      CategoryManager.tsx     ← top-level state owner
-      StatsBar.tsx            ← Total / Root / Sub / Deep / Active counts
-      CategoryFilters.tsx     ← level filter + status filter dropdowns
-      CategoryTreeTable.tsx   ← renders the indented rows, drag handles
-      CategoryRow.tsx         ← single row — all variants (root/sub/deep)
-      InlineAddForm.tsx       ← expands below the +Sub row
-      CategoryModal.tsx       ← Edit / Add root modal
-      DeleteConfirm.tsx       ← confirm dialog before cascade delete
-    hooks/
-      useCategories.ts        ← fetch, optimistic updates, refetch
-      useSortable.ts          ← drag-to-reorder (sort_order field)
-    lib/
-      categoryHelpers.ts      ← flatToTree(), computeSlug(), computeLevel()
-      supabase/categories.ts  ← all DB calls (read/create/update/delete)
-    types/
-      category.ts             ← Category interface, TreeNode type
-```
+Define a STATUSES array in order:
+  [
+    { key: 'pending',   label: 'Pending',   color: 'amber' },
+    { key: 'paid',      label: 'Paid',      color: 'blue'  },
+    { key: 'shipped',   label: 'Shipped',   color: 'purple'},
+    { key: 'delivered', label: 'Delivered', color: 'green' },
+    { key: 'cancelled', label: 'Cancelled', color: 'red'   },
+  ]
 
----
+Define a STATUS_NEXT map for the "advance to next" shortcut:
+  pending   → paid
+  paid      → shipped
+  shipped   → delivered
+  delivered → null (terminal)
+  cancelled → null (terminal)
 
-## State shape (CategoryManager.tsx)
+Define a Tailwind color map per status key for badges, backgrounds, and text:
+  Use consistent classes like: bg-amber-50 text-amber-800 for pending, etc.
 
-```ts
-const [categories, setCategories]         = useState<Category[]>([])   // flat from DB
-const [expandedIds, setExpandedIds]       = useState<Set<string>>(new Set())
-const [inlineParentId, setInlineParentId] = useState<string | null>(null)
-const [editTarget, setEditTarget]         = useState<Category | null>(null)
-const [filters, setFilters]               = useState({ level: 'all', status: 'all' })
-const [search, setSearch]                 = useState('')
-```
+────────────────────────────────────────
+TOP-LEVEL COMPONENT: <OrdersPage />
+────────────────────────────────────────
 
-The tree is **derived** — never stored: `const tree = flatToTree(categories, filters, search)`
+Layout: full height flex-col
 
----
+Render in this order:
 
-## Every button — exact behavior
+1. <StatsBar />         — always visible, 5 stat cards
+2. <Toolbar />          — always visible, search + filters + view toggle + bulk bar
+3. <ViewRenderer />     — switches between the 3 views based on activeView
 
-| Button | Where | What it does |
-|---|---|---|
-| `+ Add root category` | top right | opens `CategoryModal` with `parentId=null`, `level=0` |
-| `Edit` | any row | opens `CategoryModal` pre-filled with that category's data |
-| `+ Sub` | root or sub row | sets `inlineParentId` → renders `InlineAddForm` inline below the row; only one can be open at a time |
-| `Del` | any row | opens `DeleteConfirm` modal → on confirm: `DELETE` cascade via FK, refetch |
-| `Save` (inline form) | inline form | `INSERT` with `parent_id`, auto-computed `level`, auto-generated `slug`, then refetch + close form |
-| `Cancel` (inline form) | inline form | clears `inlineParentId`, collapses form |
-| `Save` (modal) | modal | `UPSERT` — if `id` exists → `UPDATE`, else `INSERT`; if `parent_id` changed → recompute `slug` and `level`; refetch |
-| `⠿` drag handle | any row | drag-and-drop sort within same parent group → batch `UPDATE sort_order` |
-| Status dot / badge | any row | clicking toggles `is_active` inline via optimistic update |
-| Row expand toggle `+` | rows with children | toggles `expandedIds` — children render/hide |
+────────────────────────────────────────
+COMPONENT: <StatsBar />
+────────────────────────────────────────
 
----
+A horizontal row of 5 metric cards derived from useOrderStatsMemo:
+  - Total orders (neutral)
+  - Revenue in EGP/$ (green)
+  - Pending count (amber, clickable → sets filter status=pending)
+  - Shipped count (purple, clickable → sets filter status=shipped)
+  - Cancelled count (red, clickable → sets filter status=cancelled)
 
-## Key data logic (categoryHelpers.ts)
+Each card: muted label on top, large bold number below.
+Clicking a status card filters the order list to that status.
 
-```ts
-// Build tree from flat array
-function flatToTree(cats: Category[]): TreeNode[] {
-  const map = new Map(cats.map(c => [c.id, { ...c, children: [] }]))
-  const roots: TreeNode[] = []
-  for (const node of map.values()) {
-    node.parent_id ? map.get(node.parent_id)?.children.push(node) : roots.push(node)
-  }
-  return roots.sort((a, b) => a.sort_order - b.sort_order)
-}
+────────────────────────────────────────
+COMPONENT: <Toolbar />
+────────────────────────────────────────
 
-// Auto-generate slug
-function computeSlug(nameEn: string, parentSlug?: string): string {
-  const base = nameEn.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
-  return parentSlug ? `${parentSlug}/${base}` : base
-}
+Row 1 — Filters:
+  - Search input (debounced 300ms) → updates filters.search
+  - Status select dropdown → updates filters.status
+  - Payment method select → updates filters.payment
+  - Governorate select (populated from useGovernoratesQuery) → filters.governorate
+  - Date range: two date inputs (from / to) → filters.dateFrom, filters.dateTo
+  - "Reset filters" button (only visible when any filter is active)
 
-// Level is always parent.level + 1 (0 = root)
-function computeLevel(parentId: string | null, cats: Category[]): number {
-  if (!parentId) return 0
-  const parent = cats.find(c => c.id === parentId)
-  return parent ? parent.level + 1 : 0
-}
-```
+Row 2 — View toggle + Bulk bar:
+  Left side: 3 toggle buttons for view modes:
+    [Table] [Kanban] [Detail]
+    Active view button is visually highlighted.
 
----
+  Right side (only visible when selectedIds.size > 0):
+    "{N} orders selected"
+    Status dropdown: "Move to..." → the 5 statuses minus cancelled
+    [Apply bulk] button → calls useBulkStatusMutation
+    [Clear selection] button
 
-## Supabase calls (lib/supabase/categories.ts)
+────────────────────────────────────────
+VIEW A: <TableView />
+────────────────────────────────────────
 
-```ts
-// READ — fetch all + product count via join
-const { data } = await supabase
-  .from('Categories')
-  .select('*, Products(count)')
-  .order('sort_order')
+A full-width table with these columns (table-layout: fixed):
+  [ ] checkbox | Order ID | Client | Total | Status | Payment | Governorate | Date | Actions
 
-// CREATE
-await supabase.from('Categories').insert({
-  name_en, name_ar, slug, parent_id, level, sort_order, is_active
-})
+Header row:
+  - Master checkbox: checks/unchecks all currently visible orders
 
-// UPDATE (also handles re-parent = move)
-await supabase.from('Categories').update({ ...fields, slug, level }).eq('id', id)
+Each data row:
+  - Checkbox: calls toggleSelect(order.id)
+  - Order ID: monospace font, truncated UUID (first 8 chars + "…"), copy-to-clipboard on click
+  - Client: full_name bold, phone_number below in muted small text. If client_id is null, show "Guest" badge
+  - Total: formatted currency
+  - Status: colored badge using STATUS color map
+  - Payment: pill badge (COD / Card / PayPal)
+  - Governorate: governorateEn
+  - Date: formatted with date-fns (e.g. "Apr 15, 2026")
+  - Actions column:
+      [View] button → sets activeOrderId + switches view to 'detail'
+      Status inline select dropdown → calls useSingleStatusMutation on change
+        The dropdown only shows valid next statuses (not backwards, not same status)
+        Delivered and Cancelled orders show a disabled "—" instead
 
-// DELETE (cascade handled by FK constraint)
-await supabase.from('Categories').delete().eq('id', id)
+Empty state: centered illustration + "No orders found" + "Reset filters" button
 
-// SORT — batch update sort_order
-await supabase.from('Categories').upsert(
-  reorderedIds.map((id, i) => ({ id, sort_order: i + 1 }))
-)
-```
+Loading state: skeleton rows (5 rows of animated gray bars)
 
----
+Pagination:
+  Page size: 20 orders per page
+  Bottom bar: "Showing X–Y of Z" + Prev / page numbers / Next
+  Pagination is client-side from the React Query result
 
-## Row visual logic
+────────────────────────────────────────
+VIEW B: <KanbanView />
+────────────────────────────────────────
 
-```
-Level 0 (Root)  → bold name, Root badge (teal), ⠿ drag handle, +Sub button visible
-Level 1 (Sub)   → indented 20px, Sub badge (purple), +Sub button visible
-Level 2 (Deep)  → indented 40px, Deep badge (gray), NO +Sub (max depth), Del only
-```
+A horizontal flex row of 5 columns, one per status.
+The board is scrollable horizontally if needed.
 
-The `+ Sub` button only appears when `level < 2`. The badge color matches what's in your screenshots already.
+Each column (<KanbanColumn />):
+  Header: status label + count badge (colored per status)
+  Body: vertically scrollable list of <KanbanCard /> items
+  Each column only shows orders matching that status (filtered from the full orders array)
 
----
+Each <KanbanCard />:
+  - Checkbox top-left: calls toggleSelect
+  - Drag handle top-right (⠿ icon): enables react-beautiful-dnd
+  - Order ID (truncated monospace)
+  - Client name bold, governorate + payment method below
+  - Total amount
+  - Date
+  - Status advance button (only if STATUS_NEXT[status] exists):
+      Label: "Mark as [next status] →"
+      On click: calls useSingleStatusMutation({ id, newStatus: STATUS_NEXT[status] })
+  - [View details] text link → sets activeOrderId + switches to 'detail' view
 
-## UX rules to enforce
+Drag and drop behavior (react-beautiful-dnd):
+  - Dragging a card to another column calls useSingleStatusMutation
+  - Cannot drag to 'cancelled' (cancelled is drop-disabled)
+  - Cannot drag backwards (paid → pending is not allowed). 
+    Enforce with a canDrop(fromStatus, toStatus) check using the STATUSES order index.
+  - Optimistic UI: update the local cache immediately, revert on error
 
-- Only **one inline form** open at a time — opening a new +Sub closes the previous one.
-- Slug is **auto-generated but editable** in the modal only. Inline form never shows slug field.
-- **Optimistic update** for toggle active/inactive — flip locally, rollback on error.
-- **Delete** always requires a confirm dialog showing: `"Delete [name]? This will also delete [n] sub-categories and unlink [n] products."`
-- Drag-to-sort is **within the same parent group only** — you can't drag a sub under a different root by dragging in this table (that's a "Move" via the modal's parent dropdown).
-- The **"Move" action** lives inside the Edit modal as a parent dropdown — changing it recomputes slug and level on save.
+Cancelled column:
+  Cards are rendered at 60% opacity
+  No drag handle, no advance button
+  Only shows [View details] link
+
+Empty column state: dashed border placeholder "No orders"
+
+────────────────────────────────────────
+VIEW C: <DetailView />
+────────────────────────────────────────
+
+A two-pane horizontal layout:
+
+LEFT PANE (fixed 280px width, scrollable):
+  Top: mini stats row (Total / Pending / Shipped / Revenue) — same data as StatsBar but compact
+
+  Bulk bar (visible when selectedIds.size > 0):
+    "{N} selected" + status dropdown + [Apply] button
+
+  Order list items — one per order, each showing:
+    - Checkbox
+    - Client name (bold) + order ID (muted mono below)
+    - Delivery info: governorate · payment · date (small muted)
+    - Right side: total amount + status badge
+    - Selected state: teal/green background highlight
+    - Click anywhere on row (except checkbox): sets activeOrderId
+
+RIGHT PANE (flex-1, scrollable):
+  If no activeOrderId: centered empty state "Select an order to view details"
+
+  If activeOrderId is set, render <OrderDetailPanel orderId={activeOrderId} />:
+
+    Section 1 — Header:
+      Client name (large, bold) + truncated order ID in mono below
+      Right side action buttons:
+        [Print invoice] → window.print() with a print-specific CSS class
+        [Cancel order] → calls useSingleStatusMutation({ id, newStatus: 'cancelled' })
+          Only visible if status is not already cancelled or delivered
+
+    Section 2 — Status stepper:
+      A horizontal pipeline of the 4 non-cancelled statuses: Pending → Paid → Shipped → Delivered
+      Past statuses: green filled circle with checkmark
+      Current status: teal filled, bold label
+      Future statuses: gray outline circle
+      Each future status step is clickable → calls useSingleStatusMutation
+      If order is cancelled: show a separate red "Cancelled" badge instead of the stepper
+
+    Section 3 — Client & delivery info (key-value rows):
+      Client name (linked to client page if client_id exists)
+      Phone number
+      Full address
+      Governorate + shipping price
+      Payment method
+      Promo code (if promocode_id exists): code string + discount amount
+
+    Section 4 — Order items table:
+      Thumbnail image (images[0] from Products), product name, color, size, quantity, unit price, subtotal
+      Total row at bottom: subtotal + shipping - discount = total_amount
+
+    Section 5 — Carts tab:
+      A secondary tab strip inside the right pane: [Order Details] [Carts]
+      Switching to Carts tab renders <CartsPanel /> which shows:
+        A list of all active carts from useCartsQuery
+        Each cart row: client name or "Guest (guest_id truncated)", item count, total value, last updated
+        Clicking a cart row expands it inline to show cart items (product name, qty, price, color, size)
+        [Clear cart] button per row: deletes the cart row from Supabase
+        No pagination needed — carts are typically low volume
+
+────────────────────────────────────────
+SHARED BEHAVIORS ACROSS ALL 3 VIEWS
+────────────────────────────────────────
+
+1. Filter state is always live:
+   All 3 views read from the same Zustand filters.
+   Switching views never resets filters.
+
+2. Selection state is always live:
+   Checking a box in TableView, then switching to KanbanView,
+   the card in KanbanView must also appear checked.
+   selectedIds is a Set in Zustand shared across all views.
+
+3. Bulk action bar:
+   Always rendered inside <Toolbar /> regardless of view.
+   Applies to whichever view is active.
+
+4. Status mutation feedback:
+   On any status change (single or bulk):
+     Show a toast notification: "Status updated to [X]" (green)
+     On error: "Failed to update. Try again." (red)
+   Use a simple custom useToast hook (no external library).
+
+5. Optimistic updates:
+   For single status changes: update React Query cache immediately before Supabase responds.
+   On error: rollback cache to previous value.
+
+6. Real-time updates (optional but recommended):
+   Subscribe to Supabase realtime on the "Orders" table.
+   On INSERT or UPDATE: invalidate ['orders'] query automatically.
+   This keeps all 3 views in sync if another admin is working simultaneously.
+
+7. Empty and loading states:
+   Every view must handle: loading (skeleton), empty (illustration + message), error (retry button).
+
+────────────────────────────────────────
+FILE STRUCTURE
+────────────────────────────────────────
+
+src/
+  pages/
+    admin/
+      orders.tsx                  ← OrdersPage (top-level)
+
+  components/
+    orders/
+      StatsBar.tsx
+      Toolbar.tsx
+      ViewRenderer.tsx
+      views/
+        TableView.tsx
+        KanbanView.tsx
+        KanbanColumn.tsx
+        KanbanCard.tsx
+        DetailView.tsx
+        OrderDetailPanel.tsx
+        CartsPanel.tsx
+      shared/
+        StatusBadge.tsx           ← reusable colored status pill
+        StatusSelect.tsx          ← inline dropdown for status change
+        StatusStepper.tsx         ← visual pipeline stepper (used in DetailView)
+        OrderCheckbox.tsx
+        BulkActionBar.tsx
+
+  hooks/
+    useOrdersQuery.ts
+    useOrderDetailQuery.ts
+    useCartsQuery.ts
+    useOrderStatsMemo.ts
+    useBulkStatusMutation.ts
+    useSingleStatusMutation.ts
+    useGovernoratesQuery.ts
+    useToast.ts
+
+  store/
+    useOrdersStore.ts             ← Zustand store
+
+  constants/
+    orderStatuses.ts              ← STATUSES array + STATUS_NEXT map + color map
+
+  lib/
+    supabase.ts                   ← Supabase client singleton
+    queryClient.ts                ← React Query client config
+
+────────────────────────────────────────
+STYLING RULES
+────────────────────────────────────────
+
+Use only Tailwind utility classes. No inline styles. No external UI libraries.
+
+Status color mapping (Tailwind classes):
+  pending:   bg-amber-50  text-amber-800  border-amber-200
+  paid:      bg-blue-50   text-blue-800   border-blue-200
+  shipped:   bg-purple-50 text-purple-800 border-purple-200
+  delivered: bg-green-50  text-green-800  border-green-200
+  cancelled: bg-red-50    text-red-800    border-red-200
+
+All cards: bg-white border border-gray-100 rounded-xl
+All badges: rounded-full px-2 py-0.5 text-xs font-medium
+Tables: text-sm, header row text-gray-500 font-medium
+Sidebar/panel borders: border-r border-gray-100
+Active view toggle button: bg-teal-500 text-white
+Inactive view toggle button: bg-white text-gray-500 border border-gray-200
+
+Dark mode: use Tailwind's dark: prefix throughout.
+  dark:bg-gray-900 for page background
+  dark:bg-gray-800 for cards and panels
+  dark:border-gray-700 for borders
+  dark:text-gray-100 for primary text
+  dark:text-gray-400 for muted text
+
+────────────────────────────────────────
+IMPORTANT CONSTRAINTS
+────────────────────────────────────────
+
+1. The 3 views are views of the same data — NOT separate pages. Do not refetch on view switch.
+2. Never mutate status backwards (e.g. delivered → shipped is forbidden in UI and in mutation).
+3. Guest orders (client_id = null) must display gracefully — never crash on missing client join.
+4. All money values must display with 2 decimal places using toLocaleString or toFixed(2).
+5. All dates must use date-fns format(parseISO(date), 'MMM d, yyyy').
+6. UUID columns displayed in UI must always be truncated to first 8 chars + "…".
+7. The Supabase client must be imported from a single lib/supabase.ts singleton — never instantiated inline.
+8. React Query must be configured with retry: 1 and staleTime: 30000 globally.
+9. The bulk apply button must be disabled if no status is selected in the dropdown.
+10. Cancelled orders must never show a "next status" advance button.
