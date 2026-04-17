@@ -1,0 +1,31 @@
+.actionsCell {
+    width: 140px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.actionBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.actionBtn:hover {
+    background: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+    transform: translateY(-1px);
+}
+
+.deleteBtn:hover {
+    background: #ef4444;
+    border-color: #ef4444;
+}

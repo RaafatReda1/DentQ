@@ -1,0 +1,22 @@
+.imagesRow {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+}
+
+.imageBox {
+    width: 140px;
+    height: 140px;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    flex-shrink: 0;
+    background: var(--background-light);
+}
+
+.previewImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}

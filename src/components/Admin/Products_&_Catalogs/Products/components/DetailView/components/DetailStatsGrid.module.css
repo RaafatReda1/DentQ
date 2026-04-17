@@ -1,0 +1,56 @@
+.card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.cardTitle {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.statsGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.miniStat {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.statIcon {
+    color: var(--accent-color);
+}
+
+.statInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+.statVal {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.statLabel {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+@media (max-width: 480px) {
+    .statsGrid {
+        grid-template-columns: 1fr;
+    }
+}

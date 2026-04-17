@@ -1,0 +1,36 @@
+.inlineFormWrapper {
+    display: flex; align-items: center; padding-left: 20px; margin: 8px 0 8px 40px; position: relative;
+}
+
+.bridgeLine {
+    position: absolute; left: 0; top: -24px; bottom: 50%; width: 20px;
+    border-left: 2px solid var(--border-color, #eee); border-bottom: 2px solid var(--border-color, #eee);
+    border-bottom-left-radius: 8px;
+}
+
+.formContainer {
+    background: var(--background-light, #f8fafc); border: 1px dashed var(--accent-color, #00b4d8);
+    border-radius: var(--radius-md); padding: 12px 16px; display: flex;
+    justify-content: space-between; align-items: center; gap: 16px; width: 100%;
+}
+
+.inputsRow { display: flex; gap: 12px; flex: 1; }
+.input { flex: 1; padding: 8px 12px; border: 1px solid var(--border-color); border-radius: var(--radius-sm); font-size: 0.85rem; }
+.input:focus { outline: none; border-color: var(--accent-color); }
+.actions { display: flex; align-items: center; gap: 8px; }
+
+.cancelBtn, .saveBtn {
+    display: flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 12px;
+    border-radius: var(--radius-sm); cursor: pointer; border: none; font-weight: 600; font-size: 0.85rem;
+}
+
+.cancelBtn { background: transparent; color: var(--text-muted); }
+.cancelBtn:hover { background: rgba(0,0,0,0.05); color: #ef4444; }
+.saveBtn { background: var(--accent-color); color: white; }
+.saveBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+@media (max-width: 600px) {
+    .formContainer { flex-direction: column; align-items: stretch; }
+    .inputsRow { flex-direction: column; }
+    .actions { justify-content: flex-end; }
+}

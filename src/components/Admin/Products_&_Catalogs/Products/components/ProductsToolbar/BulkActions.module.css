@@ -1,0 +1,27 @@
+.bulkActions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background: rgba(0, 180, 216, 0.08);
+    border: 1px solid rgba(0, 180, 216, 0.2);
+    border-radius: var(--radius-md);
+    color: var(--accent-color);
+    font-size: 0.8rem;
+}
+
+.bulkCount {
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.bulkSelect {
+    padding: 4px 8px;
+    border: 1px solid rgba(0, 180, 216, 0.3);
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--accent-color);
+    font-size: 0.78rem;
+    cursor: pointer;
+    outline: none;
+}

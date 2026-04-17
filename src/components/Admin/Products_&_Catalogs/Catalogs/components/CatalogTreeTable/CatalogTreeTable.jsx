@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import CatalogRow from './CatalogRow';
+import CatalogRow from '../CatalogRow/CatalogRow';
 import styles from './CatalogTreeTable.module.css';
 
 const CatalogTreeTable = ({ 

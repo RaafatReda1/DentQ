@@ -1,9 +1,6 @@
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
+import { reorderNodes } from '../lib/utils/reorderUtils';
 
-/**
- * Handle Drag and Drop tracking logic for the generic tree table rows.
- * Disconnects the mouse/drag events from the visual components.
- */
 export const useSortable = (updateSortOrdersCallback) => {
     const [draggingId, setDraggingId] = useState(null);
     const [dragOverId, setDragOverId] = useState(null);
@@ -11,13 +8,11 @@ export const useSortable = (updateSortOrdersCallback) => {
     const handleDragStart = (e, id) => {
         setDraggingId(id);
         e.dataTransfer.effectAllowed = 'move';
-        // Minor visual feedback
         setTimeout(() => { e.target.style.opacity = '0.5'; }, 0);
     };
 
     const handleDragOver = (e, id, level, draggingLevel) => {
         e.preventDefault();
-        // Prevent cross-level dragging
         if (level === draggingLevel) {
             setDragOverId(id);
             e.dataTransfer.dropEffect = 'move';
@@ -26,44 +21,15 @@ export const useSortable = (updateSortOrdersCallback) => {
         }
     };
 
-    const handleDragLeave = () => {
-        setDragOverId(null);
-    };
-
     const handleDrop = async (e, droppedOnId, currentNodes) => {
         e.preventDefault();
         e.target.style.opacity = '1';
         setDragOverId(null);
-        
-        if (!draggingId || draggingId === droppedOnId) {
-            setDraggingId(null);
-            return;
-        }
+        if (!draggingId || draggingId === droppedOnId) return setDraggingId(null);
 
-        const nodesList = [...currentNodes];
-        const draggedIndex = nodesList.findIndex(n => n.id === draggingId);
-        const droppedIndex = nodesList.findIndex(n => n.id === droppedOnId);
-
-        if (draggedIndex === -1 || droppedIndex === -1) {
-            setDraggingId(null);
-            return;
-        }
-
-        // Reorder array
-        const [draggedNode] = nodesList.splice(draggedIndex, 1);
-        nodesList.splice(droppedIndex, 0, draggedNode);
-
-        // Compute new sort orders
-        const payload = nodesList.map((node, i) => ({
-            id: node.id,
-            sort_order: i + 1
-        }));
-
+        const payload = reorderNodes(currentNodes, draggingId, droppedOnId);
         setDraggingId(null);
-        
-        if (updateSortOrdersCallback) {
-            await updateSortOrdersCallback(payload);
-        }
+        if (payload && updateSortOrdersCallback) await updateSortOrdersCallback(payload);
     };
 
     const handleDragEnd = (e) => {
@@ -72,13 +38,8 @@ export const useSortable = (updateSortOrdersCallback) => {
         setDragOverId(null);
     };
 
-    return {
-        draggingId,
-        dragOverId,
-        handleDragStart,
-        handleDragOver,
-        handleDragLeave,
-        handleDrop,
-        handleDragEnd
+    return { 
+        draggingId, dragOverId, handleDragStart, handleDragOver, 
+        handleDragLeave: () => setDragOverId(null), handleDrop, handleDragEnd 
     };
 };
