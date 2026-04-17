@@ -1,0 +1,39 @@
+/* ─── Markdown Editor ─── */
+.mdeContainer {
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    background: #fff;
+    transition: border-color var(--transition-fast);
+}
+
+.mdeContainer:focus-within {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(0, 180, 216, 0.08);
+}
+
+.mdeContainer :global(.w-md-editor) {
+    border: none !important;
+    box-shadow: none !important;
+    background: #fff !important;
+}
+
+.mdeContainer :global(.w-md-editor-toolbar) {
+    background: #f9fafb !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    padding: 0 8px !important;
+}
+
+.mdeContainer :global(.w-md-editor-toolbar-child) {
+    background: #f9fafb !important;
+}
+
+.rtlMde :global(.w-md-editor-text-input),
+.rtlMde :global(.w-md-editor-preview) {
+    direction: rtl !important;
+    text-align: right !important;
+}
+
+.rtlMde :global(.w-md-editor-toolbar) {
+    direction: ltr !important; /* Keep toolbar icons LTR */
+}

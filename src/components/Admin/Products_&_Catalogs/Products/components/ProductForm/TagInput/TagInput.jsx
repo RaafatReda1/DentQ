@@ -1,61 +1,29 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { X, Plus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useTagInput } from './useTagInput';
 import styles from './TagInput.module.css';
 
 /**
- * TagInput — Reusable chip/tag input for sizes and colors.
- * 
- * Props:
- *   - tags (array) — current tags, e.g. ["S","M","L"] or [{name:"Red",hex:"#ff0000"}]
- *   - onChange(newTags) callback
- *   - placeholder (string)
- *   - isColor (bool) — if true, shows color picker alongside name
- *   - label (string) — section label
+ * TagInput UI
+ * Extremely lightweight chip renderer relying on `useTagInput` for array modification logic.
  */
 const TagInput = ({ tags = [], onChange, placeholder, isColor = false, label }) => {
     const { t } = useTranslation();
     const tp = (key) => t(`admin.products.${key}`);
-    const [inputValue, setInputValue] = useState('');
-    const [colorValue, setColorValue] = useState('#3b82f6');
 
-    const handleAddTag = () => {
-        const trimmed = inputValue.trim();
-        if (!trimmed) return;
-
-        let newTag;
-        if (isColor) {
-            // Check if color name already exists
-            if (tags.some((t) => t.name.toLowerCase() === trimmed.toLowerCase())) return;
-            newTag = { name: trimmed, hex: colorValue };
-            onChange([...tags, newTag]);
-        } else {
-            // Check if tag already exists
-            if (tags.some((t) => t.toLowerCase() === trimmed.toLowerCase())) return;
-            onChange([...tags, trimmed]);
-        }
-
-        setInputValue('');
-    };
-
-    const handleRemoveTag = (index) => {
-        const updated = tags.filter((_, i) => i !== index);
-        onChange(updated);
-    };
-
-    const handleKeyDown = (e) => {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            handleAddTag();
-        }
-    };
+    const {
+        inputValue, setInputValue,
+        colorValue, setColorValue,
+        handleAddTag, handleRemoveTag, handleKeyDown
+    } = useTagInput(tags, onChange, isColor);
 
     return (
         <div className={styles.tagInput}>
             {label && <label className={styles.label}>{label}</label>}
 
             <div className={styles.tagsContainer}>
-                {/* Render existing tags */}
+                {/* Applied Tags Render */}
                 {tags.map((tag, index) => (
                     <span key={index} className={styles.tag}>
                         {isColor && (
@@ -75,7 +43,7 @@ const TagInput = ({ tags = [], onChange, placeholder, isColor = false, label }) 
                     </span>
                 ))}
 
-                {/* Input area */}
+                {/* Input mechanism */}
                 <div className={styles.inputWrapper}>
                     {isColor && (
                         <input

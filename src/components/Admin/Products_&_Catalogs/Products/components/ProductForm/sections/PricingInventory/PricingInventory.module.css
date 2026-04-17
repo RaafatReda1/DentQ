@@ -1,0 +1,44 @@
+/* Price row — 4 inputs side by side with labels */
+.priceRow {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 600px) {
+    .priceRow > div {
+        flex: 1 1 calc(50% - 12px);
+    }
+}
+
+@media (max-width: 480px) {
+    .priceRow > div {
+        flex: 1 1 100%;
+    }
+}
+
+.formInsideGroup {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.inputHint {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.readOnlyInput {
+    background: rgba(0, 0, 0, 0.03) !important;
+    border-style: dashed !important;
+    color: var(--accent-color);
+    font-weight: 700;
+}
+
+.lossValue {
+    color: #ef4444 !important;
+}
