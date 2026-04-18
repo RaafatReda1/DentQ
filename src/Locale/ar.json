@@ -772,6 +772,80 @@
             "delete_cascade_warn": "هذا الإجراء سيؤدي أيضًا إلى حذف وفك ارتباط:",
             "deleting": "جاري الحذف...",
             "confirm_delete": "نعم، احذف"
+        },
+        "orders": {
+            "title": "إدارة الطلبات",
+            "filters": {
+                "status": "كل الحالات",
+                "payment": "كل طرق الدفع",
+                "gov": "كل المحافظات"
+            },
+            "table": {
+                "view_detail": "عرض التفاصيل"
+            },
+            "kanban": {
+                "advance": "تمييز كـ",
+                "view_order": "عرض الطلب",
+                "view_products": "عرض المنتجات"
+            },
+            "modal_title": "تفاصيل الطلب",
+            "empty_modal": "لا توجد منتجات في هذا الاختيار.",
+            "detail": {
+                "tab_info": "تفاصيل الطلب",
+                "status_hint": "معاينة الطلب النشط",
+                "select_hint": "اختر طلباً لعرض التفاصيل الكاملة",
+                "mini_title": "مسار الطلبات",
+                "id": "رقم الطلب",
+                "view_products": "عرض المنتجات",
+                "print": "طباعة",
+                "cancel": "إلغاء",
+                "customer_title": "معلومات العميل"
+            }
+        },
+        "carts": {
+            "title": "إدارة السلال",
+            "search_placeholder": "ابحث عن مستخدم أو رقم سلة...",
+            "no_results": "لم يتم العثور على سلال تطابق البحث.",
+            "sort": {
+                "recent": "النشطة مؤخراً",
+                "value": "الأعلى قيمة",
+                "items": "الأكثر منتجات"
+            },
+            "guest": "مستخدم ضيف",
+            "profit_label": "الربح المتوقع",
+            "view_client": "بيانات العميل",
+            "modal_client_title": "ملف العميل",
+            "containing": "يحتوي على:",
+            "recover": "متابعة",
+            "inspect": "التفاصيل",
+            "items_count": "المنتجات",
+            "view_details": "التفاصيل",
+            "modal_title": "محتويات السلة"
+        },
+        "dashboard": {
+            "total_volume": "إجمالي الطلبات",
+            "total_volume_sub": "إجمالي عدد الطلبات",
+            "total_revenue": "إجمالي الإيرادات",
+            "total_revenue_sub": "باستثناء الملغاة",
+            "success_rate": "نسبة النجاح",
+            "success_rate_sub": "تم التسليم مقارنة بالكل",
+            "abandoned_carts": "إجمالي السلال المتروكة",
+            "abandoned_carts_sub": "{{count}} زائر",
+            "potential_revenue": "الإيرادات المحتملة",
+            "potential_revenue_sub": "في السلال النشطة",
+            "recoverable": "قابلة للاسترداد",
+            "recoverable_sub": "العملاء مع أرقام هواتف",
+            "user_ratio": "نسبة المستخدمين",
+            "user_ratio_sub": "المستخدمين المسجلين"
         }
+    },
+    "common": {
+        "loading": "جاري التحميل...",
+        "qty": "الكمية",
+        "sales": "مبيعات",
+        "views": "مشاهدات",
+        "in_stock": "في المخزن",
+        "unknown_item": "منتج غير معروف",
+        "units": "وحدات"
     }
 }

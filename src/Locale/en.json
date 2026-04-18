@@ -730,6 +730,21 @@
             "toast_csv_exported": "CSV exported!",
             "toast_no_export": "No products to export"
         },
+        "orders": {
+            "modal_title": "Order Breakdown",
+            "empty_modal": "No products found in this selection.",
+            "detail": {
+                "tab_info": "Order Details",
+                "status_hint": "Previewing Active Order",
+                "select_hint": "Select an order to view full details",
+                "mini_title": "Order Pipeline",
+                "id": "Order ID",
+                "view_products": "View Products",
+                "print": "Print",
+                "cancel": "Cancel",
+                "customer_title": "Customer info"
+            }
+        },
         "catalogs": {
             "menu_title": "Catalogs Navigator",
             "add_root": "Add Root Category",
@@ -772,6 +787,50 @@
             "delete_cascade_warn": "This action will also cascade and un-link:",
             "deleting": "Deleting...",
             "confirm_delete": "Yes, Delete"
+        },
+        "carts": {
+            "title": "Carts Management",
+            "search_placeholder": "Search user or cart ID...",
+            "no_results": "No carts found matching your filters.",
+            "sort": {
+                "recent": "Recently Active",
+                "value": "Highest Value",
+                "items": "Most Items"
+            },
+            "profit_label": "Est. Profit",
+            "view_client": "View Client",
+            "modal_client_title": "Client Profile",
+            "containing": "Containing:",
+            "recover": "Recover",
+            "guest": "Guest User",
+            "items_count": "Items",
+            "view_details": "Details",
+            "modal_title": "Cart Contents"
+        },
+        "dashboard": {
+            "total_volume": "Total Volume",
+            "total_volume_sub": "Gross orders",
+            "total_revenue": "Total Revenue",
+            "total_revenue_sub": "Excl. cancelled",
+            "success_rate": "Success Rate",
+            "success_rate_sub": "Delivered vs All",
+            "abandoned_carts": "Total Abandoned",
+            "abandoned_carts_sub": "{{count}} guests",
+            "potential_revenue": "Potential Revenue",
+            "potential_revenue_sub": "In active carts",
+            "recoverable": "Recoverable",
+            "recoverable_sub": "With phone numbers",
+            "user_ratio": "User Ratio",
+            "user_ratio_sub": "Registered users"
         }
+    },
+    "common": {
+        "loading": "Loading...",
+        "qty": "QTY",
+        "sales": "sales",
+        "views": "views",
+        "in_stock": "in stock",
+        "unknown_item": "Unknown Item",
+        "units": "units"
     }
 }

@@ -1,0 +1,50 @@
+.strip {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fff;
+    border: 1px solid var(--border-color, #eee);
+    border-radius: var(--radius-md, 12px);
+    padding: 8px;
+    display: flex;
+    gap: 8px;
+    box-shadow: var(--shadow-medium, 0 4px 20px rgba(0,0,0,0.15));
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.2s ease-out;
+    z-index: 100;
+}
+
+.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-5px);
+    pointer-events: auto;
+}
+
+.imageBox {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-sm, 6px);
+    overflow: hidden;
+    background: #f8f9fa;
+    border: 1px solid var(--border-color, #eee);
+    flex-shrink: 0;
+}
+
+.thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.tooltip {
+    position: absolute;
+    top: -30px;
+    background: #333;
+    color: #fff;
+    font-size: 10px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+}

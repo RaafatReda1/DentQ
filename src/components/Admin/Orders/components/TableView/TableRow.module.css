@@ -1,0 +1,101 @@
+.row {
+    border-bottom: 1px solid var(--border-color, #f3f4f6);
+    transition: background 0.2s;
+}
+
+.row:hover {
+    background: var(--background-light, #f9f9fb);
+}
+
+.selected {
+    background: rgba(0, 180, 216, 0.04);
+}
+
+.cell {
+    padding: 12px 16px;
+    vertical-align: middle;
+}
+
+.idClickable {
+    display: inline-block;
+    font-family: monospace;
+    font-size: 11px;
+    color: var(--accent-color, #00b4d8);
+    cursor: pointer;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.idClickable:hover {
+    background: rgba(0, 180, 216, 0.08);
+    text-decoration: underline;
+}
+
+.name {
+    font-weight: 700;
+    color: var(--text-main, #333);
+    font-size: 14px;
+}
+
+.phone {
+    font-size: 11px;
+    color: var(--text-muted, #888);
+}
+
+.total {
+    font-weight: 800;
+    color: var(--accent-color, #00b4d8);
+    font-size: 14px;
+}
+
+.payment {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-secondary, #555);
+    text-transform: uppercase;
+}
+
+.gov {
+    font-size: 13px;
+    color: var(--text-secondary, #555);
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.date {
+    font-size: 11px;
+    color: var(--text-muted, #888);
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.viewBtn {
+    padding: 6px;
+    border-radius: var(--radius-sm, 6px);
+    color: var(--accent-color, #00b4d8);
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.viewBtn:hover {
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.statusSelect {
+    font-size: 11px;
+    padding: 4px;
+    border: 1px solid var(--border-color, #e0e0e0);
+    border-radius: var(--radius-sm, 4px);
+    background: #fff;
+}

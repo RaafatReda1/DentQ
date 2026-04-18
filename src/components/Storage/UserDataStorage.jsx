@@ -16,14 +16,14 @@ function useUserData() {
   });
 
   useEffect(() => {
-    // Initial fetch
-    UserTypeRouter(user, setUser);
+    // 1. Initial mounting call (triggers global loading state)
+    UserTypeRouter(setUser, true);
     
-    // Listen for authentication state changes (login, logout, etc.)
+    // 2. Background auth listener (silent, no loading flash)
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       console.log("Auth event triggered:", event);
-      if (event === 'SIGNED_IN' || event === 'SIGNED_OUT' || event === 'USER_UPDATED') {
-        UserTypeRouter(user, setUser);
+      if (['SIGNED_IN', 'SIGNED_OUT', 'USER_UPDATED', 'PASSWORD_RECOVERY'].includes(event)) {
+        UserTypeRouter(setUser, false); // false = silent refresh
       }
     });
 

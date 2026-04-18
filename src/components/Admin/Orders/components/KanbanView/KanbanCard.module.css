@@ -1,0 +1,118 @@
+.card {
+    background: var(--card-bg, #fff);
+    padding: 12px;
+    border-radius: var(--radius-lg, 16px);
+    border: 1px solid var(--border-color, #f3f4f6);
+    box-shadow: var(--shadow-light, 0 2px 8px rgba(0,0,0,0.05));
+    margin-bottom: 12px;
+    user-select: none;
+    transition: all var(--transition-normal, 0.3s);
+}
+
+.dragging {
+    box-shadow: var(--shadow-medium, 0 4px 20px rgba(0,0,0,0.15));
+    border-color: var(--accent-color, #00b4d8);
+    transform: scale(1.02);
+    z-index: 50;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+}
+
+.grip {
+    color: var(--text-muted, #ccc);
+    cursor: grab;
+}
+
+.grip:hover {
+    color: var(--text-secondary, #555);
+}
+
+.id {
+    font-family: monospace;
+    font-size: 10px;
+    color: var(--text-muted, #aaa);
+}
+
+.name {
+    font-weight: 800;
+    font-size: 14px;
+    color: var(--text-main, #333);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-bottom: 4px;
+}
+
+.location {
+    font-size: 11px;
+    color: var(--text-muted, #888);
+    margin-bottom: 8px;
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.price {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--accent-color, #00b4d8);
+}
+
+.payment {
+    font-size: 9px;
+    background: var(--background-light, #f9f9fb);
+    padding: 2px 6px;
+    border-radius: var(--radius-sm, 4px);
+    color: var(--text-muted, #888);
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.actions {
+    display: flex;
+    gap: 8px;
+}
+
+.advanceBtn {
+    flex: 1;
+    background: rgba(0, 180, 216, 0.05);
+    color: var(--accent-color, #00b4d8);
+    font-size: 10px;
+    font-weight: 800;
+    padding: 6px;
+    border-radius: var(--radius-md, 8px);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.advanceBtn:hover {
+    background: rgba(0, 180, 216, 0.1);
+}
+
+.viewBtn {
+    padding: 6px 12px;
+    background: #fff;
+    border: 1px solid var(--border-color, #e0e0e0);
+    border-radius: var(--radius-md, 8px);
+    font-size: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .5s;
+}
+
+.viewBtn:hover {
+    background: rgba(0, 180, 216, 0.39);
+}

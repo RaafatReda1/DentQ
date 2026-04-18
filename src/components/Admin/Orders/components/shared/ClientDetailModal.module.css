@@ -1,0 +1,56 @@
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(8px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal {
+    background: #fff;
+    width: 100%;
+    max-width: 500px;
+    border-radius: 32px;
+    overflow: hidden;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.header { position: relative; padding: 40px 32px 32px; background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%); }
+.closeBtn { position: absolute; top: 24px; right: 24px; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: #64748b; cursor: pointer; transition: all 0.2s; }
+.closeBtn:hover { border-color: #3b82f6; color: #3b82f6; transform: rotate(90deg); }
+
+.banner { display: flex; align-items: center; gap: 24px; }
+.avatar { width: 80px; height: 80px; border-radius: 24px; background: #fff; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); display: flex; align-items: center; justify-content: center; color: #3b82f6; overflow: hidden; border: 4px solid #fff; }
+.avatar img { width: 100%; height: 100%; object-fit: cover; }
+.guestAvatar { color: #ef4444; }
+
+.bannerText h3 { font-size: 22px; font-weight: 900; color: #1e293b; margin-bottom: 6px; }
+.badgeRow { display: flex; align-items: center; gap: 10px; }
+.userBadge, .guestBadge { font-size: 10px; font-weight: 800; padding: 4px 10px; border-radius: 8px; display: flex; align-items: center; gap: 6px; }
+.userBadge { background: #dcfce7; color: #15803d; }
+.guestBadge { background: #fee2e2; color: #b91c1c; }
+.nickName { font-size: 12px; color: #64748b; font-weight: 600; }
+
+.content { padding: 32px; display: flex; flex-direction: column; gap: 32px; }
+.section h4 { font-size: 12px; font-weight: 800; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
+.grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+
+.fieldBox { display: flex; align-items: center; gap: 16px; padding: 16px; background: #f8fafc; border-radius: 16px; border: 1px solid #f1f5f9; }
+.fieldIcon { width: 36px; height: 36px; background: #fff; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #3b82f6; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+.fieldText { display: flex; flex-direction: column; }
+.fieldLabel { font-size: 10px; font-weight: 700; color: #94a3b8; text-transform: uppercase; }
+.fieldValue { font-size: 14px; font-weight: 700; color: #1e293b; }
+.fieldValueLink { font-size: 14px; font-weight: 700; color: #3b82f6; text-decoration: none; }
+
+.footer { padding: 0 32px 32px; }
+.primaryBtn { width: 100%; padding: 16px; background: #1e293b; color: #fff; border: none; border-radius: 16px; font-size: 14px; font-weight: 800; cursor: pointer; transition: all 0.2s; }
+.primaryBtn:hover { background: #000; transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }

@@ -1,0 +1,99 @@
+.container {
+    flex: 1;
+    background: rgba(243, 244, 246, 0.4);
+    padding: 24px;
+    overflow-y: auto;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.iconBox {
+    padding: 8px;
+    background: var(--accent-color, #00b4d8);
+    color: #fff;
+    border-radius: var(--radius-md, 10px);
+}
+
+.header h2 {
+    font-size: 1.25rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -0.5px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+}
+
+.card {
+    padding: 16px;
+    background: #fff;
+    border-radius: var(--radius-lg, 16px);
+    border: 1px solid var(--border-color, #eee);
+    transition: all 0.2s;
+}
+
+.card:hover {
+    box-shadow: var(--shadow-light, 0 2px 8px rgba(0,0,0,0.05));
+    transform: translateY(-2px);
+}
+
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+}
+
+.userBox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(0, 180, 216, 0.05);
+    color: var(--accent-color, #00b4d8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.userName {
+    font-weight: 800;
+    font-size: 14px;
+    color: var(--text-main, #333);
+}
+
+.cartId {
+    font-family: monospace;
+    font-size: 10px;
+    color: var(--text-muted, #aaa);
+}
+
+.itemCount {
+    font-size: 11px;
+    font-weight: 700;
+    background: rgba(0, 180, 216, 0.05);
+    color: var(--accent-color, #00b4d8);
+    padding: 2px 8px;
+    border-radius: var(--radius-full, 99px);
+}
+
+.footer {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    color: var(--text-muted, #aaa);
+}

@@ -1,0 +1,14 @@
+.checkbox {
+    width: 1rem;
+    height: 1rem;
+    cursor: pointer;
+    accent-color: var(--accent-color, #00b4d8);
+    border-radius: var(--radius-sm, 4px);
+    border: 1px solid var(--border-color, #e0e0e0);
+    transition: all var(--transition-fast, 0.2s);
+}
+
+.checkbox:focus {
+    outline: 2px solid var(--accent-color, #00b4d8);
+    outline-offset: 2px;
+}

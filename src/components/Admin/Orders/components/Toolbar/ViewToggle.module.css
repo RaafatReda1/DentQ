@@ -1,0 +1,37 @@
+.container {
+    display: flex;
+    background: #f3f4f6;
+    padding: 4px;
+    border-radius: var(--radius-md, 10px);
+}
+
+.button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: var(--radius-sm, 6px);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-muted, #888);
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: all var(--transition-fast, 0.2s);
+}
+
+.button:hover {
+    color: var(--text-main, #333);
+}
+
+.active {
+    background: #fff;
+    color: var(--accent-color, #00b4d8);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+@media (max-width: 640px) {
+    .label {
+        display: none;
+    }
+}
