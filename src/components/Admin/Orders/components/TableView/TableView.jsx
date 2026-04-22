@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import TableRow from "./TableRow";
 import { useOrderMutations } from "../../hooks/useOrderMutations";
 import styles from "./TableView.module.css";
+import { useTranslation } from "react-i18next";
 
 const TableView = ({ orders = [] }) => {
   const { mutate: updateStatus } = useOrderMutations();
+  const { t } = useTranslation();
   const [page, setPage] = useState(0);
   const pageSize = 15;
   const paginated = orders.slice(page * pageSize, (page + 1) * pageSize);
@@ -17,14 +19,14 @@ const TableView = ({ orders = [] }) => {
           <thead className={styles.thead}>
             <tr>
               <th className={styles.checkboxHeader}></th>
-              <th>Order ID</th>
-              <th>Client</th>
-              <th>Total</th>
-              <th>Status</th>
-              <th>Payment</th>
-              <th>Date</th>
-              <th>Gov</th>
-              <th>Action</th>
+              <th>{t("admin.orders.id")}</th>
+              <th>{t("admin.orders.customer")}</th>
+              <th>{t("admin.orders.total")}</th>
+              <th>{t("admin.orders.status")}</th>
+              <th>{t("admin.orders.date")}</th>
+              <th>{t("admin.orders.payment")}</th>
+              <th>{t("admin.orders.governorate")}</th>
+              <th>{t("admin.orders.actions")}</th>
             </tr>
           </thead>
           <tbody>
