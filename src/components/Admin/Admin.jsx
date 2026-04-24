@@ -7,7 +7,7 @@ import Orders from "./Orders/Orders";
 
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from './Orders/lib/queryClient';
-
+import Invoice from './Orders/components/Invoice/Invoice';
 const Admin = () => {
   return (
     <QueryClientProvider client={queryClient}>
@@ -41,7 +41,7 @@ const Admin = () => {
           />
           <Route
             path="cms"
-            element={<div>CMS Settings Module loads here...</div>}
+            element={<Invoice></Invoice>}
           />
         </Route>
         {/* Catch-all redirect */}
