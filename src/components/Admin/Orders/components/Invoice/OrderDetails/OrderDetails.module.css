@@ -1,0 +1,29 @@
+:root {
+  --ivoiceTableBorderRadius: 30px;
+}
+
+.productsTable {
+  margin: 30px;
+}
+.productsTable thead {
+  border-radius: 20px;
+  background: var(--invoice-main-color);
+}
+
+.productsTable thead th {
+  font-size: 20px;
+  padding: 10px;
+  color: #ffffff;
+}
+
+.productsTable thead th:first-child {
+  border-top-left-radius: var(--ivoiceTableBorderRadius);
+  border-bottom-left-radius: var(--ivoiceTableBorderRadius);
+  padding-left: 30px !important;
+}
+
+.productsTable thead th:last-child {
+  border-top-right-radius: var(--ivoiceTableBorderRadius);
+  border-bottom-right-radius: var(--ivoiceTableBorderRadius);
+  padding-right: 30px !important;
+}
