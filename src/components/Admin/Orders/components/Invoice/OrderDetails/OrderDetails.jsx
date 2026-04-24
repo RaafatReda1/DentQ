@@ -13,11 +13,39 @@ const OrderDetails = () => {
         </thead>
 
         <tbody>
+          <tr>
             <td>3</td>
             <td>Iphone 15 Pro Max</td>
-            <td>This is an extremely valuable iphone that can call anyone everywhere...</td>
+            <td>
+              This is an extremely valuable iphone that can call anyone
+              everywhere...
+            </td>
             <td>120</td>
             <td>360</td>
+          </tr>
+          {/* copy should be deleted later */}
+
+          <tr>
+            <td>3</td>
+            <td>Iphone 15 Pro Max</td>
+            <td>
+              This is an extremely valuable iphone that can call anyone
+              everywhere...
+            </td>
+            <td>120</td>
+            <td>360</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>Iphone 15 Pro Max</td>
+            <td>
+              This is an extremely valuable iphone that can call anyone
+              everywhere...
+            </td>
+            <td>120</td>
+            <td>360</td>
+          </tr>
+
 
         </tbody>
       </table>
