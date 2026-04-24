@@ -1,0 +1,27 @@
+.recepientSection{
+    margin: 20px;
+}
+.recepientSection h2{
+    display: inline-block;
+margin-bottom: 20px;
+font-size: 20px;
+font-weight: 800;
+border-bottom: 1px solid #acacac;
+padding: 0px 58px 9px 0px;
+}
+
+.recepientDataContainer{
+    display: flex;
+    flex-direction: row;
+    gap:200px;
+}
+.personalData, .delivaryData{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+.recepientDataField{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}

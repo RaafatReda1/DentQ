@@ -38,7 +38,7 @@ const InvoiceHeader = () => {
         </div>
 
         <div className={styles.invoiceInfoContainer}>
-          <span className={styles.orderId}>#123</span>
+          <span className={styles.orderId}>Id: #d076ec93</span>
           <span className={styles.invoiceDate}>Date: 2023-09-01</span>
         </div>
       </section>
