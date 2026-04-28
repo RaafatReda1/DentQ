@@ -4,6 +4,7 @@ import { useCartsQuery } from '../../hooks/useCartsQuery';
 import { useOrdersStore } from '../../store/useOrdersStore';
 import CartsToolbar from './CartsToolbar';
 import CartCard from './CartCard';
+import CartsSkeleton from '../shared/Skeletons/CartsSkeleton';
 import { ShoppingBag } from 'lucide-react';
 import styles from './CartsView.module.css';
 
@@ -12,7 +13,7 @@ const CartsView = () => {
     const { carts, isLoading } = useCartsQuery();
     const { filters } = useOrdersStore();
 
-    if (isLoading) return <div className={styles.loader}>{t('common.loading', 'Loading Carts...')}</div>;
+    if (isLoading) return <CartsSkeleton />;
 
     const renderContent = () => {
         if (!carts.length) {

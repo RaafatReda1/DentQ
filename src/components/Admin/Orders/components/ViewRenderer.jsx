@@ -4,6 +4,9 @@ import TableView from './TableView/TableView';
 import KanbanView from './KanbanView/KanbanView';
 import DetailView from './DetailView/DetailView';
 import CartsView from './CartsView/CartsView';
+import TableSkeleton from './shared/Skeletons/TableSkeleton';
+import KanbanSkeleton from './shared/Skeletons/KanbanSkeleton';
+import DetailSkeleton from './shared/Skeletons/DetailSkeleton';
 import styles from './ViewRenderer.module.css';
 
 /**
@@ -13,7 +16,9 @@ const ViewRenderer = ({ orders = [], isLoading }) => {
     const activeView = useOrdersStore(state => state.activeView);
 
     if (isLoading) {
-        return <div className={styles.loading}>Synchronizing Data...</div>;
+        if (activeView === 'kanban') return <KanbanSkeleton />;
+        if (activeView === 'detail') return <DetailSkeleton />;
+        return <TableSkeleton />; // Default skeleton for all other table-like views
     }
 
     if (orders.length === 0 && activeView !== 'carts') {

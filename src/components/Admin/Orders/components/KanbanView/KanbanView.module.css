@@ -3,6 +3,12 @@
     gap: 16px;
     overflow-x: auto;
     padding-bottom: 24px;
+    
+    /* Native swipe/snap behaviors for smaller screens */
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scroll-padding: 0 16px;
+
     /* Hide scrollbar for clean look but keep functionality */
     scrollbar-width: thin;
     scrollbar-color: var(--accent-color, #00b4d8) transparent;
