@@ -43,4 +43,10 @@
 }
 .productsTable tbody td:last-child{
     padding-right: 30px !important;
+
 }
+.productsTable tbody tr:last-child{
+    border-bottom: 2px solid #000;
+
+}
+

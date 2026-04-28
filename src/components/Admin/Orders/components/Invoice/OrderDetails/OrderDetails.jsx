@@ -23,8 +23,9 @@ const OrderDetails = () => {
             <td>120</td>
             <td>360</td>
           </tr>
-          {/* copy should be deleted later */}
 
+
+          {/* copies should be deleted later */}
           <tr>
             <td>3</td>
             <td>Iphone 15 Pro Max</td>
@@ -45,6 +46,7 @@ const OrderDetails = () => {
             <td>120</td>
             <td>360</td>
           </tr>
+          {/* copies should be deleted later */}
 
 
         </tbody>

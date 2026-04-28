@@ -1,0 +1,84 @@
+:root {
+  --invoice-main-color: #292929;
+  /* --invoice-main-color: #F5E9D8; */
+  --invoice-secondary-color: #9bdcf2;
+  --invoice-background: #fff;
+}
+
+.invoiceFooter {
+  background: var(--invoice-background);
+  display: flex;
+  flex-direction: row-reverse; /* Put the blob on the right side */
+  position: relative;
+  justify-content: space-between;
+  margin: 0;
+  margin-top: auto; /* Push it to the bottom if container is flex col */
+}
+
+/* 
+  Header has:
+  border-radius: 0 30px 150px 0; (left side blob)
+  shadow: 70px 0 0 0 secondary;
+
+  Footer will be inverted on the right side:
+  border-radius: 150px 0 0 30px;
+  shadow: -70px 0 0 0 secondary;
+*/
+.dataContainer {
+  position: relative;
+  background: var(--invoice-main-color);
+  width: 50%;
+  padding: 40px;
+  padding-right: 0;
+  padding-left: 70px;
+
+  border-radius: 150px 0 0 30px; 
+  box-shadow: -70px 0 0 0 var(--invoice-secondary-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2; /* Needs to be above the outerBorder */
+}
+
+
+/* The long extending border line */
+.outerBorder {
+  background: var(--invoice-main-color);
+  position: absolute;
+  bottom: 0; /* Anchor to bottom opposite of header */
+  width: 100%;
+  height: 29.49px;
+  /* Inverse of 0 0 150px 0 => 150px 0 0 0 */
+  border-radius: 150px 0 0 0;
+  z-index: 2;
+}
+
+/* Contents inside the blob */
+.data {
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 15px;
+  width: 100%;
+  direction: rtl;
+  padding-right: 20px; /* padding on the right edge */
+  padding-left: 20px; /* offset inner content from curve */
+}
+
+.dataSection {
+  display: flex;
+  align-items: center; /* better alignment for icons and text */
+  gap: 12px;
+  color: var(--invoice-secondary-color); /* Icons colored */
+}
+
+.dataSection h2 {
+  font-size: 16px;
+  margin: 0;
+  font-weight: 500;
+  color: #fff;
+  direction: ltr; /* keep phone numbers ltr */
+  unicode-bidi: embed; /* ensures LTR inside RTL context works beautifully */
+}

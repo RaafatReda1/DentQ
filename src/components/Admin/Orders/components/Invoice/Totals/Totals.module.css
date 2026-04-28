@@ -1,0 +1,40 @@
+.totalsSection{
+    position: relative;
+    left: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 20%;
+}
+
+.totalsSection .header{
+    font-size: larger;
+    font-weight: 600;
+    color: #1e1e1f
+}
+
+.sectionFeild{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #1e293b;
+    border-bottom: 1px solid #e2e2e2;
+}
+
+.sectionFeild h2{
+    font-size: 12px;
+    font-weight: 300;
+    color: #000000;
+}
+
+.sectionFeild:nth-last-child(2){
+    border-bottom: 1.5px solid #000000;
+}
+
+.sectionFeild:nth-last-child(1){
+    border-bottom: none;
+}
