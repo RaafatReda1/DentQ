@@ -4,6 +4,7 @@
 
 .productsTable {
   margin: 30px;
+  width: 90%;
 }
 .productsTable thead {
   border-radius: 20px;

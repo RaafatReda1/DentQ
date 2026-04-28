@@ -1,20 +1,38 @@
-import React from "react";
+import React, { useState } from "react";
 import styles  from "./Invoice.module.css";
 import InvoiceHeader from "./InvoiceHeader/InvoiceHeader";
 import RecepientData from "./RecepientData/RecepientData";
 import OrderDetails from "./OrderDetails/OrderDetails";
 import Totals from "./Totals/Totals";
 import Footer from "./InvoiceFooter/InvoiceFooter";
+import StoreSettingsEditor from "./StoreSettingsEditor";
+import { Settings } from "lucide-react";
+import { useStoreSettings } from "../../hooks/useStoreSettings";
 
 const Invoice = React.forwardRef(({ order }, ref) => {
+  const { data: storeSettings } = useStoreSettings();
+  const [isEditorOpen, setIsEditorOpen] = useState(false);
+
+  const invoiceStyle = {
+    "--invoice-main-color": storeSettings?.accent_color || "#292929",
+  };
+
   return (
-    <div ref={ref} className={styles.Invoice}>
-      <table className={styles.printTable}>
+    <div className={styles.invoiceOuterWrapper}>
+      {/* Settings control panel outside printable area */}
+      <div className={styles.invoiceControls}>
+        <button className={styles.btnSettings} onClick={() => setIsEditorOpen(true)}>
+          <Settings size={16} /> Edit Branding
+        </button>
+      </div>
+
+      <div ref={ref} className={styles.Invoice} style={invoiceStyle}>
+        <table className={styles.printTable}>
         {/* Magic Repeating Header */}
         <thead>
           <tr>
             <td>
-              <InvoiceHeader />
+              <InvoiceHeader order={order} />
             </td>
           </tr>
         </thead>
@@ -24,9 +42,9 @@ const Invoice = React.forwardRef(({ order }, ref) => {
           <tr>
             <td>
               <div className={styles.pageContent}>
-                <RecepientData />
-                <OrderDetails />
-                <Totals />
+                <RecepientData order={order} />
+                <OrderDetails order={order} />
+                <Totals order={order} />
               </div>
             </td>
           </tr>
@@ -46,6 +64,9 @@ const Invoice = React.forwardRef(({ order }, ref) => {
       <div className={styles.fixedFooter}>
         <Footer />
       </div>
+    </div>
+    
+    <StoreSettingsEditor isOpen={isEditorOpen} onClose={() => setIsEditorOpen(false)} />
     </div>
   );
 });

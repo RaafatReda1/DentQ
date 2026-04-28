@@ -9,7 +9,7 @@ import {
   PhoneForwarded,
   User,
 } from "lucide-react";
-const RecepientData = () => {
+const RecepientData = ({ order }) => {
   return (
     <section className= {styles.recepientSection}>
       <h2>Recepient Data</h2>
@@ -17,29 +17,29 @@ const RecepientData = () => {
         <div className={styles.personalData}>
           <div className={`${styles.recepientDataField} ${styles.Name}`}>
             <User></User>
-            <span>رأفت رضا جاهين أحمد</span>
+            <span>{order?.full_name || "Unknown"}</span>
           </div>
 
           <div className={`${styles.recepientDataField} ${styles.Phone}`}>
             <PhoneForwarded></PhoneForwarded>
-            <span>+201022779263</span>
+            <span dir="ltr">{order?.phone_number || "---"}</span>
           </div>
 
           <div className={`${styles.recepientDataField} ${styles.Email}`}>
             <AtSign></AtSign>
-            <span>rafat2782005@gmail.com</span>
+            <span>{order?.Clients?.email || "---"}</span>
           </div>
         </div>
 
         <div className={styles.delivaryData}>
           <div className={`${styles.recepientDataField} ${styles.Location}`}>
             <LocationEdit></LocationEdit>
-            <span>البحيرة-حوش عيسي-شارع الجمهورية</span>
+            <span>{order?.address || "---"}</span>
           </div>
 
           <div className={`${styles.recepientDataField} ${styles.Gov}`}>
             <Building2></Building2>
-            <span>البحيره</span>
+            <span>{order?.GovernoratesShipping?.governorateAr || order?.GovernoratesShipping?.governorateEn || "---"}</span>
           </div>
         </div>
       </section>
