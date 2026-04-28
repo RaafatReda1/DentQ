@@ -5,14 +5,42 @@ import RecepientData from "./RecepientData/RecepientData";
 import OrderDetails from "./OrderDetails/OrderDetails";
 import Totals from "./Totals/Totals";
 import Footer from "./InvoiceFooter/InvoiceFooter";
+
 const Invoice = React.forwardRef(({ order }, ref) => {
   return (
     <div ref={ref} className={styles.Invoice}>
-      <InvoiceHeader />
-      <RecepientData />
-      <OrderDetails/>
-      <Totals />
-      <Footer/>
+      <table className={styles.printTable}>
+        {/* Magic Repeating Header */}
+        <thead>
+          <tr>
+            <td>
+              <InvoiceHeader />
+            </td>
+          </tr>
+        </thead>
+        
+        {/* Flowing Content */}
+        <tbody>
+          <tr>
+            <td>
+              <div className={styles.pageContent}>
+                <RecepientData />
+                <OrderDetails />
+                <Totals />
+              </div>
+            </td>
+          </tr>
+        </tbody>
+
+        {/* Magic Repeating Footer */}
+        <tfoot>
+          <tr>
+            <td>
+              <Footer />
+            </td>
+          </tr>
+        </tfoot>
+      </table>
     </div>
   );
 });

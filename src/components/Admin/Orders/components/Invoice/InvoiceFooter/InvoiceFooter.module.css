@@ -6,7 +6,7 @@
 }
 
 .invoiceFooter {
-  background: var(--invoice-background);
+    background-color: transparent;
   display: flex;
   flex-direction: row-reverse; /* Put the blob on the right side */
   position: relative;
