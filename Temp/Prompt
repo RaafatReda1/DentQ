@@ -1,122 +1,564 @@
-As we pivot to the **Marketing Tab** for your DentQ admin panel, you're shifting from managing *operations* (building products and fulfilling orders) to managing *growth* (driving traffic, increasing conversions, and retaining customers).
+Viewed CardBadges.jsx:1-24
+Ran command: `Get-ChildItem -Recurse | Select-String "CMS" | Select-Object -Unique Path`
+Viewed Sidebar.jsx:1-61
+Viewed Admin.jsx:1-53
+Viewed en.json:1-800
+Viewed en.json:801-936
+Viewed StoreSettingsEditor.jsx:1-156
+Viewed HeroSection.jsx:1-77
+Ran command: `Get-ChildItem -Recurse -Filter Footer.jsx | Select-Object FullName`
+Viewed Footer.jsx:1-112
+Ran command: `Get-ChildItem -Recurse -Filter About.jsx | Select-Object FullName`
+Ran command: `Get-ChildItem -Recurse -Filter AboutUs.jsx | Select-Object FullName`
+Viewed AboutUs.jsx:1-82
 
-In a highly professional e-commerce system, the Marketing Tab is the absolute engine for generating revenue. Based on the architecture we've already built together, here is exactly what the Marketing Tab should do:
+The **CMS Settings** (Content Management System) tab is designed to be the central "control room" for all non-product content on the DentQ storefront. 
 
-### 1. Promo Codes & Discounts Engine (Priority #1)
-You need a system to create and track coupons.
-*   **What it does:** Allows you to generate codes (e.g., `SUMMER20`, `FREESHIP`).
-*   **Features:** You set whether it's a fixed amount (e.g., -50 EGP) or a percentage (-20%), set expiration dates, limit the total number of uses (e.g., "First 100 buyers"), and set minimum order values.
-*   **Why:** You already have the `promoDiscount` line integrated into your Invoice and Orders system! This is the control panel that fuels it.
+Based on the existing codebase (like `AboutUs.jsx`, `Footer.jsx`, and `StoreSettingsEditor.jsx`), here is a refresher on what this phase is meant to accomplish:
 
-### 2. Abandoned Cart Recovery 
-We already built the `CartsView` tracking in your Order management, but the Marketing tab is where you *act* on that data.
-*   **What it does:** Displays the users who left items in their cart and gives you a one-click button to send them an automated email/WhatsApp message.
-*   **Features:** Often integrates with an "auto-generate coupon" feature (e.g., *"Wait! Here's 10% off if you complete your DentQ checkout today!"*).
+### 1. Store Identity & Contact Info
+Currently, your contact details (Phone, Email, Address) are used in the checkout and invoice systems. 
+*   **Goal**: Provide a clean form to update the store's official phone numbers, emails, and physical office addresses (both in English and Arabic).
+*   **Branding**: Manage the "Accent Color" used for branding and invoices, and allow uploading the main store logo.
 
-### 3. Storefront Banners & Announcements
-You shouldn't need to rewrite React code every time you have a holiday sale.
-*   **What it does:** A visual editor where you can turn on a "Top Marquee Banner" (e.g., *"Free Shipping on all Dental Implants this week!*" or *"Happy Eid!"*).
-*   **Features:** You can change the text, color, and toggle it Active/Inactive safely from the Admin panel. Your storefront React app simply fetches this table on load.
+### 2. Footer Management
+The footer is currently dynamic but needs an admin UI.
+*   **Slogans**: Edit the marketing slogans (EN/AR) that appear next to the logo.
+*   **Social Links**: A management area to add or remove links for Facebook, Instagram, WhatsApp, etc. (The footer already supports auto-detecting icons based on the URL).
 
-### 4. SEO & Analytics Management
-A centralized place to monitor traffic.
-*   **What it does:** You can integrate your Facebook Meta Pixel ID, TikTok Pixel ID, or Google Analytics Data Stream ID directly into a database table.
-*   **Features:** Viewing quick conversion metrics (e.g., "How many people used the `VIP20` code today?").
+### 3. About Us Page Content
+The "About Us" page has several sections (Mission, How it Works, Commitment) and a stats bar (Partner Clinics, Distributors, etc.).
+*   **Goal**: Instead of editing code or translation files, the admin should be able to update these titles, descriptions, and statistics directly from this tab.
 
-**How do you want to proceed?** 
-I recommend we start by building the **Promo Codes Engine**, as that directly ties into your Checkout and Invoice systems. Shall I investigate the database and draft up a schema/implementation plan for it?
+### 4. Legal & Static Pages
+*   **Terms of Use & Privacy Policy**: A text editor area to update the legal text that customers agree to during checkout.
+
+---
+
+### My Plan for this Phase:
+1.  **Consolidate**: Create a unified `CMS` component in the Admin folder that uses a **Tabbed Interface** (General, Footer, About Us, Legal).
+2.  **Logic**: Hook these forms up to the existing Supabase tables (`StoreSettings`, `Footer`, `AboutUs`).
+3.  **Refactor**: I will move the existing `StoreSettingsEditor` (which is currently a hidden drawer in the Orders section) into this permanent CMS page for better organization.
+
+**Shall I proceed with setting up this unified CMS structure?**
 
 
-create table public."Banners" (
+create table public."ContactData" (
+  id bigint generated by default as identity not null,
+  created_at timestamp with time zone not null default now(),
+  phones numeric null,
+  emails text null,
+  constraint ContactData_pkey primary key (id)
+) TABLESPACE pg_default;
+
+create table public."ContactForm" (
+  id bigint generated by default as identity not null,
+  created_at timestamp with time zone not null default now(),
+  full_name text null,
+  email_address text null,
+  phone_number numeric null,
+  message text not null,
+  client uuid not null,
+  constraint ContactForm_pkey primary key (id),
+  constraint ContactForm_client_fkey foreign KEY (client) references "Clients" (id) on update CASCADE on delete CASCADE
+) TABLESPACE pg_default;
+
+
+create table public."Footer" (
+  id bigint generated by default as identity not null,
+  slug_name text null,
+  slogan_ar text null,
+  "Links" jsonb null,
+  created_at timestamp with time zone not null default now(),
+  slogan_en text null,
+  constraint Footer_pkey primary key (id)
+) TABLESPACE pg_default;
+
+create table public."GovernoratesShipping" (
+  id bigint generated by default as identity not null,
+  "governorateEn" text null,
+  "shippingPrice" double precision null default '0'::double precision,
+  created_at timestamp with time zone not null default now(),
+  updated_at timestamp without time zone null,
+  "governorateAr" text null,
+  constraint GovernoratesShipping_pkey primary key (id),
+  constraint GovernoratesShipping_governorateAr_key unique ("governorateAr"),
+  constraint GovernoratesShipping_governorate_key unique ("governorateEn")
+) TABLESPACE pg_default;
+
+create table public."StoreSettings" (
+  id uuid not null default gen_random_uuid (),
+  address_ar text null,
+  address_en text null,
+  phone text null,
+  email text null,
+  accent_color text null default '#1a1a2e'::text,
+  updated_at timestamp with time zone null default now(),
+  constraint storesettings_pkey primary key (id)
+) TABLESPACE pg_default;
+
+
+create table public.navigation_items (
   id serial not null,
-  title_en character varying(200) not null,
-  title_ar character varying(200) not null,
-  subtitle_en character varying(200) null,
-  subtitle_ar character varying(200) null,
-  image character varying(255) null,
-  cta_text_en character varying(100) null,
-  cta_text_ar character varying(100) null,
-  cta_link character varying(255) null,
-  is_active boolean null default true,
+  section_key character varying(50) not null,
+  section_title_ar character varying(100) not null,
+  section_title_en character varying(100) not null,
+  item_label_ar character varying(100) not null,
+  item_label_en character varying(100) not null,
+  item_link character varying(255) not null,
+  item_order integer not null,
+  section_order integer not null,
   created_at timestamp without time zone null default CURRENT_TIMESTAMP,
   updated_at timestamp without time zone null default CURRENT_TIMESTAMP,
-  slug text null,
-  title_color text null,
-  subtitle_color text null,
-  cta_bg_color text null,
-  cta_txt_color text null,
-  bg_linear_colors jsonb null,
-  related_cat_id uuid null,
-  constraint hero_banners_pkey primary key (id),
-  constraint Banners_slug_key unique (slug),
-  constraint Banners_related_cat_id_fkey foreign KEY (related_cat_id) references "Categories" (id) on update CASCADE on delete RESTRICT
+  constraint navigation_items_pkey primary key (id)
 ) TABLESPACE pg_default;
 
-create index IF not exists idx_hero_active on public."Banners" using btree (is_active) TABLESPACE pg_default;
+create index IF not exists idx_section_key on public.navigation_items using btree (section_key) TABLESPACE pg_default;
 
-create trigger update_hero_banners_updated_at BEFORE
-update on "Banners" for EACH row
-execute FUNCTION update_updated_at_column ();
+create index IF not exists idx_section_order on public.navigation_items using btree (section_order, item_order) TABLESPACE pg_default;
 
-create table public.promo_codes (
-  id serial not null,
-  code character varying(50) not null,
-  discount numeric(10, 2) not null,
-  type character varying(20) not null,
-  used boolean null default false,
-  max_uses integer null default 0,
-  used_by_user_ids jsonb null default '[]'::jsonb,
-  is_active boolean null default true,
-  expiry timestamp with time zone null,
-  created_at timestamp with time zone null default now(),
-  updated_at timestamp with time zone null default now(),
-  constraint promo_codes_pkey primary key (id),
-  constraint promo_codes_code_key unique (code),
-  constraint promo_codes_type_check check (
-    (
-      (type)::text = any (
-        (
-          array[
-            'percentage'::character varying,
-            'fixed'::character varying
-          ]
-        )::text[]
-      )
-    )
-  )
-) TABLESPACE pg_default;
-
-create index IF not exists idx_promo_codes_code on public.promo_codes using btree (code) TABLESPACE pg_default;
-
-create index IF not exists idx_promo_codes_active on public.promo_codes using btree (is_active) TABLESPACE pg_default;
-
-create index IF not exists idx_promo_codes_expiry on public.promo_codes using btree (expiry) TABLESPACE pg_default;
-
-create trigger update_promo_codes_updated_at BEFORE
-update on promo_codes for EACH row
+create trigger update_navigation_items_updated_at BEFORE
+update on navigation_items for EACH row
 execute FUNCTION update_updated_at_column ();
 
 
 
 
-Here's the full UI/UX plan with a working interactive mockup. Let me walk you through the design decisions.
 
-How the Marketing Tab is structured
-The tab is split into three sections — all accessible from the pill-style tab bar at the top.
-Section 1 — Promo Codes (your main tool)
-At the top, four metric cards give you a live dashboard: total codes, total uses this week, discount given in EGP this month, and the current top-performing code. Below that is the codes table.
-Each row in the table shows the code (in monospace so it's instantly copyable), whether it's a percentage or fixed-EGP type (color-coded badges), the discount value, a visual progress bar for uses vs. max_uses, the expiry date, status, and action buttons.
-The "+ New code" button opens a modal form that maps exactly to your create-promo-code edge function payload: code, type (percentage or fixed), discount value, max_uses, expiry, and an active toggle. On submit it calls your edge function with the admin's JWT token — no page reload needed.
-Status logic is automatic: if used_by_user_ids.length >= max_uses, it shows "Maxed out"; if expiry < now(), it shows "Expired"; otherwise it reflects is_active.
-Section 2 — Banners
-Each banner shows a color preview, the English title, subtitle, and a toggle switch. The critical UX rule here: only one banner can be active at a time. Flipping a toggle on one auto-deactivates all others — this is enforced in the UI before even hitting the database. This prevents you from accidentally showing two conflicting banners on the storefront.
-Section 3 — Pixels & Analytics
-A clean list of your tracking pixels (Meta, TikTok, GA4) with their IDs and a "Connect" button for unlinked ones. Below that is a conversion table showing how each promo code performed — impressions, successful checkouts, and revenue attributed — pulling from your orders data joined against promo_codes.used_by_user_ids.
+Store identity maps directly to your StoreSettings table — one row, single source of truth. The address fields come in both EN and AR pairs, phone and email have inline hints showing which column they write to, and the accent color picker updates StoreSettings.accent_color. The logo upload is a separate storage bucket operation.
+Footer maps to your Footer table. The slogan fields write to slogan_en and slogan_ar. The social links section manages the Links JSONB column — each row is {platform, url} and the storefront auto-detects the icon from the URL pattern, which is already how your Footer.jsx works. The admin just adds/removes rows.
+About us is the richest section. The stats bar (500+, 120, 2400+, 8) are simple editable fields — these probably live in your en.json / ar.json translation files right now, but the plan is to move them into a proper AboutUs Supabase table. Each content section (Mission, How it works, Commitment) gets a title + body field pair in both languages.
+Legal pages uses a two-tab switcher (Terms / Privacy Policy) to keep it compact. Both documents are textarea fields in EN + AR. These are shown at checkout and in the footer. They map to a legal_pages table we'd need to create (just id, type, content_en, content_ar).
+Navigation items manages your navigation_items table directly — each row shows the path, EN label, and AR label side by side with a drag handle for reordering (item_order column).
+The left sidebar nav lets the admin jump between sections. Each section has its own Save button so changes are isolated
 
-Admin workflow for creating a promo code (step by step)
 
-Admin clicks "+ New code"
-Fills in: code name, type (% or EGP), value, max uses, optional expiry
-Hits "Create code" → your frontend calls POST /functions/v1/create-promo-code with the admin JWT + the fields
-The edge function verifies admin via CheckIsAdmin, then inserts into promo_codes![alt text](image-1.png)
-On success (201), the table refreshes and the new code appears immediately
+
+
+
+Here is the complete, detailed implementation prompt you can hand directly to any developer or AI coding session:
+
+---
+
+## DentQ Admin — CMS Settings Tab: Full Implementation Prompt
+
+---
+
+### Context & architecture
+
+This is the CMS Settings tab inside the existing DentQ React admin panel. The admin panel already has a sidebar (`Sidebar.jsx`), a top-level router (`Admin.jsx`), and existing tabs for Orders, Products, and Marketing. The CMS tab slots in as a new peer route. The app uses Supabase as the backend, `i18next` for translations (with `en.json` and `ar.json`), and Tailwind or custom CSS for styling (match whatever the existing codebase uses).
+
+The CMS tab is a single-page settings interface divided into five named sections accessible via a left vertical sub-navigation. Each section maps to one or more Supabase tables. Every bilingual field (EN + AR) must appear side by side in a two-column grid so the admin can read and edit both simultaneously without scrolling.
+
+---
+
+### Database plan — revised & finalized
+
+Before building the UI, run these migrations.
+
+**Table 1 — `StoreSettings` (already exists, extend it)**
+
+Add two missing columns:
+
+```sql
+alter table public."StoreSettings"
+  add column if not exists logo_url text null,
+  add column if not exists logo_storage_path text null;
+```
+
+This table has exactly one row (the store's singleton config). The admin UI always does an upsert on the fixed UUID, never inserts a second row. Columns used: `address_en`, `address_ar`, `phone`, `email`, `accent_color`, `logo_url`, `logo_storage_path`, `updated_at`.
+
+**Table 2 — `Footer` (already exists, no changes needed)**
+
+Columns used: `slogan_en`, `slogan_ar`, `Links` (JSONB array of `{platform: string, url: string}`). This table also has exactly one row. The `Links` JSONB is managed as a local array in React state — the admin adds/removes items and the whole array is written back on save.
+
+**Table 3 — `AboutUs` (create new)**
+
+```sql
+create table public."AboutUs" (
+  id serial primary key,
+  section_key varchar(60) not null unique,
+  title_en text null,
+  title_ar text null,
+  body_en text null,
+  body_ar text null,
+  display_order integer not null default 0,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create trigger update_about_us_updated_at
+  before update on "AboutUs"
+  for each row execute function update_updated_at_column();
+```
+
+Seed with these rows on first run:
+
+| section_key | title_en | display_order |
+|---|---|---|
+| `hero` | Page headline | 0 |
+| `mission` | Our Mission | 1 |
+| `how_it_works` | How It Works | 2 |
+| `commitment` | Our Commitment | 3 |
+
+**Table 4 — `AboutStats` (create new)**
+
+```sql
+create table public."AboutStats" (
+  id serial primary key,
+  stat_key varchar(40) not null unique,
+  label_en varchar(80) not null,
+  label_ar varchar(80) not null,
+  value varchar(20) not null,
+  display_order integer not null default 0,
+  updated_at timestamptz not null default now()
+);
+```
+
+Seed with: `partner_clinics`, `distributors`, `products`, `years_active`. The `value` column is a plain string so the admin can write `500+` or `2,400+` freely.
+
+**Table 5 — `LegalPages` (create new)**
+
+```sql
+create table public."LegalPages" (
+  id serial primary key,
+  page_key varchar(40) not null unique,
+  content_en text null,
+  content_ar text null,
+  updated_at timestamptz not null default now()
+);
+
+create trigger update_legal_pages_updated_at
+  before update on "LegalPages"
+  for each row execute function update_updated_at_column();
+```
+
+Seed with two rows: `terms_of_use` and `privacy_policy`.
+
+**Table 6 — `navigation_items` (already exists, no changes needed)**
+
+Columns used: `section_key`, `section_title_en`, `section_title_ar`, `item_label_en`, `item_label_ar`, `item_link`, `item_order`, `section_order`. Items within the same `section_key` are grouped visually. Drag-to-reorder updates `item_order` for the affected rows.
+
+**Table 7 — `ContactData` (already exists — keep for legacy, but `StoreSettings` is now the source of truth for admin-editable contact info)**
+
+Do not build a separate editor for `ContactData`. The checkout and invoice systems should be migrated to read from `StoreSettings` instead. No UI needed for `ContactData` in this tab.
+
+**Table 8 — `ContactForm` (read-only, no editor needed)**
+
+This is inbound customer messages. It belongs in a future CRM section, not CMS settings.
+
+---
+
+### Component structure
+
+```
+src/
+  admin/
+    cms/
+      CMS.jsx                  ← top-level tab component, owns sub-nav + section routing
+      sections/
+        StoreIdentity.jsx      ← section 1
+        FooterEditor.jsx       ← section 2
+        AboutUsEditor.jsx      ← section 3
+        LegalEditor.jsx        ← section 4
+        NavigationEditor.jsx   ← section 5
+      hooks/
+        useStoreSettings.js
+        useFooter.js
+        useAboutUs.js
+        useLegalPages.js
+        useNavigation.js
+      components/
+        Bilingual Field.jsx    ← reusable EN+AR side-by-side field wrapper
+        SectionCard.jsx        ← card wrapper with title, subtitle, save button
+        SocialLinkRow.jsx      ← single social link row with remove button
+        StatEditor.jsx         ← single stat card (label + value input)
+        NavItemRow.jsx         ← draggable nav item row
+        ColorPickerField.jsx   ← swatch + hex input pair
+        LogoUploader.jsx       ← logo preview + upload button
+        LegalTabSwitcher.jsx   ← Terms / Privacy tab selector
+```
+
+---
+
+### Section 1 — Store identity (`StoreSettings` table)
+
+**What it manages:** The single-row store configuration.
+
+**Layout:** Two-column grid throughout. Section card with header row containing the section title on the left and "Discard / Save changes" buttons on the right.
+
+**Fields, in order:**
+
+Row 1 — two columns:
+- Left: "Address" with EN badge → text input → value from `address_en` → hint text: "Used on invoices and the contact page"
+- Right: "Address" with AR badge → text input, `dir="rtl"` → value from `address_ar`
+
+Row 2 — two columns:
+- Left: "Phone number" → text input → value from `phone` → hint: maps to `StoreSettings.phone`
+- Right: "Email" → text input → value from `email` → hint: maps to `StoreSettings.email`
+
+Horizontal divider.
+
+Row 3 — two columns:
+- Left: "Brand accent color" → `ColorPickerField` showing a 32×32 color swatch beside a hex text input. On change, update local state immediately so the swatch reflects the new color in real time. Value from `accent_color`. Hint: "Used on invoice headers, buttons, and UI highlights."
+- Right: "Store logo" → `LogoUploader`. Shows a 64×32 preview of the current logo (loaded from `logo_url`). Below the preview, a dashed-border upload zone with an upload icon and the text "Click to upload (PNG, SVG, max 2 MB)". On file select, upload to the `store-assets` Supabase Storage bucket, save the returned public URL into `logo_url` and the storage path into `logo_storage_path`. Show a loading spinner during upload. On success, refresh the preview without page reload.
+
+**Save behavior:** On "Save changes", upsert the single `StoreSettings` row. Show an inline success toast "Store identity saved" for 2.5 seconds. On error, show an inline error message below the save button.
+
+---
+
+### Section 2 — Footer editor (`Footer` table)
+
+**What it manages:** The single-row footer configuration.
+
+**Layout:** Section card with "Save footer" button top-right.
+
+**Fields, in order:**
+
+Row 1 — two columns:
+- Left: "Slogan" with EN badge → text input → `slogan_en`
+- Right: "Slogan" with AR badge → text input, RTL → `slogan_ar`
+
+Horizontal divider.
+
+Social links block:
+- Label row: "Social links" with an info badge reading "Icon auto-detected from URL"
+- Below the label: a vertical list of `SocialLinkRow` components, each rendered from the `Links` JSONB array
+- Each `SocialLinkRow` shows: a 24×24 platform icon (auto-detected, see logic below), the URL in monospace, and a remove (×) button on the right
+- Below the list: an "Add social link" button with a dashed border that appends a new empty row with a URL text input — on blur or Enter, detect the platform and update the icon
+
+**Platform auto-detection logic** (run on every URL change):
+
+```js
+function detectPlatform(url) {
+  if (url.includes('facebook.com')) return 'facebook';
+  if (url.includes('instagram.com')) return 'instagram';
+  if (url.includes('wa.me') || url.includes('whatsapp')) return 'whatsapp';
+  if (url.includes('tiktok.com')) return 'tiktok';
+  if (url.includes('youtube.com')) return 'youtube';
+  if (url.includes('linkedin.com')) return 'linkedin';
+  if (url.includes('twitter.com') || url.includes('x.com')) return 'twitter';
+  return 'link';
+}
+```
+
+Each platform maps to a distinct icon and a distinct background color pill (facebook → blue, instagram → amber, whatsapp → green, tiktok → gray, generic → gray).
+
+**Save behavior:** Write the full `Links` array back to `Footer.Links`. Slogan fields are written to their respective columns in the same upsert. Toast: "Footer saved."
+
+---
+
+### Section 3 — About us editor (`AboutUs` + `AboutStats` tables)
+
+**What it manages:** All text content on the About Us storefront page, plus the live stats bar.
+
+**Layout:** Section card with "Save about us" button top-right. Three sub-blocks separated by dividers.
+
+**Sub-block A — Stats bar**
+
+Label: "Stats bar" with a green badge reading "Live on storefront".
+
+A 4-column grid of `StatEditor` cards. Each card shows:
+- The stat label in all-caps muted text (e.g. "PARTNER CLINICS")
+- A single text input for `value` (e.g. "500+")
+- Below: two small inputs side-by-side for `label_en` and `label_ar` (the display name below the number on the storefront)
+
+The four stats are loaded from `AboutStats` ordered by `display_order`.
+
+**Sub-block B — Content sections**
+
+Label: "Page sections". Below this label is a vertical stack of expandable section editors, one per row in `AboutUs` ordered by `display_order`.
+
+Each section editor is a collapsible card. Collapsed state shows the `section_key` in monospace and the English title. Expanded state shows:
+
+Row 1 — two columns:
+- Left: "Title" with EN badge → text input → `title_en`
+- Right: "Title" with AR badge → text input, RTL → `title_ar`
+
+Row 2 (if the section supports a body — all sections except `hero`):
+- Left: "Body text" with EN badge → textarea, 4 rows → `body_en`
+- Right: "Body text" with AR badge → textarea, 4 rows, RTL → `body_ar`
+
+The `hero` section only has title fields, no body. Display an info hint: "This is the large headline at the top of the About Us page."
+
+**Save behavior:** On save, batch-upsert all `AboutUs` rows and all `AboutStats` rows in parallel. Toast: "About us saved."
+
+---
+
+### Section 4 — Legal pages editor (`LegalPages` table)
+
+**What it manages:** Terms of use and privacy policy content shown at checkout and in the footer.
+
+**Layout:** Section card with "Save legal" button top-right.
+
+**Tab switcher:** Two pill-style tabs — "Terms of use" and "Privacy policy". Switching tabs changes which `LegalPages` row is in the editor. The active tab has a filled background; the inactive tab is outlined. Tabs are rendered using `LegalTabSwitcher`.
+
+For the active tab, render:
+
+Row 1 — full width:
+- Label: "Content" with EN badge + a warning badge reading "Displayed at checkout"
+- Textarea, 10 rows, `content_en`
+
+Row 2 — full width:
+- Label: "Content" with AR badge
+- Textarea, 8 rows, RTL, `content_ar`
+
+Below the textareas: a muted hint — "Plain text only. Line breaks are preserved. HTML is stripped on save."
+
+**Save behavior:** Upsert only the currently active tab's row. Do not save both tabs at once. Toast: "Terms of use saved" or "Privacy policy saved" depending on which tab is active.
+
+---
+
+### Section 5 — Navigation items editor (`navigation_items` table)
+
+**What it manages:** All storefront menu links, their labels, and their display order.
+
+**Layout:** Section card with "Save navigation" button top-right.
+
+**Structure:** Items are grouped by `section_key`. Each group renders as a labeled block with the section title in both languages at the top (editable inline), and a vertical list of `NavItemRow` components below.
+
+Each `NavItemRow` shows:
+- Left: a drag handle icon (six dots, cursor: grab). Drag-to-reorder within the section updates `item_order` in local state (actual DB write happens on save)
+- Next: the `item_link` URL in monospace, muted, fixed width
+- Right: two column inputs — `item_label_en` (EN badge) and `item_label_ar` (AR badge, RTL)
+- Far right: a remove (×) button
+
+Below each group's item list: an "Add item to this section" link in muted text with a small + icon.
+
+Below all groups: an "Add new section" button with a dashed border. This creates a new group with an editable section title in both languages, and an empty item list.
+
+**Drag-and-drop implementation:** Use `@dnd-kit/core` and `@dnd-kit/sortable`. Each `NavItemRow` is wrapped in a `SortableItem`. The `DndContext` and `SortableContext` are scoped per section group so items can only be reordered within their own section, not moved between sections.
+
+**Save behavior:** On save, compute the final `item_order` from the current array index and batch-upsert all rows. Also upsert `section_title_en` and `section_title_ar` for any modified section groups. Toast: "Navigation saved."
+
+---
+
+### Sub-navigation & overall layout
+
+The `CMS.jsx` component renders a two-column layout:
+
+Left column (180px fixed, `background: var(--color-background-secondary)`, `border-right: 0.5px solid var(--color-border-tertiary)`):
+- A label "SECTIONS" in small all-caps muted text
+- Five nav items: Store identity, Footer, About us, Legal pages, Navigation items
+- Each nav item: icon (14×14 SVG) + label, 8px 10px padding, `border-radius: var(--border-radius-md)`. Active item: white background, full border, primary text color. Inactive: no background, secondary text color
+- Clicking a nav item scrolls the right panel to the corresponding section using `scrollIntoView({ behavior: 'smooth', block: 'start' })`
+
+Right column (flex: 1, `overflow-y: auto`):
+- All five section cards stacked vertically, each with a visible `id` attribute for scroll targeting
+- No routing or tab switching — all sections are always rendered in the DOM, the sub-nav just scrolls
+
+Top bar (full width, above the two columns):
+- Left: page title "CMS settings" (14px, weight 500) + subtitle "Storefront content management" (11px, muted)
+- Right: no global save button — each section manages its own save independently
+
+---
+
+### Shared components — detailed specs
+
+**`BilingualField`**
+
+Props: `labelEn`, `labelAr`, `valueEn`, `valueAr`, `onChangeEn`, `onChangeAr`, `multiline` (bool), `rows` (number, default 3).
+
+Renders a two-column grid. Left cell: label with EN badge, input/textarea. Right cell: label with AR badge, input/textarea with `dir="rtl"`. Both cells have identical heights. The EN badge is `background: #E6F1FB; color: #0C447C`. The AR badge is `background: #FAEEDA; color: #633806`.
+
+**`SectionCard`**
+
+Props: `title`, `subtitle`, `saveLabel`, `onSave`, `onDiscard` (optional), `saving` (bool), `children`.
+
+Renders a section block with a header row (title + subtitle on the left, buttons on the right). The save button shows a spinner icon when `saving` is true and is disabled during that state. If `onDiscard` is provided, a ghost "Discard" button appears to the left of the save button.
+
+**`ColorPickerField`**
+
+Props: `value`, `onChange`, `label`, `hint`.
+
+Renders a label, then a flex row containing: a 32×32 div acting as the color swatch (background set to `value`), clicking it triggers a hidden `<input type="color">` overlaid on the swatch, and a text input next to it showing the hex value. Both the color picker and the text input update the same state. Sanitize the text input: accept only valid 3- or 6-digit hex strings (with or without `#`), normalize to 6-digit uppercase on blur.
+
+**`LogoUploader`**
+
+Props: `currentUrl`, `onUpload`, `uploading`.
+
+Renders a 64×32 logo preview box (or a placeholder with the text "No logo" if `currentUrl` is null), beside a dashed upload zone. The upload zone accepts only PNG, SVG, and WEBP files up to 2 MB. Validate file type and size before uploading. If invalid, show an inline error. During upload (`uploading: true`), show a spinner over the upload zone and disable it.
+
+**`SocialLinkRow`**
+
+Props: `platform`, `url`, `onChange`, `onRemove`.
+
+The platform icon is an inline SVG rendered by a `getPlatformIcon(platform)` helper. Each platform has a fixed background color for the icon pill. The URL is shown as a monospace string that becomes an editable input on click (click-to-edit pattern). On blur, run `detectPlatform` and update the platform prop accordingly.
+
+**`NavItemRow`**
+
+Props: `id`, `link`, `labelEn`, `labelAr`, `onChangeLabelEn`, `onChangeLabelAr`, `onRemove`.
+
+Wrapped in `@dnd-kit/sortable`'s `useSortable` hook. The drag handle uses `attributes` and `listeners` from `useSortable`. The row has a subtle left border highlight when actively being dragged.
+
+---
+
+### Data loading pattern
+
+Each section uses its own custom hook. All hooks follow this pattern:
+
+```js
+function useStoreSettings() {
+  const [data, setData] = useState(null);
+  const [draft, setDraft] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    supabase.from('StoreSettings').select('*').single()
+      .then(({ data, error }) => {
+        if (error) setError(error.message);
+        else { setData(data); setDraft(data); }
+        setLoading(false);
+      });
+  }, []);
+
+  const save = async () => {
+    setSaving(true);
+    const { error } = await supabase
+      .from('StoreSettings')
+      .upsert({ ...draft, updated_at: new Date().toISOString() });
+    setSaving(false);
+    if (error) setError(error.message);
+    else setData(draft);
+  };
+
+  const discard = () => setDraft(data);
+
+  const isDirty = JSON.stringify(draft) !== JSON.stringify(data);
+
+  return { draft, setDraft, loading, saving, error, save, discard, isDirty };
+}
+```
+
+The `isDirty` flag controls whether the save button is visually active (accent color) or muted. The discard button is only shown when `isDirty` is true.
+
+---
+
+### Toast system
+
+Use a lightweight context-based toast system (not a third-party library unless one is already in the codebase). The toast renders in the bottom-right corner, slides up with a CSS transition, auto-dismisses after 2.5 seconds. Three variants: `success` (green left border), `error` (red left border), `info` (blue left border). Maximum one toast visible at a time; new toasts replace the current one.
+
+---
+
+### Accessibility & UX requirements
+
+Every `<input>` and `<textarea>` must have an associated `<label>` connected by `htmlFor` / `id`. The EN/AR badges inside labels are decorative spans and must have `aria-hidden="true"`. The section card's save button shows a visible focus ring on keyboard focus. All drag-and-drop interactions in the NavigationEditor have keyboard alternatives: arrow keys to reorder when the drag handle is focused. The legal page textareas have a character count displayed below them in muted text (e.g. "1,240 characters"). The color hex input shows a red border when the entered value is not a valid hex color.
+
+---
+
+### What not to build in this tab
+
+- No editor for `ContactData` — it is superseded by `StoreSettings`
+- No viewer for `ContactForm` — that belongs in a future CRM section
+- No editor for `GovernoratesShipping` — that belongs in the Shipping/Logistics tab
+- No banner management — that is already handled in the Marketing tab
+- No promo code management — already handled in the Marketing tab
+
+---
+
+That is the complete plan. Every table, component, field, save behavior, and UX detail is specified. Hand this prompt to a developer or a new AI coding session and it should be enough to build the entire CMS tab without needing to ask clarifying questions.
+
+
+
