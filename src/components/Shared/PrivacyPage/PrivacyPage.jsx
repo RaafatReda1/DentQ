@@ -1,9 +1,11 @@
 import React from "react";
 import styles from "./PrivacyPage.module.css";
 import { useTranslation } from "react-i18next";
+import { useLogo } from "../../../utils/LogoContext";
 
 const PrivacyPage = () => {
   const { t, i18n } = useTranslation();
+  const { logoUrl } = useLogo();
   const isLTR = i18n.language.startsWith("en");
   const contentArray = t("privacy_page.content", { returnObjects: true });
   const contentToRender = Array.isArray(contentArray) ? contentArray : [];
@@ -11,7 +13,7 @@ const PrivacyPage = () => {
   return (
     <div className={styles.pageContainer} dir={isLTR ? "ltr" : "rtl"}>
       <div className={styles.content}>
-        <img src="/logo.png" alt="DentQ Logo" className={styles.logo} />
+        <img src={logoUrl || '/logo.png'} alt="DentQ Logo" className={styles.logo} />
         <h1>{t("privacy_page.title", "Privacy Policy")}</h1>
         <div className={styles.textContent}>
           {contentToRender.map((block, idx) => {

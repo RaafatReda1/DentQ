@@ -9,11 +9,13 @@ import useProductsData from "./components/Storage/ProductsDataStorage.jsx";
 import { userContext, productsContext } from "./utils/AppContexts";
 import { Toaster } from "react-hot-toast";
 import { CartProvider } from "./components/Storage/CartProvider.jsx";
+import { LogoProvider } from "./utils/LogoContext.jsx";
 function App() {
   const { user, setUser } = useUserData(); //I've stored the User state into UserDataStorag.jsx to arrange the code and not to make the code in app.jsx more complex and all states will compelete as this
   const { products, setProducts } = useProductsData();
 
   return (
+    <LogoProvider>
     <userContext.Provider value={[user, setUser]}>
       <productsContext.Provider value={[products, setProducts]}>
         <CartProvider>
@@ -34,6 +36,7 @@ function App() {
         </CartProvider>
       </productsContext.Provider>
     </userContext.Provider>
+    </LogoProvider>
   );
 }
 

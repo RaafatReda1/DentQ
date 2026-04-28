@@ -9,6 +9,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from './Orders/lib/queryClient';
 import Invoice from './Orders/components/Invoice/Invoice';
 import Marketing from "./Marketing/Marketing";
+import CMS from "./CMS/CMS";
 const Admin = () => {
   return (
     <QueryClientProvider client={queryClient}>
@@ -37,10 +38,7 @@ const Admin = () => {
 
           <Route path="orders" element={<Orders />} />
           <Route path="marketing" element={<Marketing />} />
-          <Route
-            path="cms"
-            element={<Invoice></Invoice>}
-          />
+          <Route path="cms" element={<CMS />} />
         </Route>
         {/* Catch-all redirect */}
         <Route path="*" element={<Navigate to="/admin" />} replace/>

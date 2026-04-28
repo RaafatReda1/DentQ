@@ -3,10 +3,12 @@ import styles from "./Footer.module.css";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { fetchFooterData, getSocialIcon } from "./FooterActions";
+import { useLogo } from '../../../../../utils/LogoContext';
 
 const Footer = () => {
   const { t, i18n } = useTranslation();
   const isLTR = i18n.language.startsWith("en");
+  const { logoUrl } = useLogo();
 
   const [footerData, setFooterData] = useState(null);
 
@@ -35,7 +37,7 @@ const Footer = () => {
           <div className={`${styles.col} ${styles.logoCol}`}>
             {/* The brand logo mapping based on existing assets. Often just /logo.png */}
             <img
-              src="/logo.png"
+              src={logoUrl || '/logo.png'}
               alt="DentQ Logo"
               className={styles.logoImage}
               // Using an onerror fallback just in case logo isn't at root

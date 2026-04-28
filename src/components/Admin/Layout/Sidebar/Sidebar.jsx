@@ -3,10 +3,12 @@ import { NavLink, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { LayoutDashboard, ShoppingBag, Truck, PieChart, Settings, Home, ChevronLeft, Boxes } from 'lucide-react';
 import styles from './Sidebar.module.css';
+import { useLogo } from '../../../../utils/LogoContext';
 
 const Sidebar = () => {
     const { t } = useTranslation();
     const [isCollapsed, setIsCollapsed] = useState(false);
+    const { logoUrl } = useLogo();
 
     const navLinks = [
         { path: '/admin', icon: <LayoutDashboard size={22} />, label: t('admin.sidebar.dashboard'), end: true },
@@ -21,7 +23,7 @@ const Sidebar = () => {
         <aside className={`${styles.sidebar} ${isCollapsed ? styles.collapsed : ''}`}>
             <div className={styles.logoContainer}>
                 <div className={styles.logoWrapper}>
-                    <img src="/logo.png" alt="DentQ" className={styles.logoImage} />
+                    <img src={logoUrl || '/logo.png'} alt="DentQ" className={styles.logoImage} />
                 </div>
                 <button 
                     className={styles.toggleBtn} 

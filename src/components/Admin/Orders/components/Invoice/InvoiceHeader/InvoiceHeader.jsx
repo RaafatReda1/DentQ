@@ -1,6 +1,8 @@
 import React from "react";
 import styles from "./InvoiceHeader.module.css";
+import { useLogo } from "../../../../../../utils/LogoContext";
 const InvoiceHeader = ({ order }) => {
+  const { logoUrl } = useLogo();
   const mySvgTriangle = (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -23,7 +25,7 @@ const InvoiceHeader = ({ order }) => {
     <>
       <header className={styles.invoiceHeader}>
         <div className={styles.logoContainer}>
-          <img src="/logo.png" alt="logo" className={styles.logo} />
+          <img src={logoUrl || '/logo.png'} alt="logo" className={styles.logo} />
         </div>
         <span className={styles.outerBorder}></span>
         <h1 className={styles.invoiceTitle}>Invoice</h1>
