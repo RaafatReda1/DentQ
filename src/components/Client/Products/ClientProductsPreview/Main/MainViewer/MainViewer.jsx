@@ -40,8 +40,11 @@ const MainViewer = () => {
   }, []);
 
   const { mainBanner, otherBanners } = useMemo(() => {
-    const main = banners.find(b => b.slug === "main");
-    const others = banners.filter(b => b.slug !== "main").sort((a, b) => a.id - b.id);
+    const main = banners.find(b => b.product_slug === "main" || b.slug === "main");
+    // Sort others by the 'order' field managed in the admin
+    const others = banners
+      .filter(b => b.product_slug !== "main" && b.slug !== "main")
+      .sort((a, b) => (a.order || 0) - (b.order || 0));
     return { mainBanner: main, otherBanners: others };
   }, [banners]);
 

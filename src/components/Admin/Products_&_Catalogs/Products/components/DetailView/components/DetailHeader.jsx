@@ -1,6 +1,7 @@
 import React from 'react';
-import { Edit3, Trash2 } from 'lucide-react';
+import { Edit3, Trash2, Copy } from 'lucide-react';
 import styles from './DetailHeader.module.css';
+import toast from 'react-hot-toast';
 
 /**
  * DetailHeader component for Product Detail view.
@@ -16,6 +17,11 @@ const DetailHeader = ({
     product,
     tp 
 }) => {
+    const handleCopyId = () => {
+        navigator.clipboard.writeText(product.id);
+        toast.success(tp('id_copied') || 'ID Copied!');
+    };
+
     return (
         <div className={styles.header}>
             <div className={styles.headerLeft}>
@@ -33,6 +39,9 @@ const DetailHeader = ({
             </div>
             
             <div className={styles.mainActions}>
+                <button className={styles.editBtn} onClick={handleCopyId} title="Copy ID">
+                    <Copy size={18} />
+                </button>
                 <button className={styles.editBtn} onClick={() => onEdit(product)}>
                     <Edit3 size={18} />
                     <span>{tp('btn_edit')}</span>

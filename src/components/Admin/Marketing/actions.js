@@ -45,57 +45,42 @@ export const deletePromoCode = async (id) => {
 
 // --- Banners ---
 export const getBanners = async () => {
-  const { data, error } = await supabase
-    .from("Banners")
-    .select("*")
-    .order("created_at", { ascending: false });
-  if (error) throw error;
-  return data;
+    const { data, error } = await supabase
+        .from("Banners")
+        .select("*")
+        .order("order", { ascending: true })
+        .order("created_at", { ascending: false });
+    if (error) {
+        console.error("Banners fetch error:", error);
+        return []; // Suppress error for UI and return empty array
+    }
+    return data || [];
 };
 
-export const createBanner = async (payload) => {
-  const { data, error } = await supabase
-    .from("Banners")
-    .insert(payload)
-    .select()
-    .single();
-  if (error) throw error;
-  return data;
+export const createBanner = async (banner) => {
+    const { data, error } = await supabase.from("Banners").insert([banner]).select();
+    if (error) throw error;
+    return data[0];
 };
 
 export const updateBanner = async (id, updates) => {
-  const { data, error } = await supabase
-    .from("Banners")
-    .update({ ...updates, updated_at: new Date().toISOString() })
-    .eq("id", id)
-    .select()
-    .single();
-  if (error) throw error;
-  return data;
+    const { error } = await supabase.from("Banners").update(updates).eq("id", id);
+    if (error) throw error;
+};
+
+export const updateBannerOrder = async (orderMap) => {
+    // orderMap = [{ id: '...', order: 0 }, ...]
+    const updates = orderMap.map(item => supabase.from("Banners").update({ order: item.order }).eq("id", item.id));
+    const results = await Promise.all(updates);
+    const firstError = results.find(r => r.error);
+    if (firstError) throw firstError.error;
 };
 
 export const deleteBanner = async (id) => {
-  const { error } = await supabase.from("Banners").delete().eq("id", id);
-  if (error) throw error;
+    const { error } = await supabase.from("Banners").delete().eq("id", id);
+    if (error) throw error;
 };
 
-// Activating a banner deactivates all others
-export const activateBannerExclusive = async (id) => {
-  const { error: deactivateErr } = await supabase
-    .from("Banners")
-    .update({ is_active: false })
-    .neq("id", id);
-  if (deactivateErr) throw deactivateErr;
-
-  const { data, error } = await supabase
-    .from("Banners")
-    .update({ is_active: true })
-    .eq("id", id)
-    .select()
-    .single();
-  if (error) throw error;
-  return data;
-};
 
 // --- Storage ---
 export const uploadBannerImage = async (file) => {

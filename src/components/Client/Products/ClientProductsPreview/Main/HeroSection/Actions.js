@@ -1,6 +1,10 @@
 import { supabase } from "../../../../../../utils/SupabaseClient";
 const fetchBanners = async (slugName) => {
-  let query = supabase.from("Banners").select("*");
+  let query = supabase
+    .from("Banners")
+    .select("*")
+    .eq("is_active", true)
+    .order("order", { ascending: true });
 
   if (slugName) {
     query = query.eq("slug", slugName);
@@ -13,7 +17,6 @@ const fetchBanners = async (slugName) => {
     return null;
   }
 
-  console.log("Banners Fetched:", data);
   return data;
 };
 

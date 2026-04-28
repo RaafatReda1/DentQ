@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Plus } from "lucide-react";
+import { Plus, GripVertical } from "lucide-react";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { useBannersQuery } from "../hooks/useBannersQuery";
 import { useBannerMutations } from "../hooks/useBannerMutations";
 import BannerCard from "./BannerCard";
@@ -23,12 +24,13 @@ const DEFAULT_BANNER = {
   cta_txt_color: "#1e293b",
   bg_linear_colors: ["#185FA5", "#378ADD"],
   related_cat_id: null,
+  order: 0,
 };
 
 const Banners = () => {
   const { t } = useTranslation();
   const { data: banners = [], isLoading, error, refetch } = useBannersQuery();
-  const { createMutation, updateMutation, deleteMutation, activateMutation } = useBannerMutations();
+  const { createMutation, updateMutation, reorderMutation, deleteMutation } = useBannerMutations();
 
   const [selected, setSelected] = useState(null);
   const [isCreating, setIsCreating] = useState(false);
@@ -40,20 +42,18 @@ const Banners = () => {
 
   const handleNewBanner = () => {
     setIsCreating(true);
-    setSelected(null); // Clear selected to show empty form
+    setSelected(null);
   };
 
   const handleToggleActive = (banner) => {
-    if (banner.is_active) {
-      updateMutation.mutate({ id: banner.id, updates: { is_active: false } });
-    } else {
-      activateMutation.mutate(banner.id);
-    }
+    updateMutation.mutate({ id: banner.id, updates: { is_active: !banner.is_active } });
   };
 
   const handleSave = (updates) => {
     if (isCreating) {
-      createMutation.mutate(updates, {
+      // Set order to end of list
+      const maxOrder = banners.length > 0 ? Math.max(...banners.map(b => b.order || 0)) : -1;
+      createMutation.mutate({ ...updates, order: maxOrder + 1 }, {
         onSuccess: (newBanner) => {
           setIsCreating(false);
           setSelected(newBanner);
@@ -69,6 +69,23 @@ const Banners = () => {
        deleteMutation.mutate(id);
        if (selected?.id === id) setSelected(null);
     }
+  };
+
+  const onDragEnd = (result) => {
+    if (!result.destination) return;
+    if (result.destination.index === result.source.index) return;
+
+    const items = Array.from(banners);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+
+    // Prepare updates for the API
+    const orderMap = items.map((item, index) => ({
+      id: item.id,
+      order: index,
+    }));
+
+    reorderMutation.mutate(orderMap);
   };
 
   const editorData = isCreating ? DEFAULT_BANNER : selected;
@@ -99,15 +116,38 @@ const Banners = () => {
           ) : banners.length === 0 ? (
              <div className={styles.emptyList}>{t("admin.marketing.banners.empty", "No banners")}</div>
           ) : (
-            banners.map((banner) => (
-              <BannerCard
-                key={banner.id}
-                banner={banner}
-                isSelected={selected?.id === banner.id}
-                onSelect={() => handleSelect(banner)}
-                onToggleActive={() => handleToggleActive(banner)}
-              />
-            ))
+            <DragDropContext onDragEnd={onDragEnd}>
+              <Droppable droppableId="banners">
+                {(provided) => (
+                  <div {...provided.droppableProps} ref={provided.innerRef}>
+                    {banners.map((banner, index) => (
+                      <Draggable key={banner.id} draggableId={banner.id.toString()} index={index}>
+                        {(provided, snapshot) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            className={`${styles.draggableItem} ${snapshot.isDragging ? styles.dragging : ""}`}
+                          >
+                            <div {...provided.dragHandleProps} className={styles.dragHandle}>
+                              <GripVertical size={16} />
+                            </div>
+                            <div className={styles.cardWrapper}>
+                              <BannerCard
+                                banner={banner}
+                                isSelected={selected?.id === banner.id}
+                                onSelect={() => handleSelect(banner)}
+                                onToggleActive={() => handleToggleActive(banner)}
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
           )}
         </div>
       </div>

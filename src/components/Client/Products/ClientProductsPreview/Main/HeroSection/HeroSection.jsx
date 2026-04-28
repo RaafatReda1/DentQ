@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from "./HeroSection.module.css";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 
 function HeroSection({ Banner }) {
   const { i18n } = useTranslation();
@@ -15,6 +16,7 @@ function HeroSection({ Banner }) {
   const bannerCTA = banner[`cta_text_${lang}`] ?? "";
 
   const link = banner?.cta_link || "category/" + banner?.related_cat_id;
+  const path = link.startsWith("/") ? link : `/${link}`;
 
   // Process linear colors safely
   let gradientColors = ["#0f2027", "#203a43", "#2c5364"]; // Default
@@ -49,13 +51,22 @@ function HeroSection({ Banner }) {
           </h3>
         )}
 
-        {bannerCTA && (
+        {bannerCTA && !banner.cta_link && (
           <a
             href={`#${link}`}
             className={styles.ctaBtn}
           >
             {bannerCTA}
           </a>
+        )}
+
+        {banner.cta_link && (
+          <Link
+            to={path}
+            className={styles.ctaBtn}
+          >
+            {bannerCTA}
+          </Link>
         )}
       </div>
     </div>

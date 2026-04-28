@@ -1,8 +1,9 @@
 import React from 'react';
-import { Star } from 'lucide-react';
+import { Star, Copy } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import StatusBadge from '../StatusBadge/StatusBadge';
 import styles from './TableRow.module.css';
+import toast from 'react-hot-toast';
 
 /**
  * TableRow — Single row in the products data table.
@@ -35,6 +36,11 @@ const TableRow = ({
         if (product.is_featured) return 'featured';
         if (product.is_trending) return 'trending';
         return product.is_active ? 'active' : 'inactive';
+    };
+
+    const handleCopyId = () => {
+        navigator.clipboard.writeText(product.id);
+        toast.success(tp('id_copied') || 'ID Copied!');
     };
 
     return (
@@ -101,6 +107,9 @@ const TableRow = ({
             {/* Actions */}
             <td className={styles.actionCell}>
                 <div className={styles.actionGroup}>
+                    <button className={styles.actionBtn} onClick={handleCopyId} title="Copy ID">
+                        <Copy size={14} />
+                    </button>
                     <button className={styles.actionBtn} onClick={() => onEdit(product)} title={tp('btn_edit')}>
                         {tp('btn_edit')}
                     </button>

@@ -141,3 +141,39 @@
   .container { flex-direction: column; }
   .leftPanel { width: 100%; }
 }
+
+.draggableItem {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: white;
+  border-radius: 12px;
+  transition: box-shadow 0.2s;
+}
+
+.dragging {
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  z-index: 1000;
+}
+
+.dragHandle {
+  cursor: grab;
+  color: #94a3b8;
+  padding: 8px 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.dragHandle:hover {
+  color: #64748b;
+}
+
+.dragHandle:active {
+  cursor: grabbing;
+}
+
+.cardWrapper {
+  flex: 1;
+}

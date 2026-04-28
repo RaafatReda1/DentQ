@@ -828,8 +828,7 @@
             "subtitle": "Manage promo codes, banners, and growth tools for DentQ",
             "tabs": {
                 "promo": "Promo codes",
-                "banners": "Banners",
-                "pixels": "Pixels & analytics"
+                "banners": "Banners"
             },
             "promo": {
                 "all_codes": "All promo codes",
@@ -888,40 +887,39 @@
             "banners": {
                 "title": "Banners",
                 "new_banner": "+ New banner",
-                "select_hint": "Select a banner or create a new one",
                 "editor": {
-                    "preview_title": "Banner Title",
+                    "live_preview": "LIVE PREVIEW",
+                    "online": "ONLINE",
                     "content": "CONTENT",
                     "title_en": "Title EN",
                     "title_ar": "Title AR",
                     "subtitle_en": "Subtitle EN",
                     "subtitle_ar": "Subtitle AR",
-                    "cta": "CTA BUTTON",
-                    "cta_en": "CTA Text EN",
-                    "cta_ar": "CTA Text AR",
-                    "cta_link": "CTA Link",
-                    "background": "BACKGROUND GRADIENT",
-                    "color_a": "COLOR A",
-                    "color_b": "COLOR B",
-                    "btn_style": "BUTTON STYLE",
-                    "bg": "Background",
-                    "text_color": "Text color",
-                    "settings": "SETTINGS",
-                    "active": "Active on storefront",
-                    "db_record": "DATABASE RECORD",
-                    "saving": "Saving...",
+                    "background": "BACKGROUND",
+                    "upload_image": "Upload Image",
+                    "color_a": "Color A",
+                    "color_b": "Color B",
+                    "link_btn": "LINK & BUTTON",
+                    "cta_en": "Btn Text EN",
+                    "cta_ar": "Btn Text AR",
+                    "link_type": "Link Type",
+                    "home": "Home",
+                    "shop": "Shop",
+                    "category": "Category",
+                    "product": "Product",
+                    "target_cat": "Target Category",
+                    "target_prod": "Target Product",
+                    "use_search": "Use Search",
+                    "manual_id": "Manual ID",
+                    "id_placeholder": "Paste ID here...",
+                    "final_url": "Final URL",
+                    "btn_bg": "Btn BG",
+                    "btn_text": "Btn Text",
+                    "active_label": "Active on storefront",
                     "save": "Save Banner",
+                    "choose": "Choose...",
                     "delete": "Delete this banner"
                 }
-            },
-            "pixels": {
-                "title": "Pixels & Analytics",
-                "subtitle": "Connect your tracking pixels to measure performance.",
-                "not_connected": "Not connected",
-                "connect": "Connect",
-                "conversion_title": "Promo Code Conversion",
-                "conversion_sub": "Track how each promo code is converting from orders data.",
-                "coming_soon": "📊 Analytics integration coming soon..."
             }
         }
     },
@@ -932,6 +930,7 @@
         "views": "views",
         "in_stock": "in stock",
         "unknown_item": "Unknown Item",
-        "units": "units"
+        "units": "units",
+        "id_copied": "ID Copied to clipboard!"
     }
 }

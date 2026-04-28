@@ -3,7 +3,7 @@ import {
   createBanner,
   updateBanner,
   deleteBanner,
-  activateBannerExclusive,
+  updateBannerOrder,
 } from "../actions";
 import toast from "react-hot-toast";
 
@@ -24,17 +24,17 @@ export const useBannerMutations = () => {
     onError: () => toast.error("Failed to update banner"),
   });
 
+  const reorderMutation = useMutation({
+    mutationFn: updateBannerOrder,
+    onSuccess: () => { invalidate(); },
+    onError: () => toast.error("Failed to update order"),
+  });
+
   const deleteMutation = useMutation({
     mutationFn: (id) => deleteBanner(id),
     onSuccess: () => { invalidate(); toast.success("Banner deleted"); },
     onError: () => toast.error("Failed to delete banner"),
   });
 
-  const activateMutation = useMutation({
-    mutationFn: (id) => activateBannerExclusive(id),
-    onSuccess: () => { invalidate(); toast.success("Banner activated!"); },
-    onError: () => toast.error("Failed to activate banner"),
-  });
-
-  return { createMutation, updateMutation, deleteMutation, activateMutation };
+  return { createMutation, updateMutation, reorderMutation, deleteMutation };
 };
