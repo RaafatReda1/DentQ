@@ -32,15 +32,20 @@ const Invoice = React.forwardRef(({ order }, ref) => {
           </tr>
         </tbody>
 
-        {/* Magic Repeating Footer */}
+        {/* Magic Repeating Spacer to ensure table doesn't overlap fixed footer */}
         <tfoot>
           <tr>
             <td>
-              <Footer />
+              <div className={styles.footerSpacer}></div>
             </td>
           </tr>
         </tfoot>
       </table>
+
+      {/* The Actual Footer natively sticking to the bottom on print pages */}
+      <div className={styles.fixedFooter}>
+        <Footer />
+      </div>
     </div>
   );
 });

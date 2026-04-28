@@ -15,6 +15,18 @@
   border: none;
 }
 
+/* Empty box that replicates the height of your footer so the text doesn't overlap it */
+.footerSpacer {
+  height: 180px; /* Adjust this if your footer gets taller */
+}
+
+/* Base style for screen preview */
+.fixedFooter {
+  position: relative;
+  width: 100%;
+  margin-top: auto; /* Pushes to bottom if flex is used, otherwise naturally follows */
+}
+
 /* Ensure our layout triggers the native print repeating engine */
 @media print {
   thead { display: table-header-group; }
@@ -23,5 +35,12 @@
   /* Prevent page breaks cleanly where possible */
   .pageContent {
     page-break-inside: auto; /* Allow the content body to jump across pages */
+  }
+
+  /* Force the footer permanently to the physical edge of the paper */
+  .fixedFooter {
+    position: fixed;
+    bottom: 0;
+    left: 0;
   }
 }
