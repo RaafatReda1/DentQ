@@ -822,6 +822,107 @@
             "recoverable_sub": "With phone numbers",
             "user_ratio": "User Ratio",
             "user_ratio_sub": "Registered users"
+        },
+        "marketing": {
+            "title": "Marketing",
+            "subtitle": "Manage promo codes, banners, and growth tools for DentQ",
+            "tabs": {
+                "promo": "Promo codes",
+                "banners": "Banners",
+                "pixels": "Pixels & analytics"
+            },
+            "promo": {
+                "all_codes": "All promo codes",
+                "new_code": "+ New code",
+                "no_codes": "No promo codes yet. Create your first code!",
+                "expired_on": "Expired",
+                "stats": {
+                    "total_codes": "Total codes",
+                    "active": "active",
+                    "total_uses": "Total uses",
+                    "uses_sub": "All time",
+                    "discount_given": "Discount given",
+                    "egp_month": "EGP this month",
+                    "top_code": "Top code",
+                    "uses": "uses"
+                },
+                "col": {
+                    "code": "CODE",
+                    "type": "TYPE",
+                    "discount": "DISCOUNT",
+                    "uses": "USES",
+                    "expiry": "EXPIRY",
+                    "status": "STATUS"
+                },
+                "status": {
+                    "active": "Active",
+                    "maxed": "Maxed out",
+                    "expired": "Expired",
+                    "inactive": "Inactive"
+                },
+                "actions": {
+                    "edit": "Edit",
+                    "deactivate": "Deactivate",
+                    "activate": "Activate",
+                    "delete": "Delete",
+                    "renew": "Renew"
+                },
+                "modal": {
+                    "create_title": "New Promo Code",
+                    "edit_title": "Edit Promo Code",
+                    "code": "Code",
+                    "type": "Type",
+                    "percentage": "Percentage (%)",
+                    "fixed": "Fixed (EGP)",
+                    "discount": "Discount Value",
+                    "max_uses": "Max Uses",
+                    "expiry": "Expiry Date",
+                    "active": "Active on creation",
+                    "saving": "Saving...",
+                    "save": "Save Changes",
+                    "create": "Create Code",
+                    "err_code": "Code is required",
+                    "err_discount": "Valid discount is required"
+                }
+            },
+            "banners": {
+                "title": "Banners",
+                "new_banner": "+ New banner",
+                "select_hint": "Select a banner or create a new one",
+                "editor": {
+                    "preview_title": "Banner Title",
+                    "content": "CONTENT",
+                    "title_en": "Title EN",
+                    "title_ar": "Title AR",
+                    "subtitle_en": "Subtitle EN",
+                    "subtitle_ar": "Subtitle AR",
+                    "cta": "CTA BUTTON",
+                    "cta_en": "CTA Text EN",
+                    "cta_ar": "CTA Text AR",
+                    "cta_link": "CTA Link",
+                    "background": "BACKGROUND GRADIENT",
+                    "color_a": "COLOR A",
+                    "color_b": "COLOR B",
+                    "btn_style": "BUTTON STYLE",
+                    "bg": "Background",
+                    "text_color": "Text color",
+                    "settings": "SETTINGS",
+                    "active": "Active on storefront",
+                    "db_record": "DATABASE RECORD",
+                    "saving": "Saving...",
+                    "save": "Save Banner",
+                    "delete": "Delete this banner"
+                }
+            },
+            "pixels": {
+                "title": "Pixels & Analytics",
+                "subtitle": "Connect your tracking pixels to measure performance.",
+                "not_connected": "Not connected",
+                "connect": "Connect",
+                "conversion_title": "Promo Code Conversion",
+                "conversion_sub": "Track how each promo code is converting from orders data.",
+                "coming_soon": "📊 Analytics integration coming soon..."
+            }
         }
     },
     "common": {

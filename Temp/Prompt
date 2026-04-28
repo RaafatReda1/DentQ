@@ -1,473 +1,122 @@
-You are building a production-ready Orders Management Admin Panel as a single self-contained React component (or Next.js page). The panel has three view modes that the admin can toggle between freely at any time without losing state. All three views share the same data, filters, and selection state.
-
-────────────────────────────────────────
-TECH STACK
-────────────────────────────────────────
-- React 18 + TypeScript
-- Supabase JS v2 client (@supabase/supabase-js)
-- TailwindCSS for all styling (no external component libraries)
-- React Query (@tanstack/react-query) for data fetching and cache
-- Zustand for shared UI state (selected orders, active view, filters)
-- react-beautiful-dnd for Kanban drag-and-drop (Plan B only)
-- date-fns for date formatting
-- No other dependencies
-
-────────────────────────────────────────
-DATABASE SCHEMA (Supabase / PostgreSQL)
-────────────────────────────────────────
-
-Table: "Orders"
-  id: uuid (PK)
-  client_id: uuid → "Clients"(id) nullable
-  guest_id: uuid nullable
-  full_name: text
-  phone_number: text
-  address: text
-  governorate_id: bigint → "GovernoratesShipping"(id)
-  shipping_price: numeric(10,2)
-  status: varchar(20) — one of: pending | paid | shipped | delivered | cancelled
-  total_amount: numeric(10,2)
-  discount: numeric(10,2)
-  payment_method: varchar(20) — one of: credit_card | paypal | cash_on_delivery
-  promocode_id: integer → promo_codes(id) nullable
-  created_at: timestamptz
-  updated_at: timestamptz
-
-Table: "Order_items"
-  id: bigint (PK)
-  order_id: uuid → "Orders"(id)
-  product_id: uuid → "Products"(id) nullable
-  quantity: integer
-  price: numeric(10,2)
-  color: text nullable
-  size: text nullable
-
-Table: "Clients"
-  id: uuid (PK)
-  fullName: text
-  nickName: text
-  email: text
-  phone: numeric
-  avatarUrl: text
-  address: text
-  governorateId: bigint
-
-Table: "GovernoratesShipping"
-  id: bigint (PK)
-  governorateEn: text
-  governorateAr: text
-  shippingPrice: double precision
-
-Table: "Carts"
-  id: uuid (PK)
-  client_id: uuid nullable → "Clients"(id)
-  guest_id: text nullable
-  items: jsonb (array of {product_id, quantity, price, color, size, name, image})
-  created_at: timestamptz
-  updated_at: timestamptz
-
-────────────────────────────────────────
-GLOBAL SHARED STATE (Zustand store)
-────────────────────────────────────────
-
-Create a single Zustand store called useOrdersStore with:
-
-  activeView: 'table' | 'kanban' | 'detail'  — current view mode
-  selectedIds: Set<string>                     — selected order UUIDs for bulk ops
-  filters: {
-    search: string                             — matches full_name, phone_number, order id
-    status: string                             — '' means all
-    payment: string                            — '' means all
-    governorate: string                        — '' means all
-    dateFrom: string                           — ISO date string
-    dateTo: string                             — ISO date string
-  }
-  activeOrderId: string | null                 — the order currently open in detail panel
-
-Actions:
-  setView(view)
-  toggleSelect(id)
-  selectAll(ids)
-  clearSelection()
-  setFilter(key, value)
-  resetFilters()
-  setActiveOrder(id)
-
-────────────────────────────────────────
-DATA FETCHING (React Query)
-────────────────────────────────────────
-
-useOrdersQuery(filters):
-  Fetches from "Orders" joined with:
-    - "GovernoratesShipping" (for governorateEn + shippingPrice)
-    - "Clients" (for fullName, email, phone)
-  Applies filters from the Zustand store
-  Returns: Order[] sorted by created_at desc
-  Cache key: ['orders', filters]
-  Stale time: 30 seconds
-
-useOrderDetailQuery(orderId):
-  Fetches single order with full join:
-    - "Order_items" joined with "Products" (nameEn, images[0])
-    - "Clients"
-    - "GovernoratesShipping"
-    - promo_codes (code, discount_value)
-  Only runs when orderId is not null
-  Cache key: ['order', orderId]
-
-useCartsQuery():
-  Fetches all "Carts" joined with "Clients" (fullName, email)
-  Sorted by updated_at desc
-  Cache key: ['carts']
-  Stale time: 60 seconds
-
-useOrderStatsMemo(orders):
-  A useMemo that derives from the orders array:
-    totalOrders: number
-    totalRevenue: number (sum of total_amount where status !== 'cancelled')
-    pendingCount: number
-    paidCount: number
-    shippedCount: number
-    deliveredCount: number
-    cancelledCount: number
-
-useBulkStatusMutation():
-  Takes: { ids: string[], newStatus: string }
-  Runs: supabase.from("Orders").update({ status: newStatus }).in('id', ids)
-  On success: invalidates ['orders'] cache, calls clearSelection()
-
-useSingleStatusMutation():
-  Takes: { id: string, newStatus: string }
-  Runs: supabase.from("Orders").update({ status: newStatus }).eq('id', id)
-  On success: invalidates ['orders'] and ['order', id] cache
-
-────────────────────────────────────────
-STATUS CONSTANTS
-────────────────────────────────────────
-
-Define a STATUSES array in order:
-  [
-    { key: 'pending',   label: 'Pending',   color: 'amber' },
-    { key: 'paid',      label: 'Paid',      color: 'blue'  },
-    { key: 'shipped',   label: 'Shipped',   color: 'purple'},
-    { key: 'delivered', label: 'Delivered', color: 'green' },
-    { key: 'cancelled', label: 'Cancelled', color: 'red'   },
-  ]
-
-Define a STATUS_NEXT map for the "advance to next" shortcut:
-  pending   → paid
-  paid      → shipped
-  shipped   → delivered
-  delivered → null (terminal)
-  cancelled → null (terminal)
-
-Define a Tailwind color map per status key for badges, backgrounds, and text:
-  Use consistent classes like: bg-amber-50 text-amber-800 for pending, etc.
-
-────────────────────────────────────────
-TOP-LEVEL COMPONENT: <OrdersPage />
-────────────────────────────────────────
-
-Layout: full height flex-col
-
-Render in this order:
-
-1. <StatsBar />         — always visible, 5 stat cards
-2. <Toolbar />          — always visible, search + filters + view toggle + bulk bar
-3. <ViewRenderer />     — switches between the 3 views based on activeView
-
-────────────────────────────────────────
-COMPONENT: <StatsBar />
-────────────────────────────────────────
-
-A horizontal row of 5 metric cards derived from useOrderStatsMemo:
-  - Total orders (neutral)
-  - Revenue in EGP/$ (green)
-  - Pending count (amber, clickable → sets filter status=pending)
-  - Shipped count (purple, clickable → sets filter status=shipped)
-  - Cancelled count (red, clickable → sets filter status=cancelled)
-
-Each card: muted label on top, large bold number below.
-Clicking a status card filters the order list to that status.
-
-────────────────────────────────────────
-COMPONENT: <Toolbar />
-────────────────────────────────────────
-
-Row 1 — Filters:
-  - Search input (debounced 300ms) → updates filters.search
-  - Status select dropdown → updates filters.status
-  - Payment method select → updates filters.payment
-  - Governorate select (populated from useGovernoratesQuery) → filters.governorate
-  - Date range: two date inputs (from / to) → filters.dateFrom, filters.dateTo
-  - "Reset filters" button (only visible when any filter is active)
-
-Row 2 — View toggle + Bulk bar:
-  Left side: 3 toggle buttons for view modes:
-    [Table] [Kanban] [Detail]
-    Active view button is visually highlighted.
-
-  Right side (only visible when selectedIds.size > 0):
-    "{N} orders selected"
-    Status dropdown: "Move to..." → the 5 statuses minus cancelled
-    [Apply bulk] button → calls useBulkStatusMutation
-    [Clear selection] button
-
-────────────────────────────────────────
-VIEW A: <TableView />
-────────────────────────────────────────
-
-A full-width table with these columns (table-layout: fixed):
-  [ ] checkbox | Order ID | Client | Total | Status | Payment | Governorate | Date | Actions
-
-Header row:
-  - Master checkbox: checks/unchecks all currently visible orders
-
-Each data row:
-  - Checkbox: calls toggleSelect(order.id)
-  - Order ID: monospace font, truncated UUID (first 8 chars + "…"), copy-to-clipboard on click
-  - Client: full_name bold, phone_number below in muted small text. If client_id is null, show "Guest" badge
-  - Total: formatted currency
-  - Status: colored badge using STATUS color map
-  - Payment: pill badge (COD / Card / PayPal)
-  - Governorate: governorateEn
-  - Date: formatted with date-fns (e.g. "Apr 15, 2026")
-  - Actions column:
-      [View] button → sets activeOrderId + switches view to 'detail'
-      Status inline select dropdown → calls useSingleStatusMutation on change
-        The dropdown only shows valid next statuses (not backwards, not same status)
-        Delivered and Cancelled orders show a disabled "—" instead
-
-Empty state: centered illustration + "No orders found" + "Reset filters" button
-
-Loading state: skeleton rows (5 rows of animated gray bars)
-
-Pagination:
-  Page size: 20 orders per page
-  Bottom bar: "Showing X–Y of Z" + Prev / page numbers / Next
-  Pagination is client-side from the React Query result
-
-────────────────────────────────────────
-VIEW B: <KanbanView />
-────────────────────────────────────────
-
-A horizontal flex row of 5 columns, one per status.
-The board is scrollable horizontally if needed.
-
-Each column (<KanbanColumn />):
-  Header: status label + count badge (colored per status)
-  Body: vertically scrollable list of <KanbanCard /> items
-  Each column only shows orders matching that status (filtered from the full orders array)
-
-Each <KanbanCard />:
-  - Checkbox top-left: calls toggleSelect
-  - Drag handle top-right (⠿ icon): enables react-beautiful-dnd
-  - Order ID (truncated monospace)
-  - Client name bold, governorate + payment method below
-  - Total amount
-  - Date
-  - Status advance button (only if STATUS_NEXT[status] exists):
-      Label: "Mark as [next status] →"
-      On click: calls useSingleStatusMutation({ id, newStatus: STATUS_NEXT[status] })
-  - [View details] text link → sets activeOrderId + switches to 'detail' view
-
-Drag and drop behavior (react-beautiful-dnd):
-  - Dragging a card to another column calls useSingleStatusMutation
-  - Cannot drag to 'cancelled' (cancelled is drop-disabled)
-  - Cannot drag backwards (paid → pending is not allowed). 
-    Enforce with a canDrop(fromStatus, toStatus) check using the STATUSES order index.
-  - Optimistic UI: update the local cache immediately, revert on error
-
-Cancelled column:
-  Cards are rendered at 60% opacity
-  No drag handle, no advance button
-  Only shows [View details] link
-
-Empty column state: dashed border placeholder "No orders"
-
-────────────────────────────────────────
-VIEW C: <DetailView />
-────────────────────────────────────────
-
-A two-pane horizontal layout:
-
-LEFT PANE (fixed 280px width, scrollable):
-  Top: mini stats row (Total / Pending / Shipped / Revenue) — same data as StatsBar but compact
-
-  Bulk bar (visible when selectedIds.size > 0):
-    "{N} selected" + status dropdown + [Apply] button
-
-  Order list items — one per order, each showing:
-    - Checkbox
-    - Client name (bold) + order ID (muted mono below)
-    - Delivery info: governorate · payment · date (small muted)
-    - Right side: total amount + status badge
-    - Selected state: teal/green background highlight
-    - Click anywhere on row (except checkbox): sets activeOrderId
-
-RIGHT PANE (flex-1, scrollable):
-  If no activeOrderId: centered empty state "Select an order to view details"
-
-  If activeOrderId is set, render <OrderDetailPanel orderId={activeOrderId} />:
-
-    Section 1 — Header:
-      Client name (large, bold) + truncated order ID in mono below
-      Right side action buttons:
-        [Print invoice] → window.print() with a print-specific CSS class
-        [Cancel order] → calls useSingleStatusMutation({ id, newStatus: 'cancelled' })
-          Only visible if status is not already cancelled or delivered
-
-    Section 2 — Status stepper:
-      A horizontal pipeline of the 4 non-cancelled statuses: Pending → Paid → Shipped → Delivered
-      Past statuses: green filled circle with checkmark
-      Current status: teal filled, bold label
-      Future statuses: gray outline circle
-      Each future status step is clickable → calls useSingleStatusMutation
-      If order is cancelled: show a separate red "Cancelled" badge instead of the stepper
-
-    Section 3 — Client & delivery info (key-value rows):
-      Client name (linked to client page if client_id exists)
-      Phone number
-      Full address
-      Governorate + shipping price
-      Payment method
-      Promo code (if promocode_id exists): code string + discount amount
-
-    Section 4 — Order items table:
-      Thumbnail image (images[0] from Products), product name, color, size, quantity, unit price, subtotal
-      Total row at bottom: subtotal + shipping - discount = total_amount
-
-    Section 5 — Carts tab:
-      A secondary tab strip inside the right pane: [Order Details] [Carts]
-      Switching to Carts tab renders <CartsPanel /> which shows:
-        A list of all active carts from useCartsQuery
-        Each cart row: client name or "Guest (guest_id truncated)", item count, total value, last updated
-        Clicking a cart row expands it inline to show cart items (product name, qty, price, color, size)
-        [Clear cart] button per row: deletes the cart row from Supabase
-        No pagination needed — carts are typically low volume
-
-────────────────────────────────────────
-SHARED BEHAVIORS ACROSS ALL 3 VIEWS
-────────────────────────────────────────
-
-1. Filter state is always live:
-   All 3 views read from the same Zustand filters.
-   Switching views never resets filters.
-
-2. Selection state is always live:
-   Checking a box in TableView, then switching to KanbanView,
-   the card in KanbanView must also appear checked.
-   selectedIds is a Set in Zustand shared across all views.
-
-3. Bulk action bar:
-   Always rendered inside <Toolbar /> regardless of view.
-   Applies to whichever view is active.
-
-4. Status mutation feedback:
-   On any status change (single or bulk):
-     Show a toast notification: "Status updated to [X]" (green)
-     On error: "Failed to update. Try again." (red)
-   Use a simple custom useToast hook (no external library).
-
-5. Optimistic updates:
-   For single status changes: update React Query cache immediately before Supabase responds.
-   On error: rollback cache to previous value.
-
-6. Real-time updates (optional but recommended):
-   Subscribe to Supabase realtime on the "Orders" table.
-   On INSERT or UPDATE: invalidate ['orders'] query automatically.
-   This keeps all 3 views in sync if another admin is working simultaneously.
-
-7. Empty and loading states:
-   Every view must handle: loading (skeleton), empty (illustration + message), error (retry button).
-
-────────────────────────────────────────
-FILE STRUCTURE
-────────────────────────────────────────
-
-src/
-  pages/
-    admin/
-      orders.tsx                  ← OrdersPage (top-level)
-
-  components/
-    orders/
-      StatsBar.tsx
-      Toolbar.tsx
-      ViewRenderer.tsx
-      views/
-        TableView.tsx
-        KanbanView.tsx
-        KanbanColumn.tsx
-        KanbanCard.tsx
-        DetailView.tsx
-        OrderDetailPanel.tsx
-        CartsPanel.tsx
-      shared/
-        StatusBadge.tsx           ← reusable colored status pill
-        StatusSelect.tsx          ← inline dropdown for status change
-        StatusStepper.tsx         ← visual pipeline stepper (used in DetailView)
-        OrderCheckbox.tsx
-        BulkActionBar.tsx
-
-  hooks/
-    useOrdersQuery.ts
-    useOrderDetailQuery.ts
-    useCartsQuery.ts
-    useOrderStatsMemo.ts
-    useBulkStatusMutation.ts
-    useSingleStatusMutation.ts
-    useGovernoratesQuery.ts
-    useToast.ts
-
-  store/
-    useOrdersStore.ts             ← Zustand store
-
-  constants/
-    orderStatuses.ts              ← STATUSES array + STATUS_NEXT map + color map
-
-  lib/
-    supabase.ts                   ← Supabase client singleton
-    queryClient.ts                ← React Query client config
-
-────────────────────────────────────────
-STYLING RULES
-────────────────────────────────────────
-
-Use only Tailwind utility classes. No inline styles. No external UI libraries.
-
-Status color mapping (Tailwind classes):
-  pending:   bg-amber-50  text-amber-800  border-amber-200
-  paid:      bg-blue-50   text-blue-800   border-blue-200
-  shipped:   bg-purple-50 text-purple-800 border-purple-200
-  delivered: bg-green-50  text-green-800  border-green-200
-  cancelled: bg-red-50    text-red-800    border-red-200
-
-All cards: bg-white border border-gray-100 rounded-xl
-All badges: rounded-full px-2 py-0.5 text-xs font-medium
-Tables: text-sm, header row text-gray-500 font-medium
-Sidebar/panel borders: border-r border-gray-100
-Active view toggle button: bg-teal-500 text-white
-Inactive view toggle button: bg-white text-gray-500 border border-gray-200
-
-Dark mode: use Tailwind's dark: prefix throughout.
-  dark:bg-gray-900 for page background
-  dark:bg-gray-800 for cards and panels
-  dark:border-gray-700 for borders
-  dark:text-gray-100 for primary text
-  dark:text-gray-400 for muted text
-
-────────────────────────────────────────
-IMPORTANT CONSTRAINTS
-────────────────────────────────────────
-
-1. The 3 views are views of the same data — NOT separate pages. Do not refetch on view switch.
-2. Never mutate status backwards (e.g. delivered → shipped is forbidden in UI and in mutation).
-3. Guest orders (client_id = null) must display gracefully — never crash on missing client join.
-4. All money values must display with 2 decimal places using toLocaleString or toFixed(2).
-5. All dates must use date-fns format(parseISO(date), 'MMM d, yyyy').
-6. UUID columns displayed in UI must always be truncated to first 8 chars + "…".
-7. The Supabase client must be imported from a single lib/supabase.ts singleton — never instantiated inline.
-8. React Query must be configured with retry: 1 and staleTime: 30000 globally.
-9. The bulk apply button must be disabled if no status is selected in the dropdown.
-10. Cancelled orders must never show a "next status" advance button.
+As we pivot to the **Marketing Tab** for your DentQ admin panel, you're shifting from managing *operations* (building products and fulfilling orders) to managing *growth* (driving traffic, increasing conversions, and retaining customers).
+
+In a highly professional e-commerce system, the Marketing Tab is the absolute engine for generating revenue. Based on the architecture we've already built together, here is exactly what the Marketing Tab should do:
+
+### 1. Promo Codes & Discounts Engine (Priority #1)
+You need a system to create and track coupons.
+*   **What it does:** Allows you to generate codes (e.g., `SUMMER20`, `FREESHIP`).
+*   **Features:** You set whether it's a fixed amount (e.g., -50 EGP) or a percentage (-20%), set expiration dates, limit the total number of uses (e.g., "First 100 buyers"), and set minimum order values.
+*   **Why:** You already have the `promoDiscount` line integrated into your Invoice and Orders system! This is the control panel that fuels it.
+
+### 2. Abandoned Cart Recovery 
+We already built the `CartsView` tracking in your Order management, but the Marketing tab is where you *act* on that data.
+*   **What it does:** Displays the users who left items in their cart and gives you a one-click button to send them an automated email/WhatsApp message.
+*   **Features:** Often integrates with an "auto-generate coupon" feature (e.g., *"Wait! Here's 10% off if you complete your DentQ checkout today!"*).
+
+### 3. Storefront Banners & Announcements
+You shouldn't need to rewrite React code every time you have a holiday sale.
+*   **What it does:** A visual editor where you can turn on a "Top Marquee Banner" (e.g., *"Free Shipping on all Dental Implants this week!*" or *"Happy Eid!"*).
+*   **Features:** You can change the text, color, and toggle it Active/Inactive safely from the Admin panel. Your storefront React app simply fetches this table on load.
+
+### 4. SEO & Analytics Management
+A centralized place to monitor traffic.
+*   **What it does:** You can integrate your Facebook Meta Pixel ID, TikTok Pixel ID, or Google Analytics Data Stream ID directly into a database table.
+*   **Features:** Viewing quick conversion metrics (e.g., "How many people used the `VIP20` code today?").
+
+**How do you want to proceed?** 
+I recommend we start by building the **Promo Codes Engine**, as that directly ties into your Checkout and Invoice systems. Shall I investigate the database and draft up a schema/implementation plan for it?
+
+
+create table public."Banners" (
+  id serial not null,
+  title_en character varying(200) not null,
+  title_ar character varying(200) not null,
+  subtitle_en character varying(200) null,
+  subtitle_ar character varying(200) null,
+  image character varying(255) null,
+  cta_text_en character varying(100) null,
+  cta_text_ar character varying(100) null,
+  cta_link character varying(255) null,
+  is_active boolean null default true,
+  created_at timestamp without time zone null default CURRENT_TIMESTAMP,
+  updated_at timestamp without time zone null default CURRENT_TIMESTAMP,
+  slug text null,
+  title_color text null,
+  subtitle_color text null,
+  cta_bg_color text null,
+  cta_txt_color text null,
+  bg_linear_colors jsonb null,
+  related_cat_id uuid null,
+  constraint hero_banners_pkey primary key (id),
+  constraint Banners_slug_key unique (slug),
+  constraint Banners_related_cat_id_fkey foreign KEY (related_cat_id) references "Categories" (id) on update CASCADE on delete RESTRICT
+) TABLESPACE pg_default;
+
+create index IF not exists idx_hero_active on public."Banners" using btree (is_active) TABLESPACE pg_default;
+
+create trigger update_hero_banners_updated_at BEFORE
+update on "Banners" for EACH row
+execute FUNCTION update_updated_at_column ();
+
+create table public.promo_codes (
+  id serial not null,
+  code character varying(50) not null,
+  discount numeric(10, 2) not null,
+  type character varying(20) not null,
+  used boolean null default false,
+  max_uses integer null default 0,
+  used_by_user_ids jsonb null default '[]'::jsonb,
+  is_active boolean null default true,
+  expiry timestamp with time zone null,
+  created_at timestamp with time zone null default now(),
+  updated_at timestamp with time zone null default now(),
+  constraint promo_codes_pkey primary key (id),
+  constraint promo_codes_code_key unique (code),
+  constraint promo_codes_type_check check (
+    (
+      (type)::text = any (
+        (
+          array[
+            'percentage'::character varying,
+            'fixed'::character varying
+          ]
+        )::text[]
+      )
+    )
+  )
+) TABLESPACE pg_default;
+
+create index IF not exists idx_promo_codes_code on public.promo_codes using btree (code) TABLESPACE pg_default;
+
+create index IF not exists idx_promo_codes_active on public.promo_codes using btree (is_active) TABLESPACE pg_default;
+
+create index IF not exists idx_promo_codes_expiry on public.promo_codes using btree (expiry) TABLESPACE pg_default;
+
+create trigger update_promo_codes_updated_at BEFORE
+update on promo_codes for EACH row
+execute FUNCTION update_updated_at_column ();
+
+
+
+
+Here's the full UI/UX plan with a working interactive mockup. Let me walk you through the design decisions.
+
+How the Marketing Tab is structured
+The tab is split into three sections — all accessible from the pill-style tab bar at the top.
+Section 1 — Promo Codes (your main tool)
+At the top, four metric cards give you a live dashboard: total codes, total uses this week, discount given in EGP this month, and the current top-performing code. Below that is the codes table.
+Each row in the table shows the code (in monospace so it's instantly copyable), whether it's a percentage or fixed-EGP type (color-coded badges), the discount value, a visual progress bar for uses vs. max_uses, the expiry date, status, and action buttons.
+The "+ New code" button opens a modal form that maps exactly to your create-promo-code edge function payload: code, type (percentage or fixed), discount value, max_uses, expiry, and an active toggle. On submit it calls your edge function with the admin's JWT token — no page reload needed.
+Status logic is automatic: if used_by_user_ids.length >= max_uses, it shows "Maxed out"; if expiry < now(), it shows "Expired"; otherwise it reflects is_active.
+Section 2 — Banners
+Each banner shows a color preview, the English title, subtitle, and a toggle switch. The critical UX rule here: only one banner can be active at a time. Flipping a toggle on one auto-deactivates all others — this is enforced in the UI before even hitting the database. This prevents you from accidentally showing two conflicting banners on the storefront.
+Section 3 — Pixels & Analytics
+A clean list of your tracking pixels (Meta, TikTok, GA4) with their IDs and a "Connect" button for unlinked ones. Below that is a conversion table showing how each promo code performed — impressions, successful checkouts, and revenue attributed — pulling from your orders data joined against promo_codes.used_by_user_ids.
+
+Admin workflow for creating a promo code (step by step)
+
+Admin clicks "+ New code"
+Fills in: code name, type (% or EGP), value, max uses, optional expiry
+Hits "Create code" → your frontend calls POST /functions/v1/create-promo-code with the admin JWT + the fields
+The edge function verifies admin via CheckIsAdmin, then inserts into promo_codes![alt text](image-1.png)
+On success (201), the table refreshes and the new code appears immediately

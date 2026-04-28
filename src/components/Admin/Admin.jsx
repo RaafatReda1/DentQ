@@ -8,6 +8,7 @@ import Orders from "./Orders/Orders";
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from './Orders/lib/queryClient';
 import Invoice from './Orders/components/Invoice/Invoice';
+import Marketing from "./Marketing/Marketing";
 const Admin = () => {
   return (
     <QueryClientProvider client={queryClient}>
@@ -35,10 +36,7 @@ const Admin = () => {
           <Route path="catalogs" element={<Catalogs />} />
 
           <Route path="orders" element={<Orders />} />
-          <Route
-            path="marketing"
-            element={<div>Marketing Module loads here...</div>}
-          />
+          <Route path="marketing" element={<Marketing />} />
           <Route
             path="cms"
             element={<Invoice></Invoice>}

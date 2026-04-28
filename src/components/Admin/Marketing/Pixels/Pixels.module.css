@@ -1,0 +1,147 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.header { margin-bottom: 4px; }
+
+.title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #1e293b;
+  margin: 0 0 6px;
+}
+
+.sub {
+  font-size: 13px;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.pixelGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+.pixelCard {
+  background: #fff;
+  border: 1px solid #f1f5f9;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pixelHeader {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border-left: 3px solid #e2e8f0;
+  padding-left: 12px;
+}
+
+.pixelLogo {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.logoImg {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  filter: brightness(10);
+}
+
+.pixelName {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 2px;
+}
+
+.pixelStatus {
+  font-size: 11px;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.docsLink {
+  margin-left: auto;
+  color: #94a3b8;
+  transition: color 0.15s;
+}
+.docsLink:hover { color: #3b82f6; }
+
+.pixelInputRow {
+  display: flex;
+  gap: 8px;
+}
+
+.pixelInput {
+  flex: 1;
+  padding: 9px 12px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #1e293b;
+  background: #f8fafc;
+  outline: none;
+  font-family: monospace;
+  transition: border-color 0.15s;
+}
+.pixelInput:focus { border-color: #3b82f6; background: #fff; }
+
+.connectBtn {
+  padding: 9px 16px;
+  background: #1e293b;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+.connectBtn:hover { background: #0f172a; }
+
+.conversionSection {
+  background: #fff;
+  border: 1px solid #f1f5f9;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.convTitle {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 6px;
+}
+
+.convSub {
+  font-size: 13px;
+  color: #94a3b8;
+  margin: 0 0 20px;
+}
+
+.comingSoon {
+  padding: 40px;
+  text-align: center;
+  background: #f8fafc;
+  border-radius: 12px;
+  border: 2px dashed #e2e8f0;
+  font-size: 14px;
+  color: #64748b;
+  font-weight: 500;
+}

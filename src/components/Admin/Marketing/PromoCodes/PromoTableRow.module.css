@@ -1,0 +1,118 @@
+.row {
+  border-bottom: 1px solid #f1f5f9;
+  transition: background 0.15s;
+}
+.row:hover { background: #f8fafc; }
+.row:last-child { border-bottom: none; }
+
+.row td {
+  padding: 16px 18px;
+  font-size: 13px;
+  color: #334155;
+  vertical-align: middle;
+}
+
+.codeCell { min-width: 100px; }
+
+.code {
+  font-family: "Courier New", monospace;
+  font-size: 13px;
+  font-weight: 700;
+  color: #1e293b;
+  background: #f1f5f9;
+  padding: 4px 10px;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+}
+
+.typeBadge {
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.pct { background: #dbeafe; color: #1d4ed8; }
+.egp { background: #fef3c7; color: #d97706; }
+
+.discount {
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.usesCell {
+  min-width: 120px;
+}
+
+.usesText {
+  font-size: 12px;
+  font-weight: 600;
+  color: #475569;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.progressTrack {
+  height: 6px;
+  background: #e2e8f0;
+  border-radius: 10px;
+  overflow: hidden;
+  width: 80px;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
+
+.progressBlue { background: #3b82f6; }
+.progressGreen { background: #10b981; }
+
+.expiry { font-size: 13px; color: #64748b; }
+.expiryRed { color: #ef4444; font-weight: 600; }
+
+/* Badges */
+.badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.badgeActive   { background: #dcfce7; color: #15803d; }
+.badgeMaxed    { background: #f1f5f9; color: #64748b; }
+.badgeExpired  { background: #fef2f2; color: #dc2626; }
+.badgeInactive { background: #f1f5f9; color: #94a3b8; }
+
+/* Action buttons */
+.actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  min-width: 160px;
+}
+
+.actions button {
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.btnEdit       { background: #fff; border-color: #e2e8f0; color: #334155; }
+.btnEdit:hover { background: #f1f5f9; }
+
+.btnDeactivate       { background: #fff; border-color: #fca5a5; color: #dc2626; }
+.btnDeactivate:hover { background: #fef2f2; }
+
+.btnActivate       { background: #dcfce7; border-color: #86efac; color: #15803d; }
+.btnActivate:hover { background: #bbf7d0; }
+
+.btnDelete       { background: #fef2f2; border-color: #fca5a5; color: #dc2626; }
+.btnDelete:hover { background: #fee2e2; }
