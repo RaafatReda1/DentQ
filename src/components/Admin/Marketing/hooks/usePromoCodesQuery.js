@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getPromoCodes } from "../actions";
+import { getPromoCodes } from "../api/marketingApi";
 
 export const usePromoCodesQuery = () => {
   const { data = [], isLoading, error } = useQuery({

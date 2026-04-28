@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createPromoCode, updatePromoCode, deletePromoCode } from "../actions";
+import { createPromoCode, updatePromoCode, deletePromoCode } from "../api/marketingApi";
 import toast from "react-hot-toast";
 
 export const usePromoCodeMutations = () => {

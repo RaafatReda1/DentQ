@@ -3,9 +3,9 @@ import { useTranslation } from "react-i18next";
 import { Plus } from "lucide-react";
 import { usePromoCodesQuery } from "../hooks/usePromoCodesQuery";
 import { usePromoCodeMutations } from "../hooks/usePromoCodeMutations";
-import PromoStatsBar from "./PromoStatsBar";
-import PromoTable from "./PromoTable";
-import PromoModal from "./PromoModal";
+import PromoStatsBar from "./components/PromoStatsBar";
+import PromoTable from "./components/PromoTable";
+import PromoModal from "./components/PromoModal/PromoModal";
 import styles from "./PromoCodes.module.css";
 
 const PromoCodes = () => {

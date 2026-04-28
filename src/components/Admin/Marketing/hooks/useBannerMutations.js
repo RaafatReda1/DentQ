@@ -4,7 +4,7 @@ import {
   updateBanner,
   deleteBanner,
   updateBannerOrder,
-} from "../actions";
+} from "../api/marketingApi";
 import toast from "react-hot-toast";
 
 export const useBannerMutations = () => {

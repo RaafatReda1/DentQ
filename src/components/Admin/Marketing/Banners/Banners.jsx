@@ -4,8 +4,8 @@ import { Plus, GripVertical } from "lucide-react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { useBannersQuery } from "../hooks/useBannersQuery";
 import { useBannerMutations } from "../hooks/useBannerMutations";
-import BannerCard from "./BannerCard";
-import BannerEditor from "./BannerEditor";
+import BannerCard from "./components/BannerCard/BannerCard";
+import BannerEditor from "./components/BannerEditor/BannerEditor";
 import styles from "./Banners.module.css";
 
 const DEFAULT_BANNER = {

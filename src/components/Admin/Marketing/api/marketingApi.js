@@ -1,4 +1,4 @@
-import { supabase } from "../../../utils/SupabaseClient";
+import { supabase } from "../../../../utils/SupabaseClient";
 
 // --- Promo Codes ---
 export const getPromoCodes = async () => {
