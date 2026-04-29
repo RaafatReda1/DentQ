@@ -1,18 +1,24 @@
 import React from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
+import { useTranslation } from "react-i18next";
+import InfoTooltip from "./InfoTooltip";
 import styles from "../Dashboard.module.css";
 
 const CATEGORY_COLORS = ['#378add', '#639922', '#7f77dd', '#ef9f27', '#e24b4a', '#5dcaa5', '#afa9ec'];
 
 const TopPerformers = ({ stats }) => {
+  const { t } = useTranslation();
   if (!stats) return null;
 
   return (
     <div className={styles.secondaryGrid}>
       {/* Top Products by Revenue */}
       <div className={styles.card}>
-        <h3 className={styles.cardTitle}>Top products by revenue</h3>
-        <span className={styles.cardSubtitle}>Ranked by total sales value</span>
+        <h3 className={styles.cardTitle} style={{ display: 'flex', alignItems: 'center' }}>
+          {t("admin.dashboard.charts.top_rev", "Top products by revenue")}
+          <InfoTooltip translationKey="top_rev" values={{ val: stats.topProductsByRevenue[0] ? `${stats.topProductsByRevenue[0].revenue.toLocaleString()} EGP` : '0 EGP' }} />
+        </h3>
+        <span className={styles.cardSubtitle}>{t("admin.dashboard.charts.top_rev_sub", "Ranked by total sales value")}</span>
         <div className={styles.rankList}>
           {stats.topProductsByRevenue.map((p, i) => (
             <div key={p.id} className={styles.rankItem}>
@@ -28,8 +34,11 @@ const TopPerformers = ({ stats }) => {
 
       {/* Top Products by Units */}
       <div className={styles.card}>
-        <h3 className={styles.cardTitle}>Top products by units sold</h3>
-        <span className={styles.cardSubtitle}>Ranked by sales count</span>
+        <h3 className={styles.cardTitle} style={{ display: 'flex', alignItems: 'center' }}>
+          {t("admin.dashboard.charts.top_units", "Top products by units sold")}
+          <InfoTooltip translationKey="top_units" values={{ val: stats.topProductsByUnits[0] ? stats.topProductsByUnits[0].units.toLocaleString() : '0' }} />
+        </h3>
+        <span className={styles.cardSubtitle}>{t("admin.dashboard.charts.top_units_sub", "Ranked by sales count")}</span>
         <div className={styles.rankList}>
           {stats.topProductsByUnits.map((p, i) => (
             <div key={p.id} className={styles.rankItem}>
@@ -37,7 +46,7 @@ const TopPerformers = ({ stats }) => {
                 <span className={styles.rankNum}>{i + 1}</span>
                 <span className={styles.rankName}>{p.name}</span>
               </div>
-              <span className={styles.rankVal}>{p.units.toLocaleString()} units</span>
+              <span className={styles.rankVal}>{p.units.toLocaleString()} {t("admin.dashboard.labels.units", "units")}</span>
             </div>
           ))}
         </div>
@@ -47,8 +56,11 @@ const TopPerformers = ({ stats }) => {
       <div className={styles.card}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div>
-            <h3 className={styles.cardTitle}>Top categories</h3>
-            <span className={styles.cardSubtitle}>Revenue share by category</span>
+            <h3 className={styles.cardTitle} style={{ display: 'flex', alignItems: 'center' }}>
+              {t("admin.dashboard.charts.top_categories", "Top categories")}
+              <InfoTooltip translationKey="top_categories" values={{ val: stats.categoryData[0] ? `${stats.categoryData[0].value.toLocaleString()} EGP` : '0 EGP' }} />
+            </h3>
+            <span className={styles.cardSubtitle}>{t("admin.dashboard.charts.top_categories_sub", "Revenue share by category")}</span>
           </div>
         </div>
 

@@ -1,15 +1,21 @@
 import React from "react";
 import { formatDistanceToNow } from "date-fns";
+import { useTranslation } from "react-i18next";
+import InfoTooltip from "./InfoTooltip";
 import styles from "../Dashboard.module.css";
 
 const RecentActivity = ({ stats }) => {
+  const { t } = useTranslation();
   if (!stats) return null;
 
   return (
     <div className={styles.fullGrid}>
       <div className={styles.card}>
-        <h3 className={styles.cardTitle}>Recent activity</h3>
-        <span className={styles.cardSubtitle}>Live feed — orders, clients, stock</span>
+        <h3 className={styles.cardTitle} style={{ display: 'flex', alignItems: 'center' }}>
+          {t("admin.dashboard.charts.recent_activity", "Recent activity")}
+          <InfoTooltip translationKey="recent_activity" />
+        </h3>
+        <span className={styles.cardSubtitle}>{t("admin.dashboard.charts.recent_activity_sub", "Live feed — orders, clients, stock")}</span>
         
         <div className={styles.activityList}>
           {stats.recentActivity.map((item, i) => {
@@ -33,7 +39,9 @@ const RecentActivity = ({ stats }) => {
             );
           })}
           {stats.recentActivity.length === 0 && (
-            <div style={{ fontSize: 13, color: '#6b7280', padding: '12px 0' }}>No recent activity.</div>
+            <div style={{ fontSize: 13, color: '#6b7280', padding: '12px 0' }}>
+              {t("admin.dashboard.labels.no_activity", "No recent activity.")}
+            </div>
           )}
         </div>
       </div>

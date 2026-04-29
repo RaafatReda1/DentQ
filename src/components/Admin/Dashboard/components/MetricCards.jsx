@@ -1,6 +1,8 @@
 import React from "react";
 import { LineChart, Line, ResponsiveContainer } from 'recharts';
 import { TrendingUp, TrendingDown, DollarSign, ShoppingBag, Users, Activity, Tag, AlertCircle, XCircle } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import InfoTooltip from "./InfoTooltip";
 import styles from "../Dashboard.module.css";
 
 const DeltaBadge = ({ value, inverted = false }) => {
@@ -26,69 +28,86 @@ const Sparkline = ({ data, dataKey, color }) => (
 );
 
 const MetricCards = ({ stats }) => {
+  const { t } = useTranslation();
   if (!stats) return null;
 
   const primaryMetrics = [
     { 
-      label: "Total Revenue", 
+      id: "revenue",
+      label: t("admin.dashboard.metrics.revenue", "Total Revenue"), 
       value: `${stats.totalRevenue.toLocaleString()} EGP`, 
       delta: stats.revenueDelta,
       icon: <DollarSign size={20} />, 
       sparkKey: "revenue",
-      sparkColor: "#378add" // blue
+      sparkColor: "#378add", // blue
+      tooltipValues: { val: `${stats.totalRevenue.toLocaleString()} EGP`, delta: stats.revenueDelta.toFixed(1) }
     },
     { 
-      label: "Total Orders", 
+      id: "orders",
+      label: t("admin.dashboard.metrics.orders", "Total Orders"), 
       value: stats.totalOrders.toLocaleString(), 
       delta: stats.ordersDelta,
       icon: <ShoppingBag size={20} />, 
       sparkKey: "orders",
-      sparkColor: "#639922" // green
+      sparkColor: "#639922", // green
+      tooltipValues: { val: stats.totalOrders.toLocaleString(), delta: stats.ordersDelta.toFixed(1) }
     },
     { 
-      label: "New Clients", 
+      id: "new_clients",
+      label: t("admin.dashboard.metrics.new_clients", "New Clients"), 
       value: stats.newClients.toLocaleString(), 
       delta: stats.newClientsDelta,
       icon: <Users size={20} />, 
       sparkKey: "clients",
-      sparkColor: "#7f77dd" // purple
+      sparkColor: "#7f77dd", // purple
+      tooltipValues: { val: stats.newClients.toLocaleString(), delta: stats.newClientsDelta.toFixed(1) }
     },
     { 
-      label: "Average Order Value", 
+      id: "aov",
+      label: t("admin.dashboard.metrics.aov", "Average Order Value"), 
       value: `${stats.aov.toLocaleString(undefined, {maximumFractionDigits: 0})} EGP`, 
       delta: stats.aovDelta,
       icon: <Activity size={20} />, 
       sparkKey: "aov",
-      sparkColor: "#ef9f27" // amber
+      sparkColor: "#ef9f27", // amber
+      tooltipValues: { val: `${stats.aov.toLocaleString(undefined, {maximumFractionDigits: 0})} EGP`, delta: stats.aovDelta.toFixed(1) }
     }
   ];
 
   const secondaryMetrics = [
     {
-      label: "Gross Profit",
+      id: "gross_profit",
+      label: t("admin.dashboard.metrics.gross_profit", "Gross Profit"),
       value: `${stats.grossProfit.toLocaleString()} EGP`,
-      subLabel: `${stats.profitMargin.toFixed(1)}% margin`,
-      icon: <TrendingUp size={20} />
+      subLabel: t("admin.dashboard.metrics.gross_profit_sub", { margin: stats.profitMargin.toFixed(1) }),
+      icon: <TrendingUp size={20} />,
+      tooltipValues: { val: `${stats.grossProfit.toLocaleString()} EGP`, margin: stats.profitMargin.toFixed(1) }
     },
     {
-      label: "Promo Discounts",
+      id: "promo_discounts",
+      label: t("admin.dashboard.metrics.promo_discounts", "Promo Discounts"),
       value: `${stats.promoDiscounts.toLocaleString()} EGP`,
-      subLabel: `${stats.promoDiscountRate.toFixed(1)}% of revenue`,
-      icon: <Tag size={20} />
+      subLabel: t("admin.dashboard.metrics.promo_discounts_sub", { rate: stats.promoDiscountRate.toFixed(1) }),
+      icon: <Tag size={20} />,
+      tooltipValues: { val: `${stats.promoDiscounts.toLocaleString()} EGP`, rate: stats.promoDiscountRate.toFixed(1) }
     },
     {
-      label: "Pending Orders",
+      id: "pending_orders",
+      label: t("admin.dashboard.metrics.pending_orders", "Pending Orders"),
       value: stats.pendingOrders.toLocaleString(),
-      subLabel: "Needs attention",
+      subLabel: t("admin.dashboard.metrics.pending_orders_sub", "Needs attention"),
       icon: <AlertCircle size={20} />,
-      valColor: "#854f0b" // amber dark
+      valColor: "#854f0b", // amber dark
+      tooltipValues: { val: stats.pendingOrders.toLocaleString() }
     },
     {
-      label: "Cancelled Orders",
+      id: "cancelled_orders",
+      label: t("admin.dashboard.metrics.cancelled_orders", "Cancelled Orders"),
       value: stats.cancelledOrders.toLocaleString(),
-      subLabel: `${stats.cancelRate.toFixed(1)}% cancel rate`,
+      subLabel: t("admin.dashboard.metrics.cancelled_orders_sub", { rate: stats.cancelRate.toFixed(1) }),
       icon: <XCircle size={20} />,
-      valColor: "#a32d2d" // red dark
+      valColor: "#a32d2d", // red dark
+      tooltipValues: { val: stats.cancelledOrders.toLocaleString(), rate: stats.cancelRate.toFixed(1) }
     }
   ];
 
@@ -100,6 +119,7 @@ const MetricCards = ({ stats }) => {
             <div className={styles.metricHeader}>
               <div className={styles.metricIcon}>{m.icon}</div>
               <span className={styles.metricLabel}>{m.label}</span>
+              <InfoTooltip translationKey={m.id} values={m.tooltipValues} />
             </div>
             <div className={styles.metricValueRow}>
               <div className={styles.metricValue}>{m.value}</div>
@@ -116,6 +136,7 @@ const MetricCards = ({ stats }) => {
             <div className={styles.metricHeader} style={{ marginBottom: 8 }}>
               <div className={styles.metricIcon}>{m.icon}</div>
               <span className={styles.metricLabel}>{m.label}</span>
+              <InfoTooltip translationKey={m.id} values={m.tooltipValues} />
             </div>
             <div className={styles.metricValueRow} style={{ marginBottom: 0 }}>
               <div className={styles.metricValue} style={m.valColor ? { color: m.valColor } : {}}>{m.value}</div>

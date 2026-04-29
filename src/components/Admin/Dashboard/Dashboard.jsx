@@ -29,25 +29,25 @@ const Dashboard = () => {
             className={`${styles.timeRangeBtn} ${dateRange === '7d' ? styles.active : ''}`}
             onClick={() => setDateRange('7d')}
           >
-            7d
+            {t("admin.dashboard.time_ranges.7d", "7d")}
           </button>
           <button 
             className={`${styles.timeRangeBtn} ${dateRange === '30d' ? styles.active : ''}`}
             onClick={() => setDateRange('30d')}
           >
-            30d
+            {t("admin.dashboard.time_ranges.30d", "30d")}
           </button>
           <button 
             className={`${styles.timeRangeBtn} ${dateRange === '90d' ? styles.active : ''}`}
             onClick={() => setDateRange('90d')}
           >
-            90d
+            {t("admin.dashboard.time_ranges.90d", "90d")}
           </button>
           <button 
             className={`${styles.timeRangeBtn} ${dateRange === 'all' ? styles.active : ''}`}
             onClick={() => setDateRange('all')}
           >
-            All time
+            {t("admin.dashboard.time_ranges.all", "All time")}
           </button>
         </div>
       </header>

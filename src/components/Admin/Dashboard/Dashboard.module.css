@@ -204,6 +204,72 @@
   margin: 4px 0;
 }
 
+/* Info Tooltip */
+.infoTooltipWrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin-left: 6px;
+}
+
+.infoIcon {
+  color: #9ca3af;
+  cursor: help;
+  transition: color 0.2s;
+}
+
+.infoIcon:hover {
+  color: #3b82f6;
+}
+
+.infoPopup {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  width: 250px;
+  background: #111827;
+  color: #f9fafb;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 400;
+  z-index: 100;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.2s ease-in-out;
+  pointer-events: none;
+}
+
+.infoTooltipWrapper:hover .infoPopup {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.infoPopup::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -6px;
+  border-width: 6px;
+  border-style: solid;
+  border-color: #111827 transparent transparent transparent;
+}
+
+.infoDesc {
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.infoEx {
+  color: #9ca3af;
+  font-style: italic;
+  line-height: 1.3;
+}
+
 /* Activity List */
 .activityList {
   display: flex;
