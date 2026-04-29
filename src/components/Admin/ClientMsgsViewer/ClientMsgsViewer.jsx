@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { Skeleton } from "@mui/material";
 import { useContactMessages, useUpdateMessage, useDeleteMessage } from "../CMS/hooks/cmsHooks";
+import ConfirmModal from "./components/ConfirmModal";
 import styles from "./ClientMsgsViewer.module.css";
 
 const MARKERS = [
@@ -29,6 +30,7 @@ const ClientMsgsViewer = () => {
   const [filter, setFilter] = useState("all"); 
   const [sortBy, setSortBy] = useState("newest"); // newest, oldest, name, marker
   const [markerMenuOpen, setMarkerMenuOpen] = useState(false);
+  const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: null });
   const markerRef = useRef(null);
 
   // Click outside to close marker menu
@@ -86,9 +88,13 @@ const ClientMsgsViewer = () => {
   };
 
   const handleDelete = (id) => {
-    if (window.confirm(t("admin.cms.messages.delete_confirm", "Are you sure you want to delete this message?"))) {
-      remove(id);
-      if (selectedId === id) setSelectedId(null);
+    setDeleteModal({ isOpen: true, id });
+  };
+
+  const confirmDelete = () => {
+    if (deleteModal.id) {
+      remove(deleteModal.id);
+      if (selectedId === deleteModal.id) setSelectedId(null);
     }
   };
 
@@ -280,6 +286,17 @@ const ClientMsgsViewer = () => {
           )}
         </div>
       </div>
+
+      <ConfirmModal 
+        isOpen={deleteModal.isOpen}
+        onClose={() => setDeleteModal({ isOpen: false, id: null })}
+        onConfirm={confirmDelete}
+        title={t("admin.cms.messages.delete_title", "Delete Message?")}
+        message={t("admin.cms.messages.delete_confirm", "Are you sure you want to delete this message? This action cannot be undone.")}
+        confirmText={t("common.delete", "Delete")}
+        cancelText={t("common.cancel", "Cancel")}
+        type="danger"
+      />
     </div>
   );
 };
