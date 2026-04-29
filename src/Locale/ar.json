@@ -969,6 +969,8 @@
             "modal_title": "محتويات السلة"
         },
         "dashboard": {
+            "title": "نظرة عامة على العمل",
+            "subtitle": "التحليلات والمقاييس في الوقت الفعلي لـ DentQ",
             "total_volume": "إجمالي الطلبات",
             "total_volume_sub": "إجمالي عدد الطلبات",
             "total_revenue": "إجمالي الإيرادات",

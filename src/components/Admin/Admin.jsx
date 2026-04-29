@@ -11,27 +11,15 @@ import Invoice from './Orders/components/Invoice/Invoice';
 import Marketing from "./Marketing/Marketing";
 import CMS from "./CMS/CMS";
 import ClientMsgsViewer from "./ClientMsgsViewer/ClientMsgsViewer";
+import Dashboard from "./Dashboard/Dashboard";
+
 const Admin = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <Routes>
         <Route path="/admin/*" element={<AdminLayout />}>
           {/* Default route inside /admin */}
-          <Route
-            index
-            element={
-              <div
-                style={{
-                  padding: "20px",
-                  fontSize: "1.2rem",
-                  color: "#555",
-                  fontFamily: "var(--font-main)",
-                }}
-              >
-                Dashboard Overview Component loads here...
-              </div>
-            }
-          />
+          <Route index element={<Dashboard />} />
 
           {/* Fallbacks for now */}
           <Route path="products" element={<Products />} />

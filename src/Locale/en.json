@@ -954,6 +954,8 @@
             "modal_title": "Cart Contents"
         },
         "dashboard": {
+            "title": "Business Overview",
+            "subtitle": "Real-time analytics and performance metrics for DentQ",
             "total_volume": "Total Volume",
             "total_volume_sub": "Gross orders",
             "total_revenue": "Total Revenue",
