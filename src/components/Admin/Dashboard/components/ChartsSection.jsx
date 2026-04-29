@@ -54,7 +54,7 @@ const ChartsSection = ({ stats }) => {
         </div>
 
         <div style={{ width: '100%', height: 300 }}>
-          <ResponsiveContainer>
+          <ResponsiveContainer width="99%" height="100%">
             <LineChart data={stats.dailyBuckets}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
               <XAxis dataKey="date" axisLine={false} tickLine={false} tick={{fill: '#6b7280', fontSize: 11}} dy={10} minTickGap={30} />
@@ -76,7 +76,7 @@ const ChartsSection = ({ stats }) => {
         <span className={styles.cardSubtitle}>{t("admin.dashboard.charts.order_status_sub", "All orders this period")}</span>
         
         <div style={{ width: '100%', height: 200, display: 'flex', justifyContent: 'center', marginBottom: 24 }}>
-          <ResponsiveContainer>
+          <ResponsiveContainer width="99%" height="100%">
             <PieChart>
               <Pie data={pieData} innerRadius="68%" outerRadius="100%" paddingAngle={0} dataKey="value" stroke="none">
                 {pieData.map((entry, i) => <Cell key={i} fill={entry.color} />)}

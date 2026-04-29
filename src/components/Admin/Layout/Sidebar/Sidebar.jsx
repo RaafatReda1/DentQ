@@ -1,14 +1,27 @@
 import React, { useState } from 'react';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { LayoutDashboard, ShoppingBag, Truck, PieChart, Settings, Home, ChevronLeft, Boxes, Mail } from 'lucide-react';
+import { LayoutDashboard, ShoppingBag, Truck, PieChart, Settings, ChevronLeft, Boxes, Mail, LogOut } from 'lucide-react';
 import styles from './Sidebar.module.css';
 import { useLogo } from '../../../../utils/LogoContext';
+import { supabase } from '../../../../utils/SupabaseClient';
+import toast from 'react-hot-toast';
 
 const Sidebar = () => {
     const { t } = useTranslation();
+    const navigate = useNavigate();
     const [isCollapsed, setIsCollapsed] = useState(false);
     const { logoUrl } = useLogo();
+
+    const handleLogout = async () => {
+        try {
+            await supabase.auth.signOut();
+            toast.success("Logged out successfully");
+            navigate('/');
+        } catch (error) {
+            toast.error("Error logging out");
+        }
+    };
 
     const navLinks = [
         { path: '/admin', icon: <LayoutDashboard size={22} />, label: t('admin.sidebar.dashboard'), end: true },
@@ -51,10 +64,10 @@ const Sidebar = () => {
             </nav>
 
             <div className={styles.bottomLink}>
-                <Link to="/" className={styles.navItem} title={isCollapsed ? "Back to Store" : ""}>
-                    <span className={styles.icon}><Home size={22} /></span>
-                    <span className={styles.label}>Back to Store</span>
-                </Link>
+                <button onClick={handleLogout} className={styles.navItem} title={isCollapsed ? t('admin.sidebar.logout', 'Logout') : ""} style={{ width: '100%', background: 'transparent', border: 'none', textAlign: 'left', cursor: 'pointer' }}>
+                    <span className={styles.icon}><LogOut size={22} /></span>
+                    <span className={styles.label}>{t('admin.sidebar.logout', 'Logout')}</span>
+                </button>
             </div>
         </aside>
     );

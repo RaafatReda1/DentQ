@@ -19,7 +19,7 @@ const DeltaBadge = ({ value, inverted = false }) => {
 
 const Sparkline = ({ data, dataKey, color }) => (
   <div className={styles.sparklineWrapper}>
-    <ResponsiveContainer width="100%" height="100%">
+    <ResponsiveContainer width="99%" height="100%">
       <LineChart data={data}>
         <Line type="monotone" dataKey={dataKey} stroke={color} strokeWidth={1.5} dot={false} isAnimationActive={false} />
       </LineChart>

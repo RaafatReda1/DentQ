@@ -29,7 +29,7 @@ export const submitContactMessage = async (formData) => {
                 email_address: formData.email_address,
                 phone_number: formData.phone_number,
                 message: formData.message,
-                client: formData.client_id,
+                ...(formData.client_id ? { client: formData.client_id } : {})
             }
         ])
         .select();

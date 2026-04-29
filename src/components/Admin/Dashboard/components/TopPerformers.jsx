@@ -75,7 +75,7 @@ const TopPerformers = ({ stats }) => {
         </div>
 
         <div style={{ width: '100%', height: 200, display: 'flex', justifyContent: 'center' }}>
-          <ResponsiveContainer>
+          <ResponsiveContainer width="99%" height="100%">
             <PieChart>
               <Pie data={stats.categoryData.slice(0,4)} innerRadius="60%" outerRadius="100%" paddingAngle={0} dataKey="value" stroke="none">
                 {stats.categoryData.slice(0,4).map((entry, i) => <Cell key={i} fill={CATEGORY_COLORS[i % CATEGORY_COLORS.length]} />)}

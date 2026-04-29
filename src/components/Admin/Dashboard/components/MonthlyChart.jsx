@@ -40,7 +40,7 @@ const MonthlyChart = ({ stats, dateRange }) => {
         </div>
 
         <div style={{ width: '100%', height: 300 }}>
-          <ResponsiveContainer>
+          <ResponsiveContainer width="99%" height="100%">
             <BarChart data={stats.monthlyData} barGap={4}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
               <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{fill: '#6b7280', fontSize: 11}} dy={10} />

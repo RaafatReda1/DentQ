@@ -1,13 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Bell, MessageSquare, LogOut } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import SearchBar from './SubComponents/SearchBar';
+import NotificationPopup from './SubComponents/NotificationPopup';
 import useUserData  from '../../../Storage/UserDataStorage';
+import { useNotifications } from './SubComponents/useNotifications';
+import { useContactMessages } from '../../CMS/hooks/cmsHooks';
 import styles from './Header.module.css';
 
 const Header = () => {
     const { t, i18n } = useTranslation();
+    const navigate = useNavigate();
     const { user } = useUserData(); // Extract for avatar loading
+    
+    const [showNotifications, setShowNotifications] = useState(false);
+    
+    // Fetch notifications
+    const { data: notifData } = useNotifications();
+    const unreadNotifs = notifData?.unreadCount || 0;
+
+    // Fetch messages
+    const { data: messages } = useContactMessages();
+    const unreadMsgs = messages ? messages.filter(m => !m.seen).length : 0;
 
     const toggleLanguage = () => {
         const nextLang = i18n.language === 'ar' ? 'en' : 'ar';
@@ -27,14 +42,21 @@ const Header = () => {
                     <button className={styles.iconBtn} onClick={toggleLanguage} style={{fontWeight: 800, fontSize: '14px', color:'var(--primary-hover)'}}>
                         {i18n.language === 'ar' ? 'EN' : 'AR'}
                     </button>
-                    <button className={styles.iconBtn}>
+                    <button className={styles.iconBtn} onClick={() => navigate('/admin/messages')} title="Messages">
                         <MessageSquare size={20} />
-                        <span className={styles.badge}>2</span>
+                        {unreadMsgs > 0 && <span className={styles.badge}>{unreadMsgs}</span>}
                     </button>
-                    <button className={styles.iconBtn}>
-                        <Bell size={20} />
-                        <span className={`${styles.badge} ${styles.alert}`}>15</span>
-                    </button>
+                    <div style={{ position: 'relative' }}>
+                        <button 
+                            className={styles.iconBtn} 
+                            onClick={(e) => { e.stopPropagation(); setShowNotifications(!showNotifications); }}
+                            title="Notifications"
+                        >
+                            <Bell size={20} />
+                            {unreadNotifs > 0 && <span className={`${styles.badge} ${styles.alert}`}>{unreadNotifs}</span>}
+                        </button>
+                        {showNotifications && <NotificationPopup onClose={() => setShowNotifications(false)} />}
+                    </div>
                 </div>
 
                 <div className={styles.divider}></div>
@@ -43,7 +65,7 @@ const Header = () => {
                 <div className={styles.profileSection}>
                     <div className={styles.profileInfo}>
                         <span className={styles.name}>{user?.fullName || "Admin"}</span>
-                        <span className={styles.role}>{t('admin.header.super_admin')}</span>
+                        <span className={styles.role}>{t('admin.header.super_admin', 'Super Admin')}</span>
                     </div>
                     <img 
                         src={user?.avatarUrl || "https://ui-avatars.com/api/?name=Admin&background=00b4d8&color=fff"} 
