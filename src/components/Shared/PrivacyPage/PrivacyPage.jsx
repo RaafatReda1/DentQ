@@ -1,28 +1,61 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./PrivacyPage.module.css";
 import { useTranslation } from "react-i18next";
 import { useLogo } from "../../../utils/LogoContext";
+import { supabase } from "../../../utils/SupabaseClient";
+import { DEFAULT_LEGAL_PAGES } from "../../Admin/CMS/config/defaults";
 
 const PrivacyPage = () => {
   const { t, i18n } = useTranslation();
   const { logoUrl } = useLogo();
   const isLTR = i18n.language.startsWith("en");
-  const contentArray = t("privacy_page.content", { returnObjects: true });
-  const contentToRender = Array.isArray(contentArray) ? contentArray : [];
+  const [content, setContent] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchContent = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("LegalPages")
+          .select("*")
+          .eq("page_key", "privacy_policy")
+          .maybeSingle();
+        
+        if (error) throw error;
+        
+        if (data) {
+          setContent(data);
+        } else {
+          // Fallback to default if not found
+          const def = DEFAULT_LEGAL_PAGES.find(p => p.page_key === "privacy_policy");
+          setContent(def);
+        }
+      } catch (err) {
+        console.error("Error fetching Privacy Policy:", err);
+        const def = DEFAULT_LEGAL_PAGES.find(p => p.page_key === "privacy_policy");
+        setContent(def);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchContent();
+  }, []);
+
+  const title = t("privacy_page.title", "Privacy Policy");
+  const displayText = isLTR ? content?.content_en : content?.content_ar;
 
   return (
     <div className={styles.pageContainer} dir={isLTR ? "ltr" : "rtl"}>
       <div className={styles.content}>
         <img src={logoUrl || '/logo.png'} alt="DentQ Logo" className={styles.logo} />
-        <h1>{t("privacy_page.title", "Privacy Policy")}</h1>
-        <div className={styles.textContent}>
-          {contentToRender.map((block, idx) => {
-            if (block.type === "h2") return <h2 key={idx}>{block.text}</h2>;
-            if (block.type === "h3") return <h3 key={idx}>{block.text}</h3>;
-            if (block.type === "li") return <li key={idx} className={styles.listItem}>{block.text}</li>;
-            return <p key={idx}>{block.text}</p>;
-          })}
-        </div>
+        <h1>{title}</h1>
+        {loading ? (
+          <div className={styles.loading}>Loading...</div>
+        ) : (
+          <div className={styles.textContent}>
+            <p style={{ whiteSpace: "pre-wrap" }}>{displayText}</p>
+          </div>
+        )}
       </div>
     </div>
   );

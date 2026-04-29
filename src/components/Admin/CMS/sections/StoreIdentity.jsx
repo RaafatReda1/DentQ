@@ -37,7 +37,7 @@ const StoreIdentity = () => {
 
     try {
       setUploading(true);
-      const { publicUrl, storagePath } = await uploadLogo(file);
+      const { publicUrl, storagePath } = await uploadLogo(file, draft.logo_storage_path);
       set("logo_url", publicUrl);
       set("logo_storage_path", storagePath);
       setLogoUrl(publicUrl); // update global context immediately
@@ -50,11 +50,26 @@ const StoreIdentity = () => {
     }
   };
 
-  const handleReset = () => {
+  const handleResetLogo = () => {
     set("logo_url", null);
     set("logo_storage_path", null);
     setLogoUrl(null); // revert context to /logo.png fallback immediately
     toast.success("Logo reset to default — click Save to persist.");
+  };
+
+  const handleResetToDefault = () => {
+    setDraft({
+      ...draft, // keep ID if it exists
+      logo_url: null,
+      logo_storage_path: null,
+      accent_color: "#1a1a2e",
+      phone: "",
+      email: "",
+      address_en: "",
+      address_ar: "",
+    });
+    setLogoUrl(null);
+    toast.success("Store identity reset to defaults — click Save to persist.");
   };
 
   const logoPreview = draft.logo_url || "/logo.png";
@@ -69,6 +84,11 @@ const StoreIdentity = () => {
       onDiscard={handleDiscard}
       saving={saving}
       isDirty={isDirty}
+      headerAction={
+        <button className={styles.globalResetBtn} onClick={handleResetToDefault} title="Reset all settings to defaults">
+          <RotateCcw size={13} /> Reset to defaults
+        </button>
+      }
     >
       {/* Addresses */}
       <BilingualField
@@ -171,7 +191,7 @@ const StoreIdentity = () => {
                 {uploading ? "Uploading…" : "Upload new logo"}
               </button>
               {draft.logo_url && (
-                <button className={styles.resetBtn} onClick={handleReset} title="Reset to default /logo.png">
+                <button className={styles.resetBtn} onClick={handleResetLogo} title="Reset to default /logo.png">
                   <RotateCcw size={13} /> Reset to default
                 </button>
               )}

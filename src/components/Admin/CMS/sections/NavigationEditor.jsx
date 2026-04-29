@@ -1,23 +1,30 @@
 import React, { useState, useEffect } from "react";
 import SectionCard from "../components/SectionCard";
+import CMSLinkSelector from "../components/CMSLinkSelector";
 import { useNavItems, useUpsertNavItems, useDeleteNavItem } from "../hooks/cmsHooks";
 import styles from "./NavigationEditor.module.css";
 import { GripVertical, Plus, X } from "lucide-react";
 
 const NavigationEditor = () => {
-  const { data: remote } = useNavItems();
+  const { data: remote, isLoading } = useNavItems();
   const { mutate: save, isPending: saving } = useUpsertNavItems();
   const { mutate: deleteItem } = useDeleteNavItem();
   const [items, setItems] = useState(null);
   const [dragging, setDragging] = useState(null);
 
-  useEffect(() => { if (remote) setItems(remote); }, [remote]);
+  useEffect(() => { if (!isLoading && remote) setItems(remote); }, [remote, isLoading]);
 
-  if (!items) return <div className={styles.loading}>Loading navigation items…</div>;
+  if (isLoading || !items) {
+    return (
+      <div className={styles.loadingWrap}>
+        <div className={styles.loadingDots}><span /><span /><span /></div>
+        <p>Loading navigation items…</p>
+      </div>
+    );
+  }
 
   const isDirty = JSON.stringify(items) !== JSON.stringify(remote);
 
-  // Group items by section_key
   const groups = items.reduce((acc, item) => {
     if (!acc[item.section_key]) acc[item.section_key] = [];
     acc[item.section_key].push(item);
@@ -54,7 +61,6 @@ const NavigationEditor = () => {
     }
   };
 
-  // Simple drag-and-drop within sections
   const onDragStart = (e, id) => { setDragging(id); e.dataTransfer.effectAllowed = "move"; };
   const onDragOver = (e, targetId) => {
     e.preventDefault();
@@ -79,13 +85,16 @@ const NavigationEditor = () => {
     save(payload);
   };
 
+  const handleDiscard = () => setItems(remote);
+
   return (
     <SectionCard
       id="navigation-editor"
-      title="Navigation items"
-      subtitle="Manage storefront menu links — drag to reorder"
-      saveLabel="Save nav"
+      title="Column Links Navigation"
+      subtitle="Manage the links that appear in the footer columns. Drag to reorder. Use the link selector to connect to internal routes, categories, or products."
+      saveLabel="Save navigation"
       onSave={handleSave}
+      onDiscard={handleDiscard}
       saving={saving}
       isDirty={isDirty}
     >
@@ -107,31 +116,45 @@ const NavigationEditor = () => {
                   onDragOver={(e) => onDragOver(e, item.id)}
                   onDragEnd={() => setDragging(null)}
                 >
-                  <GripVertical size={16} className={styles.dragHandle} />
-                  <span className={styles.linkPath}>{item.item_link}</span>
-                  <input
-                    className={styles.labelInput}
-                    value={item.item_label_en}
-                    onChange={(e) => updateItem(item.id, "item_label_en", e.target.value)}
-                    placeholder="EN"
-                    dir="ltr"
-                  />
-                  <input
-                    className={`${styles.labelInput} ${styles.rtl}`}
-                    value={item.item_label_ar}
-                    onChange={(e) => updateItem(item.id, "item_label_ar", e.target.value)}
-                    placeholder="AR"
-                    dir="rtl"
-                  />
-                  <button className={styles.removeBtn} onClick={() => removeItem(item)} title="Remove">
-                    <X size={13} />
+                  <div className={styles.dragHandleWrapper}>
+                    <GripVertical size={16} className={styles.dragHandle} />
+                  </div>
+                  
+                  <div className={styles.itemControls}>
+                    <div className={styles.labelInputs}>
+                      <input
+                        className={styles.labelInput}
+                        value={item.item_label_en}
+                        onChange={(e) => updateItem(item.id, "item_label_en", e.target.value)}
+                        placeholder="Link text (English)"
+                        dir="ltr"
+                      />
+                      <input
+                        className={`${styles.labelInput} ${styles.rtl}`}
+                        value={item.item_label_ar}
+                        onChange={(e) => updateItem(item.id, "item_label_ar", e.target.value)}
+                        placeholder="Link text (Arabic)"
+                        dir="rtl"
+                      />
+                    </div>
+                    <div className={styles.selectorWrapper}>
+                      <CMSLinkSelector 
+                        value={item.item_link} 
+                        onChange={(newLink) => updateItem(item.id, "item_link", newLink)} 
+                        placeholder="Select destination path..."
+                      />
+                    </div>
+                  </div>
+
+                  <button className={styles.removeBtn} onClick={() => removeItem(item)} title="Remove link">
+                    <X size={15} />
                   </button>
                 </div>
               ))}
           </div>
 
           <button className={styles.addItemBtn} onClick={() => addItem(sectionKey)}>
-            <Plus size={13} /> Add nav item
+            <Plus size={14} /> Add new link to {sectionItems[0]?.section_title_en || sectionKey}
           </button>
         </div>
       ))}

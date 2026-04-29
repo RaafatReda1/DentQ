@@ -32,7 +32,11 @@ export const upsertStoreSettings = async (payload) => {
   }
 };
 
-export const uploadLogo = async (file) => {
+export const uploadLogo = async (file, oldPath) => {
+  if (oldPath) {
+    await supabase.storage.from("Banners").remove([oldPath]);
+  }
+
   const ext = file.name.split(".").pop();
   const name = `logo_${Date.now()}.${ext}`;
   const path = `LOGO/${name}`;
@@ -138,4 +142,23 @@ export const upsertNavItems = async (items) => {
 export const deleteNavItem = async (id) => {
   const { error } = await supabase.from("navigation_items").delete().eq("id", id);
   if (error) throw error;
+};
+
+// ─── Link picker helpers ──────────────────────────────────────────────────────
+export const getCategoriesForNav = async () => {
+  const { data, error } = await supabase
+    .from("Categories")
+    .select("id, name_en, name_ar, parent_id")
+    .order("name_en");
+  if (error) return [];
+  return data || [];
+};
+
+export const getProductsForNav = async () => {
+  const { data, error } = await supabase
+    .from("Products")
+    .select("id, nameEn, nameAr")
+    .order("nameEn");
+  if (error) return [];
+  return data || [];
 };

@@ -6,7 +6,13 @@ import {
     Twitter,
     Youtube,
     MessageCircle,
-    LinkIcon
+    LinkIcon,
+    Ghost,
+    Send,
+    Music,
+    Image as ImageIcon,
+    MessageSquare,
+    PhoneCall
 } from "lucide-react";
 
 /* ======================================
@@ -40,6 +46,12 @@ const iconMap = [
     { keys: ["twitter.com", "x.com"], icon: Twitter },
     { keys: ["youtube.com", "youtu.be"], icon: Youtube },
     { keys: ["wa.me", "whatsapp.com"], icon: MessageCircle },
+    { keys: ["snapchat.com"], icon: Ghost },
+    { keys: ["t.me", "telegram.org"], icon: Send },
+    { keys: ["tiktok.com"], icon: Music },
+    { keys: ["pinterest.com"], icon: ImageIcon },
+    { keys: ["reddit.com", "discord.com", "discord.gg"], icon: MessageSquare },
+    { keys: ["viber.com"], icon: PhoneCall },
 ];
 
 export const getSocialIcon = (url) => {

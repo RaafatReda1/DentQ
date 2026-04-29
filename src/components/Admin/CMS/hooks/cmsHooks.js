@@ -6,7 +6,9 @@ import {
   getAboutUsSections, getAboutStats, upsertAboutUsSections, upsertAboutStats,
   getLegalPages, upsertLegalPage,
   getNavItems, upsertNavItems, deleteNavItem,
+  getCategoriesForNav, getProductsForNav,
 } from "../api/cmsApi";
+
 
 // ─── StoreSettings ────────────────────────────────────────────────────────────
 export const useStoreSettings = () =>
@@ -93,3 +95,11 @@ export const useDeleteNavItem = () => {
     onError: (e) => toast.error(e.message),
   });
 };
+
+// ─── Link Picker ──────────────────────────────────────────────────────────────
+export const useNavCategories = () =>
+  useQuery({ queryKey: ["cms-nav-cats"], queryFn: getCategoriesForNav, staleTime: 10 * 60 * 1000 });
+
+export const useNavProducts = () =>
+  useQuery({ queryKey: ["cms-nav-prods"], queryFn: getProductsForNav, staleTime: 10 * 60 * 1000 });
+

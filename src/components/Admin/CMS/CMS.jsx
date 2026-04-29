@@ -10,10 +10,9 @@ import styles from "./CMS.module.css";
 
 const TABS = [
   { id: "store",  icon: Store,      label: "Store identity" },
-  { id: "footer", icon: Layout,     label: "Footer" },
+  { id: "footer", icon: Layout,     label: "Footer & Navigation" },
   { id: "about",  icon: Info,       label: "About us" },
   { id: "legal",  icon: FileText,   label: "Legal pages" },
-  { id: "nav",    icon: Navigation, label: "Navigation" },
 ];
 
 const CMS = () => {
@@ -46,10 +45,14 @@ const CMS = () => {
       {/* Tab Content */}
       <div className={styles.content}>
         {activeTab === "store"  && <StoreIdentity />}
-        {activeTab === "footer" && <FooterEditor />}
+        {activeTab === "footer" && (
+          <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+            <FooterEditor />
+            <NavigationEditor />
+          </div>
+        )}
         {activeTab === "about"  && <AboutUsEditor />}
         {activeTab === "legal"  && <LegalEditor />}
-        {activeTab === "nav"    && <NavigationEditor />}
       </div>
     </div>
   );
