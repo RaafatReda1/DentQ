@@ -974,7 +974,23 @@
             "subtitle": "Manage promo codes, banners, and growth tools for DentQ",
             "tabs": {
                 "promo": "Promo codes",
-                "banners": "Banners"
+                "banners": "Banners",
+                "shipping": "Shipping"
+            },
+            "shipping": {
+                "title": "Shipping Management",
+                "subtitle": "Set custom shipping prices for each governorate",
+                "add_new": "New Governorate",
+                "governorate": "Governorate",
+                "price": "Shipping Price",
+                "actions": "Actions",
+                "no_rates": "No shipping rates found.",
+                "edit_title": "Edit Shipping Rate",
+                "add_title": "Add Shipping Rate",
+                "gov_en": "Governorate (English)",
+                "gov_ar": "Governorate (Arabic)",
+                "price_label": "Shipping Price (EGP)",
+                "delete_confirm": "Are you sure you want to delete this shipping rate?"
             },
             "promo": {
                 "all_codes": "All promo codes",

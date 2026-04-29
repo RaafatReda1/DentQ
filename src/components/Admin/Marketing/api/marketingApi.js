@@ -126,3 +126,41 @@ export const getLinkProducts = async () => {
     }
     return data || [];
 };
+// --- Shipping Rates ---
+export const getShippingRates = async () => {
+  const { data, error } = await supabase
+    .from("GovernoratesShipping")
+    .select("*")
+    .order("governorateEn", { ascending: true });
+  if (error) throw error;
+  return data || [];
+};
+
+export const createShippingRate = async (rate) => {
+  const { data, error } = await supabase
+    .from("GovernoratesShipping")
+    .insert([rate])
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
+};
+
+export const updateShippingRate = async (id, updates) => {
+  const { data, error } = await supabase
+    .from("GovernoratesShipping")
+    .update({ ...updates, updated_at: new Date().toISOString() })
+    .eq("id", id)
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
+};
+
+export const deleteShippingRate = async (id) => {
+  const { error } = await supabase
+    .from("GovernoratesShipping")
+    .delete()
+    .eq("id", id);
+  if (error) throw error;
+};

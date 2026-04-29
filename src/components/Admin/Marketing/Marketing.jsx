@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Tag, Image } from "lucide-react";
+import { Tag, Image, Truck } from "lucide-react";
 import PromoCodes from "./PromoCodes/PromoCodes";
 import Banners from "./Banners/Banners";
+import ShippingEditor from "./Shipping/ShippingEditor";
 import styles from "./Marketing.module.css";
 
 const TABS = [
   { id: "promo", icon: Tag, labelKey: "admin.marketing.tabs.promo" },
   { id: "banners", icon: Image, labelKey: "admin.marketing.tabs.banners" },
+  { id: "shipping", icon: Truck, labelKey: "admin.marketing.tabs.shipping" },
 ];
 
 const Marketing = () => {
@@ -44,6 +46,7 @@ const Marketing = () => {
       <div className={styles.content}>
         {activeTab === "promo" && <PromoCodes />}
         {activeTab === "banners" && <Banners />}
+        {activeTab === "shipping" && <ShippingEditor />}
       </div>
     </div>
   );
