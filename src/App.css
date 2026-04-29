@@ -11,9 +11,12 @@
   --highlight-color: #00b7a8;
 
   /* 🔔 Status Colors */
-  --danger-color: #ef4444;      /* Red-500 */
-  --warning-color: #f59e0b;     /* Amber-500 */
-  --success-color: #10b981;     /* Emerald-500 */
+  --danger-color: #ef4444;
+  /* Red-500 */
+  --warning-color: #f59e0b;
+  /* Amber-500 */
+  --success-color: #10b981;
+  /* Emerald-500 */
 
   /* خلفيات ناعمة */
 
@@ -95,11 +98,9 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(
-    180deg,
-    var(--secondary-color),
-    var(--highlight-color)
-  );
+  background: linear-gradient(180deg,
+      var(--secondary-color),
+      var(--highlight-color));
   border: 2.5px solid var(--background-light);
   border-radius: var(--radius-full);
   transition: all var(--transition-normal);
@@ -136,6 +137,10 @@ body {
   margin-top: 20px !important;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 /* --- Lenis Smooth Scrolling --- */
 html.lenis,
 html.lenis body {
@@ -157,4 +162,3 @@ html.lenis body {
 .lenis.lenis-scrolling iframe {
   pointer-events: none;
 }
-
