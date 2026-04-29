@@ -162,3 +162,31 @@ html.lenis body {
 .lenis.lenis-scrolling iframe {
   pointer-events: none;
 }
+
+/* --- Global Responsiveness Tweaks --- */
+@media (max-width: 1200px) {
+  :root {
+    --padding-lg: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --padding-lg: 1rem;
+    --padding-md: 0.75rem;
+  }
+
+  body {
+    font-size: 14px;
+  }
+
+  h1 { font-size: 1.8rem; }
+  h2 { font-size: 1.5rem; }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
