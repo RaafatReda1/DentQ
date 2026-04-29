@@ -8,10 +8,13 @@ import { getIconByKey } from "../../../../utils/IconRegistry";
 import { DEFAULT_FOOTER } from "../config/defaults";
 import IconPickerModal from "../components/IconPickerModal";
 import styles from "./FooterEditor.module.css";
-import { Plus, X, Eye, RotateCcw } from "lucide-react";
+import { Plus, X, Eye } from "lucide-react";
+import { Skeleton } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 // ── Live Preview Component ──────────────────────────────────────────────────
 const FooterPreview = ({ draft, navItems, logoUrl }) => {
+  const { t } = useTranslation();
   // Group nav items
   const groupedNav = (navItems || []).reduce((acc, item) => {
     if (!acc[item.section_key]) acc[item.section_key] = [];
@@ -27,7 +30,7 @@ const FooterPreview = ({ draft, navItems, logoUrl }) => {
     <div className={styles.previewContainer}>
       <div className={styles.previewHeader}>
         <Eye size={14} />
-        <span>Live Storefront Preview</span>
+        <span>{t("admin.cms.footer.live_preview", "Live Storefront Preview")}</span>
       </div>
       <div className={styles.previewBox}>
         <div className={styles.previewGrid}>
@@ -79,6 +82,7 @@ const FooterPreview = ({ draft, navItems, logoUrl }) => {
 
 // ── FooterEditor ─────────────────────────────────────────────────────────────
 const FooterEditor = () => {
+  const { t } = useTranslation();
   const { data: remote, isLoading } = useFooter();
   const { data: navItems } = useNavItems();
   const { logoUrl } = useLogo();
@@ -98,9 +102,11 @@ const FooterEditor = () => {
 
   if (isLoading || !draft) {
     return (
-      <div className={styles.loadingWrap}>
-        <div className={styles.loadingDots}><span /><span /><span /></div>
-        <p>Loading footer settings…</p>
+      <div className={styles.skeletonWrap} style={{ padding: "20px", display: "flex", flexDirection: "column", gap: "15px" }}>
+        <Skeleton variant="rectangular" width="100%" height={250} style={{ borderRadius: 12 }} />
+        <Skeleton variant="text" width="60%" height={30} />
+        <Skeleton variant="rectangular" width="100%" height={60} style={{ borderRadius: 8 }} />
+        <Skeleton variant="rectangular" width="100%" height={60} style={{ borderRadius: 8 }} />
       </div>
     );
   }
@@ -126,9 +132,9 @@ const FooterEditor = () => {
   return (
     <SectionCard
       id="footer-editor"
-      title="Footer brand & socials"
-      subtitle="Slogans and social links displayed in the storefront footer"
-      saveLabel="Save footer"
+      title={t("admin.cms.footer.title", "Footer brand & socials")}
+      subtitle={t("admin.cms.footer.subtitle", "Slogans and social links displayed in the storefront footer")}
+      saveLabel={t("admin.cms.common.save", "Save changes")}
       onSave={handleSave}
       onDiscard={handleDiscard}
       onResetToDefault={handleResetToDefault}
@@ -140,21 +146,21 @@ const FooterEditor = () => {
       <hr className={styles.divider} />
 
       <BilingualField
-        label="Footer Slogan"
+        label={t("admin.cms.footer.slogan", "Footer Slogan")}
         valueEn={draft.slogan_en}
         valueAr={draft.slogan_ar}
         onChangeEn={(v) => set("slogan_en", v)}
         onChangeAr={(v) => set("slogan_ar", v)}
-        placeholderEn="Egypt's trusted dental supply platform"
-        placeholderAr="شريكك الموثوق لمستلزمات الأسنان"
+        placeholderEn={t("admin.cms.footer.slogan_en_ph", "Egypt's trusted dental supply platform")}
+        placeholderAr={t("admin.cms.footer.slogan_ar_ph", "شريكك الموثوق لمستلزمات الأسنان")}
       />
 
       {/* Social Links */}
       <div className={styles.linksSection}>
         <div className={styles.linksHeader}>
           <div style={{ display: "flex", alignItems: "center", gap: "10px", flex: 1 }}>
-            <span className={styles.label}>SOCIAL MEDIA LINKS</span>
-            <span className={styles.autoBadge}>Auto-detects icon from URL</span>
+            <span className={styles.label}>{t("admin.cms.footer.social_links", "SOCIAL MEDIA LINKS")}</span>
+            <span className={styles.autoBadge}>{t("admin.cms.footer.auto_detect", "Auto-detects icon from URL")}</span>
           </div>
         </div>
 
@@ -166,7 +172,7 @@ const FooterEditor = () => {
                 <button
                   className={`${styles.platformPill} ${styles.clickablePill}`}
                   onClick={() => setPickerOpenFor(i)}
-                  title="Click to select specific icon"
+                  title={t("admin.cms.footer.click_icon", "Click to select specific icon")}
                 >
                   <Icon size={15} />
                 </button>
@@ -177,7 +183,7 @@ const FooterEditor = () => {
                   placeholder="https://..."
                   dir="ltr"
                 />
-                <button className={styles.removeBtn} onClick={() => removeLink(i)} title="Remove">
+                <button className={styles.removeBtn} onClick={() => removeLink(i)} title={t("admin.cms.common.remove", "Remove")}>
                   <X size={15} />
                 </button>
               </div>
@@ -186,7 +192,7 @@ const FooterEditor = () => {
         </div>
 
         <button className={styles.addBtn} onClick={addLink}>
-          <Plus size={14} /> Add new social profile
+          <Plus size={14} /> {t("admin.cms.footer.add_social", "Add new social profile")}
         </button>
       </div>
 

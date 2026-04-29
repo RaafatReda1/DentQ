@@ -4,21 +4,26 @@ import CMSLinkSelector from "../components/CMSLinkSelector";
 import { useNavItems, useUpsertNavItems, useDeleteNavItem } from "../hooks/cmsHooks";
 import styles from "./NavigationEditor.module.css";
 import { GripVertical, Plus, X } from "lucide-react";
+import { Skeleton } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 const NavigationEditor = () => {
+  const { t } = useTranslation();
   const { data: remote, isLoading } = useNavItems();
   const { mutate: save, isPending: saving } = useUpsertNavItems();
   const { mutate: deleteItem } = useDeleteNavItem();
   const [items, setItems] = useState(null);
   const [dragging, setDragging] = useState(null);
 
-  useEffect(() => { if (!isLoading && remote) setItems(remote); }, [remote, isLoading]);
+  useEffect(() => { if (!isLoading) setItems(remote || []); }, [remote, isLoading]);
 
   if (isLoading || !items) {
     return (
-      <div className={styles.loadingWrap}>
-        <div className={styles.loadingDots}><span /><span /><span /></div>
-        <p>Loading navigation items…</p>
+      <div className={styles.skeletonWrap} style={{ padding: "20px", display: "flex", flexDirection: "column", gap: "15px" }}>
+        <Skeleton variant="rectangular" width="100%" height={60} style={{ borderRadius: 8 }} />
+        <Skeleton variant="rectangular" width="100%" height={40} style={{ borderRadius: 8 }} />
+        <Skeleton variant="rectangular" width="100%" height={40} style={{ borderRadius: 8 }} />
+        <Skeleton variant="rectangular" width="100%" height={40} style={{ borderRadius: 8 }} />
       </div>
     );
   }
@@ -88,7 +93,7 @@ const NavigationEditor = () => {
   const handleDiscard = () => setItems(remote);
   
   const handleResetToDefault = () => {
-    if (window.confirm("Are you sure you want to delete all navigation links? This will reset the footer columns.")) {
+    if (window.confirm(t("admin.cms.navigation.reset_confirm", "Are you sure you want to delete all navigation links? This will reset the footer columns."))) {
       setItems([]);
     }
   };
@@ -96,9 +101,9 @@ const NavigationEditor = () => {
   return (
     <SectionCard
       id="navigation-editor"
-      title="Column Links Navigation"
-      subtitle="Manage the links that appear in the footer columns. Drag to reorder. Use the link selector to connect to internal routes, categories, or products."
-      saveLabel="Save navigation"
+      title={t("admin.cms.navigation.title", "Column Links Navigation")}
+      subtitle={t("admin.cms.navigation.subtitle", "Manage the links that appear in the footer columns. Drag to reorder. Use the link selector to connect to internal routes, categories, or products.")}
+      saveLabel={t("admin.cms.navigation.save", "Save navigation")}
       onSave={handleSave}
       onDiscard={handleDiscard}
       onResetToDefault={handleResetToDefault}
@@ -133,14 +138,14 @@ const NavigationEditor = () => {
                         className={styles.labelInput}
                         value={item.item_label_en}
                         onChange={(e) => updateItem(item.id, "item_label_en", e.target.value)}
-                        placeholder="Link text (English)"
+                        placeholder={t("admin.cms.navigation.link_label_en", "Link Label (EN)")}
                         dir="ltr"
                       />
                       <input
                         className={`${styles.labelInput} ${styles.rtl}`}
                         value={item.item_label_ar}
                         onChange={(e) => updateItem(item.id, "item_label_ar", e.target.value)}
-                        placeholder="Link text (Arabic)"
+                        placeholder={t("admin.cms.navigation.link_label_ar", "Link Label (AR)")}
                         dir="rtl"
                       />
                     </div>
@@ -148,7 +153,7 @@ const NavigationEditor = () => {
                       <CMSLinkSelector 
                         value={item.item_link} 
                         onChange={(newLink) => updateItem(item.id, "item_link", newLink)} 
-                        placeholder="Select destination path..."
+                        placeholder={t("admin.cms.navigation.link_url", "URL / Path")}
                       />
                     </div>
                   </div>
@@ -161,7 +166,7 @@ const NavigationEditor = () => {
           </div>
 
           <button className={styles.addItemBtn} onClick={() => addItem(sectionKey)}>
-            <Plus size={14} /> Add new link to {sectionItems[0]?.section_title_en || sectionKey}
+            <Plus size={14} /> {t("admin.cms.navigation.add_link", "Add Link")} {t("admin.cms.common.to", "to")} {sectionItems[0]?.section_title_en || sectionKey}
           </button>
         </div>
       ))}

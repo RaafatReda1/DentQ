@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useLogo } from "../../../utils/LogoContext";
 import { supabase } from "../../../utils/SupabaseClient";
 import { DEFAULT_LEGAL_PAGES } from "../../Admin/CMS/config/defaults";
+import { Skeleton } from "@mui/material";
 
 const PrivacyPage = () => {
   const { t, i18n } = useTranslation();
@@ -50,7 +51,17 @@ const PrivacyPage = () => {
         <img src={logoUrl || '/logo.png'} alt="DentQ Logo" className={styles.logo} />
         <h1>{title}</h1>
         {loading ? (
-          <div className={styles.loading}>Loading...</div>
+          <div className={styles.skeletonWrap}>
+            <Skeleton variant="text" width="100%" height={24} />
+            <Skeleton variant="text" width="95%" height={24} />
+            <Skeleton variant="text" width="98%" height={24} />
+            <br />
+            <Skeleton variant="text" width="80%" height={24} />
+            <Skeleton variant="text" width="90%" height={24} />
+            <Skeleton variant="text" width="85%" height={24} />
+            <br />
+            <Skeleton variant="rectangular" width="100%" height={120} style={{ borderRadius: 8 }} />
+          </div>
         ) : (
           <div className={styles.textContent}>
             <p style={{ whiteSpace: "pre-wrap" }}>{displayText}</p>

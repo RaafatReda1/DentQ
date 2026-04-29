@@ -1,11 +1,15 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import styles from "./BilingualField.module.css";
 
-const Badge = ({ lang }) => (
-  <span className={`${styles.badge} ${lang === "en" ? styles.badgeEn : styles.badgeAr}`} aria-hidden="true">
-    {lang.toUpperCase()}
-  </span>
-);
+const Badge = ({ lang }) => {
+  const { t } = useTranslation();
+  return (
+    <span className={`${styles.badge} ${lang === "en" ? styles.badgeEn : styles.badgeAr}`} aria-hidden="true">
+      {lang === "en" ? t("admin.cms.common.english", "EN") : t("admin.cms.common.arabic", "AR")}
+    </span>
+  );
+};
 
 const BilingualField = ({
   label,

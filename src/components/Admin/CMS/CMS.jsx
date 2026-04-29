@@ -8,23 +8,24 @@ import LegalEditor from "./sections/LegalEditor";
 import NavigationEditor from "./sections/NavigationEditor";
 import styles from "./CMS.module.css";
 
-const TABS = [
-  { id: "store",  icon: Store,      label: "Store identity" },
-  { id: "footer", icon: Layout,     label: "Footer & Navigation" },
-  { id: "about",  icon: Info,       label: "About us" },
-  { id: "legal",  icon: FileText,   label: "Legal pages" },
-];
-
 const CMS = () => {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState("store");
+
+  const TABS = [
+    { id: "store",  icon: Store,      label: t("admin.cms.tabs.store_identity", "Store identity") },
+    { id: "footer", icon: Layout,     label: t("admin.cms.tabs.footer_navigation", "Footer & Navigation") },
+    { id: "about",  icon: Info,       label: t("admin.cms.tabs.about_us", "About us") },
+    { id: "legal",  icon: FileText,   label: t("admin.cms.tabs.legal_pages", "Legal pages") },
+  ];
 
   return (
     <div className={styles.container}>
       {/* Page Header */}
       <div className={styles.pageHeader}>
         <div>
-          <h1 className={styles.pageTitle}>CMS Settings</h1>
-          <p className={styles.pageSubtitle}>Manage storefront content — identity, footer, pages &amp; navigation</p>
+          <h1 className={styles.pageTitle}>{t("admin.cms.main.title", "CMS Settings")}</h1>
+          <p className={styles.pageSubtitle}>{t("admin.cms.main.subtitle", "Manage storefront content — identity, footer, pages & navigation")}</p>
         </div>
       </div>
 

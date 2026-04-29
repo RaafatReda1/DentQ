@@ -2,15 +2,18 @@ import React, { useState, useEffect } from "react";
 import SectionCard from "../components/SectionCard";
 import { useLegalPages, useUpsertLegalPage } from "../hooks/cmsHooks";
 import { DEFAULT_LEGAL_PAGES } from "../config/defaults";
+import { Skeleton } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import styles from "./LegalEditor.module.css";
 import { Eye, RotateCcw } from "lucide-react";
 
-const TABS = [
-  { key: "terms_of_use",   label: "Terms of use" },
-  { key: "privacy_policy", label: "Privacy policy" },
-];
-
 const LegalEditor = () => {
+  const { t } = useTranslation();
+
+  const TABS = [
+    { key: "terms_of_use",   label: t("admin.cms.legal.terms", "Terms of use") },
+    { key: "privacy_policy", label: t("admin.cms.legal.privacy", "Privacy policy") },
+  ];
   const { data: remote, isLoading } = useLegalPages();
   const { mutate: save, isPending: saving } = useUpsertLegalPage();
   const [activeKey, setActiveKey] = useState("terms_of_use");
@@ -37,9 +40,11 @@ const LegalEditor = () => {
 
   if (isLoading || !Object.keys(drafts).length) {
     return (
-      <div className={styles.loadingWrap}>
-        <div className={styles.loadingDots}><span /><span /><span /></div>
-        <p>Loading legal pages…</p>
+      <div className={styles.skeletonWrap} style={{ padding: "20px", display: "flex", flexDirection: "column", gap: "15px" }}>
+        <Skeleton variant="rectangular" width="100%" height={80} style={{ borderRadius: 12 }} />
+        <Skeleton variant="text" width="40%" height={30} />
+        <Skeleton variant="rectangular" width="100%" height={200} style={{ borderRadius: 8 }} />
+        <Skeleton variant="rectangular" width="100%" height={200} style={{ borderRadius: 8 }} />
       </div>
     );
   }
@@ -67,9 +72,9 @@ const LegalEditor = () => {
   return (
     <SectionCard
       id="legal-editor"
-      title="Legal pages"
-      subtitle="Terms of use and privacy policy displayed at checkout and in the footer"
-      saveLabel={`Save ${activeLabel.toLowerCase()}`}
+      title={t("admin.cms.legal.title", "Legal pages")}
+      subtitle={t("admin.cms.legal.subtitle", "Terms of use and privacy policy displayed at checkout and in the footer")}
+      saveLabel={activeKey === "terms_of_use" ? t("admin.cms.legal.save_terms", "Save terms of use") : t("admin.cms.legal.save_privacy", "Save privacy policy")}
       onSave={() => save(current)}
       onDiscard={handleDiscard}
       onResetToDefault={handleResetToDefault}
@@ -96,9 +101,9 @@ const LegalEditor = () => {
         <div className={styles.fieldGroup}>
           <div className={styles.labelRow}>
             <label className={styles.label} htmlFor={`legal-en-${activeKey}`}>
-              {activeLabel.toUpperCase()} <span className={styles.badgeEn} aria-hidden="true">EN</span>
+              {activeLabel.toUpperCase()} <span className={styles.badgeEn} aria-hidden="true">{t("admin.cms.common.english", "EN")}</span>
             </label>
-            <span className={styles.warningBadge}>Live Editor</span>
+            <span className={styles.warningBadge}>{t("admin.cms.legal.live_editor", "Live Editor")}</span>
           </div>
           <textarea
             id={`legal-en-${activeKey}`}
@@ -107,7 +112,7 @@ const LegalEditor = () => {
             onChange={(e) => set("content_en", e.target.value)}
             rows={15}
             dir="ltr"
-            placeholder={`Enter ${activeLabel.toLowerCase()} text in English…`}
+            placeholder={t("admin.cms.legal.write_here", "Write your {label} here...").replace("{label}", activeLabel.toLowerCase())}
           />
           <p className={styles.charCount}>{enCount.toLocaleString()} characters</p>
         </div>
@@ -116,7 +121,7 @@ const LegalEditor = () => {
         <div className={styles.fieldGroup}>
           <div className={styles.labelRow}>
             <label className={styles.label}>
-               STOREFRONT PREVIEW
+               {t("admin.cms.footer.live_preview", "Live Storefront Preview")}
             </label>
             <Eye size={14} className={styles.eyeIcon} />
           </div>
@@ -133,7 +138,7 @@ const LegalEditor = () => {
         <div className={styles.fieldGroup}>
           <div className={styles.labelRow}>
             <label className={styles.label} htmlFor={`legal-ar-${activeKey}`}>
-              {activeLabel.toUpperCase()} <span className={styles.badgeAr} aria-hidden="true">AR</span>
+              {activeLabel.toUpperCase()} <span className={styles.badgeAr} aria-hidden="true">{t("admin.cms.common.arabic", "AR")}</span>
             </label>
           </div>
           <textarea
@@ -152,7 +157,7 @@ const LegalEditor = () => {
         <div className={styles.fieldGroup}>
           <div className={styles.labelRow}>
             <label className={styles.label}>
-               المعاينة المباشرة (AR)
+               {t("admin.cms.footer.live_preview", "Live Storefront Preview")} (AR)
             </label>
             <Eye size={14} className={styles.eyeIcon} />
           </div>

@@ -5,8 +5,11 @@ import { useAboutUsSections, useAboutStats, useUpsertAboutUs } from "../hooks/cm
 import { DEFAULT_ABOUT_SECTIONS, DEFAULT_ABOUT_STATS } from "../config/defaults";
 import styles from "./AboutUsEditor.module.css";
 import { ChevronDown, ChevronRight, RotateCcw } from "lucide-react";
+import { Skeleton } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 const AboutUsEditor = () => {
+  const { t } = useTranslation();
   const { data: remoteSections, isLoading: loadingSections } = useAboutUsSections();
   const { data: remoteStats, isLoading: loadingStats } = useAboutStats();
   const { mutate: save, isPending: saving } = useUpsertAboutUs();
@@ -36,11 +39,10 @@ const AboutUsEditor = () => {
 
   if (loadingSections || loadingStats || !sections || !stats) {
     return (
-      <div className={styles.loadingWrap}>
-        <div className={styles.loadingDots}>
-          <span /><span /><span />
-        </div>
-        <p>Loading About Us data…</p>
+      <div className={styles.skeletonWrap} style={{ padding: "20px", display: "flex", flexDirection: "column", gap: "15px" }}>
+        <Skeleton variant="rectangular" width="100%" height={80} style={{ borderRadius: 12 }} />
+        <Skeleton variant="text" width="40%" height={30} />
+        <Skeleton variant="rectangular" width="100%" height={200} style={{ borderRadius: 8 }} />
       </div>
     );
   }
@@ -69,9 +71,9 @@ const AboutUsEditor = () => {
   return (
     <SectionCard
       id="about-us-editor"
-      title="About us page"
-      subtitle="Mission, how it works, commitment sections and stats bar"
-      saveLabel="Save about us"
+      title={t("admin.cms.about.title", "About Us Content")}
+      subtitle={t("admin.cms.about.subtitle", "Manage the main content blocks on the About Us page")}
+      saveLabel={t("admin.cms.common.save", "Save changes")}
       onSave={handleSave}
       onDiscard={handleDiscard}
       onResetToDefault={handleResetToDefault}
@@ -81,8 +83,8 @@ const AboutUsEditor = () => {
       {/* ── Stats Bar ─────────────────────────────────────────────── */}
       <div className={styles.block}>
         <div className={styles.blockHeader}>
-          <span className={styles.blockLabel}>STATS BAR</span>
-          <span className={styles.liveBadge}>Live on storefront</span>
+          <span className={styles.blockLabel}>{t("admin.cms.about.stats_title", "Key Statistics")}</span>
+          <span className={styles.liveBadge}>{t("admin.cms.footer.live_preview", "Live Storefront Preview")}</span>
         </div>
         <div className={styles.statsGrid}>
           {stats.map((stat) => (
@@ -99,14 +101,14 @@ const AboutUsEditor = () => {
                   className={styles.statLabelInput}
                   value={stat.label_en ?? ""}
                   onChange={(e) => updateStat(stat.stat_key, "label_en", e.target.value)}
-                  placeholder="EN label"
+                  placeholder={t("admin.cms.about.stat_label_en", "Label (EN)")}
                   dir="ltr"
                 />
                 <input
                   className={`${styles.statLabelInput} ${styles.rtl}`}
                   value={stat.label_ar ?? ""}
                   onChange={(e) => updateStat(stat.stat_key, "label_ar", e.target.value)}
-                  placeholder="التسمية"
+                  placeholder={t("admin.cms.about.stat_label_ar", "Label (AR)")}
                   dir="rtl"
                 />
               </div>
@@ -119,7 +121,7 @@ const AboutUsEditor = () => {
 
       {/* ── Content Sections ───────────────────────────────────────── */}
       <div className={styles.block}>
-        <span className={styles.blockLabel}>CONTENT SECTIONS</span>
+        <span className={styles.blockLabel}>{t("admin.cms.about.add_section", "Add Section").replace("Add Section", "SECTIONS")}</span>
         <div className={styles.sectionsList}>
           {sections
             .slice()
@@ -145,25 +147,25 @@ const AboutUsEditor = () => {
                         <p className={styles.heroHint}>ℹ️ This is the large headline at the top of the About Us page.</p>
                       )}
                       <BilingualField
-                        label="Title"
+                        label={t("admin.cms.about.section_title_en", "Title (EN)").replace(" (EN)", "")}
                         valueEn={sec.title_en}
                         valueAr={sec.title_ar}
                         onChangeEn={(v) => updateSection(sec.section_key, "title_en", v)}
                         onChangeAr={(v) => updateSection(sec.section_key, "title_ar", v)}
-                        placeholderEn="Section title in English"
-                        placeholderAr="عنوان القسم بالعربية"
+                        placeholderEn={t("admin.cms.about.section_title_en", "Title (EN)")}
+                        placeholderAr={t("admin.cms.about.section_title_ar", "Title (AR)")}
                       />
                       {sec.section_key !== "hero" && (
                         <BilingualField
-                          label="Body text"
+                          label={t("admin.cms.about.section_content_en", "Content (EN)").replace(" (EN)", "")}
                           valueEn={sec.body_en}
                           valueAr={sec.body_ar}
                           onChangeEn={(v) => updateSection(sec.section_key, "body_en", v)}
                           onChangeAr={(v) => updateSection(sec.section_key, "body_ar", v)}
                           multiline
                           rows={4}
-                          placeholderEn="Section body in English"
-                          placeholderAr="نص القسم بالعربية"
+                          placeholderEn={t("admin.cms.about.section_content_en", "Content (EN)")}
+                          placeholderAr={t("admin.cms.about.section_content_ar", "Content (AR)")}
                         />
                       )}
                     </div>

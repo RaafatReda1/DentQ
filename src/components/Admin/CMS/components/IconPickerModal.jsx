@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { Search, X } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { ICON_REGISTRY } from "../../../../utils/IconRegistry";
 import styles from "./IconPickerModal.module.css";
 
 const IconPickerModal = ({ isOpen, onClose, onSelect, selectedKey }) => {
+  const { t } = useTranslation();
   const [search, setSearch] = useState("");
 
   if (!isOpen) return null;
@@ -17,7 +19,7 @@ const IconPickerModal = ({ isOpen, onClose, onSelect, selectedKey }) => {
     <div className={styles.overlay} onClick={onClose}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
         <div className={styles.header}>
-          <h3 className={styles.title}>Choose an Icon</h3>
+          <h3 className={styles.title}>{t("admin.cms.icon_picker.title", "Choose an Icon")}</h3>
           <button className={styles.closeBtn} onClick={onClose}>
             <X size={18} />
           </button>
@@ -29,7 +31,7 @@ const IconPickerModal = ({ isOpen, onClose, onSelect, selectedKey }) => {
             autoFocus
             type="text"
             className={styles.searchInput}
-            placeholder="Search icons (e.g., TikTok, Snapchat)..."
+            placeholder={t("admin.cms.icon_picker.search_placeholder", "Search icons (e.g., TikTok, Snapchat)...")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -37,7 +39,7 @@ const IconPickerModal = ({ isOpen, onClose, onSelect, selectedKey }) => {
 
         <div className={styles.grid}>
           {filtered.length === 0 ? (
-            <div className={styles.noResults}>No icons found.</div>
+            <div className={styles.noResults}>{t("admin.cms.icon_picker.no_results", "No icons found.")}</div>
           ) : (
             filtered.map((icon) => {
               const IconComp = icon.component;

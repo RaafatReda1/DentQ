@@ -3,12 +3,16 @@ import SectionCard from "../components/SectionCard";
 import BilingualField from "../components/BilingualField";
 import { useStoreSettings, useUpsertStoreSettings } from "../hooks/cmsHooks";
 import { uploadLogo } from "../api/cmsApi";
+import { DEFAULT_STORE } from "../config/defaults";
+import { Skeleton } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import { useLogo } from "../../../../utils/LogoContext";
 import styles from "./StoreIdentity.module.css";
 import { Upload, RotateCcw, Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
 
 const StoreIdentity = () => {
+  const { t } = useTranslation();
   const { data: remote } = useStoreSettings();
   const { mutate: save, isPending: saving } = useUpsertStoreSettings();
   const { setLogoUrl } = useLogo();
@@ -17,10 +21,22 @@ const StoreIdentity = () => {
   const fileRef = useRef();
 
   useEffect(() => {
-    if (remote) setDraft(remote);
+    if (remote) {
+      setDraft(remote);
+    } else {
+      setDraft(DEFAULT_STORE);
+    }
   }, [remote]);
 
-  if (!draft) return <div className={styles.loading}>Loading store identity…</div>;
+  if (!draft) {
+    return (
+      <div className={styles.skeletonWrap} style={{ padding: "20px", display: "flex", flexDirection: "column", gap: "15px" }}>
+        <Skeleton variant="rectangular" width="100%" height={100} style={{ borderRadius: 12 }} />
+        <Skeleton variant="text" width="50%" height={30} />
+        <Skeleton variant="rectangular" width="100%" height={80} style={{ borderRadius: 8 }} />
+      </div>
+    );
+  }
 
   const set = (key, val) => setDraft((p) => ({ ...p, [key]: val }));
   const isDirty = JSON.stringify(draft) !== JSON.stringify(remote);
@@ -77,9 +93,9 @@ const StoreIdentity = () => {
   return (
     <SectionCard
       id="store-identity"
-      title="Store identity & contact info"
-      subtitle="Core contact details used across checkout, invoices, and the storefront"
-      saveLabel="Save changes"
+      title={t("admin.cms.store_identity.title", "Store identity & contact info")}
+      subtitle={t("admin.cms.store_identity.subtitle", "Core contact details used across checkout, invoices, and the storefront")}
+      saveLabel={t("admin.cms.common.save", "Save changes")}
       onSave={handleSave}
       onDiscard={handleDiscard}
       onResetToDefault={handleResetToDefault}
@@ -88,21 +104,21 @@ const StoreIdentity = () => {
     >
       {/* Addresses */}
       <BilingualField
-        label="Address"
+        label={t("admin.cms.store_identity.address", "Address")}
         valueEn={draft.address_en}
         valueAr={draft.address_ar}
         onChangeEn={(v) => set("address_en", v)}
         onChangeAr={(v) => set("address_ar", v)}
-        placeholderEn="123 Dental St., New Cairo, Egypt"
-        placeholderAr="١٢٣ شارع طب الأسنان، القاهرة الجديدة"
-        hint="Used on invoices and the storefront contact page"
+        placeholderEn={t("admin.cms.store_identity.address_en_ph", "123 Dental St., New Cairo, Egypt")}
+        placeholderAr={t("admin.cms.store_identity.address_ar_ph", "١٢٣ شارع طب الأسنان، القاهرة الجديدة")}
+        hint={t("admin.cms.store_identity.address_hint", "Used on invoices and the storefront contact page")}
       />
 
       {/* Phone + Email */}
       <div className={styles.row}>
         <div className={styles.fieldGroup}>
           <label className={styles.label} htmlFor="store-phone">
-            PHONE NUMBER
+            {t("admin.cms.store_identity.phone", "PHONE NUMBER")}
           </label>
           <input
             id="store-phone"
@@ -112,11 +128,11 @@ const StoreIdentity = () => {
             placeholder="+20 100 123 4567"
             dir="ltr"
           />
-          <p className={styles.hint}>Maps to <code>StoreSettings.phone</code></p>
+          <p className={styles.hint}>{t("admin.cms.store_identity.phone_hint", "Maps to StoreSettings.phone")}</p>
         </div>
         <div className={styles.fieldGroup}>
           <label className={styles.label} htmlFor="store-email">
-            EMAIL
+            {t("admin.cms.store_identity.email", "EMAIL")}
           </label>
           <input
             id="store-email"
@@ -127,7 +143,7 @@ const StoreIdentity = () => {
             placeholder="hello@dentq.com"
             dir="ltr"
           />
-          <p className={styles.hint}>Maps to <code>StoreSettings.email</code></p>
+          <p className={styles.hint}>{t("admin.cms.store_identity.email_hint", "Maps to StoreSettings.email")}</p>
         </div>
       </div>
 
@@ -137,7 +153,7 @@ const StoreIdentity = () => {
       <div className={styles.row}>
         {/* Accent Color */}
         <div className={styles.fieldGroup}>
-          <label className={styles.label}>BRAND ACCENT COLOR</label>
+          <label className={styles.label}>{t("admin.cms.store_identity.accent_color", "BRAND ACCENT COLOR")}</label>
           <div className={styles.colorRow}>
             <div
               className={styles.swatch}
@@ -160,12 +176,12 @@ const StoreIdentity = () => {
               maxLength={7}
             />
           </div>
-          <p className={styles.hint}>Used on invoice headers, buttons, and UI highlights.</p>
+          <p className={styles.hint}>{t("admin.cms.store_identity.accent_hint", "Used on invoice headers, buttons, and UI highlights.")}</p>
         </div>
 
         {/* Logo */}
         <div className={styles.fieldGroup}>
-          <label className={styles.label}>STORE LOGO</label>
+          <label className={styles.label}>{t("admin.cms.store_identity.logo", "STORE LOGO")}</label>
           <div className={styles.logoRow}>
             <div className={styles.logoPreview}>
               <img src={logoPreview} alt="Store logo" className={styles.logoImg} />
@@ -184,16 +200,16 @@ const StoreIdentity = () => {
                 disabled={uploading}
               >
                 {uploading ? <Loader2 size={14} className={styles.spin} /> : <Upload size={14} />}
-                {uploading ? "Uploading…" : "Upload new logo"}
+                {uploading ? t("admin.cms.store_identity.uploading", "Uploading…") : t("admin.cms.store_identity.upload_logo", "Upload new logo")}
               </button>
               {draft.logo_url && (
-                <button className={styles.resetBtn} onClick={handleResetLogo} title="Reset to default /logo.png">
-                  <RotateCcw size={13} /> Reset to default
+                <button className={styles.resetBtn} onClick={handleResetLogo} title={t("admin.cms.store_identity.reset_logo", "Reset to default")}>
+                  <RotateCcw size={13} /> {t("admin.cms.store_identity.reset_logo", "Reset to default")}
                 </button>
               )}
             </div>
           </div>
-          <p className={styles.hint}>PNG, SVG, WEBP · max 2 MB · stored in Banners/LOGO/</p>
+          <p className={styles.hint}>{t("admin.cms.store_identity.logo_hint", "PNG, SVG, WEBP · max 2 MB · stored in Banners/LOGO/")}</p>
         </div>
       </div>
     </SectionCard>

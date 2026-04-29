@@ -577,6 +577,128 @@
             "catalogs": "Catalogs",
             "cms": "CMS Settings"
         },
+        "cms": {
+            "icon_picker": {
+                "title": "Choose an Icon",
+                "search_placeholder": "Search icons (e.g., TikTok, Snapchat)...",
+                "no_results": "No icons found."
+            },
+            "tabs": {
+                "store_identity": "Store identity",
+                "footer_navigation": "Footer & Navigation",
+                "about_us": "About us",
+                "legal_pages": "Legal pages"
+            },
+            "common": {
+                "save": "Save changes",
+                "saving": "Saving...",
+                "discard": "Discard",
+                "reset": "Reset to default",
+                "add_new": "Add new",
+                "remove": "Remove",
+                "loading": "Loading...",
+                "english": "EN",
+                "arabic": "AR"
+            },
+            "main": {
+                "title": "CMS Settings",
+                "subtitle": "Manage storefront content – identity, footer, pages & navigation"
+            },
+            "store_identity": {
+                "title": "Store identity & contact info",
+                "subtitle": "Core contact details used across checkout, invoices, and the storefront",
+                "address": "Address",
+                "address_en_ph": "123 Dental St., New Cairo, Egypt",
+                "address_ar_ph": "١٢٣ شارع طب الأسنان، القاهرة الجديدة",
+                "address_hint": "Used on invoices and the storefront contact page",
+                "phone": "PHONE NUMBER",
+                "email": "EMAIL",
+                "phone_hint": "Maps to StoreSettings.phone",
+                "email_hint": "Maps to StoreSettings.email",
+                "accent_color": "BRAND ACCENT COLOR",
+                "accent_hint": "Used on invoice headers, buttons, and UI highlights.",
+                "logo": "STORE LOGO",
+                "upload_logo": "Upload new logo",
+                "uploading": "Uploading...",
+                "reset_logo": "Reset to default",
+                "logo_hint": "PNG, SVG, WEBP · max 2 MB · stored in Banners/LOGO/"
+            },
+            "footer": {
+                "title": "Footer brand & socials",
+                "subtitle": "Slogans and social links displayed in the storefront footer",
+                "live_preview": "Live Storefront Preview",
+                "slogan": "Footer Slogan",
+                "slogan_en_ph": "Egypt's trusted dental supply platform",
+                "slogan_ar_ph": "شريكك الموثوق لمستلزمات الأسنان",
+                "social_links": "SOCIAL MEDIA LINKS",
+                "auto_detect": "Auto-detects icon from URL",
+                "add_social": "Add new social profile",
+                "click_icon": "Click to select specific icon"
+            },
+            "legal": {
+                "title": "Legal pages",
+                "subtitle": "Terms of use and privacy policy displayed at checkout and in the footer",
+                "terms": "Terms of use",
+                "privacy": "Privacy policy",
+                "live_editor": "Live Editor",
+                "save_terms": "Save terms of use",
+                "save_privacy": "Save privacy policy",
+                "write_here": "Write your {label} here..."
+            },
+            "about": {
+                "title": "About Us Content",
+                "subtitle": "Manage the main content blocks on the About Us page",
+                "add_section": "Add Section",
+                "stats_title": "Key Statistics",
+                "stats_subtitle": "Numbers shown in the highlight bar",
+                "add_stat": "Add Stat",
+                "stat_value": "Value (e.g. 10k+)",
+                "stat_label_en": "Label (EN)",
+                "stat_label_ar": "Label (AR)",
+                "section_key": "Section Key (e.g. mission)",
+                "section_title_en": "Title (EN)",
+                "section_title_ar": "Title (AR)",
+                "section_content_en": "Content (EN)",
+                "section_content_ar": "Content (AR)",
+                "collapse": "Collapse",
+                "expand": "Expand"
+            },
+            "navigation": {
+                "title": "Column Links Navigation",
+                "subtitle": "Manage the links that appear in the footer columns. Drag to reorder.",
+                "save": "Save navigation",
+                "add_column": "Add Column",
+                "add_link": "Add Link",
+                "col_key": "Column ID",
+                "col_title_en": "Column Title (EN)",
+                "col_title_ar": "Column Title (AR)",
+                "link_label_en": "Link Label (EN)",
+                "link_label_ar": "Link Label (AR)",
+                "link_url": "URL / Path",
+                "select_link": "Select Link",
+                "search_pages": "Search internal pages, products...",
+                "internal_routes": "Internal Routes",
+                "categories": "Categories",
+                "products": "Products",
+                "custom_url": "Custom URL",
+                "enter_url": "Enter custom URL...",
+                "apply": "Apply",
+                "cancel": "Cancel",
+                "reset_confirm": "Are you sure you want to delete all navigation links? This will reset the footer columns.",
+                "paths": {
+                    "home": "Home",
+                    "products": "Products / Shop",
+                    "about": "About Us",
+                    "contact": "Contact",
+                    "account": "My Account",
+                    "orders": "My Orders",
+                    "cart": "Cart",
+                    "notifications": "Notifications",
+                    "terms": "Terms of Use",
+                    "privacy": "Privacy Policy"
+                }
+            }
+        },
         "search": {
             "placeholder": "Search settings, orders, users...",
             "no_results": "No records found."
