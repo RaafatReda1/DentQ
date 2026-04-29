@@ -10,7 +10,7 @@ import CategoryProductGrid from "./SubComponents/CategoryProductGrid";
 const CategoryPage = () => {
   const { slug } = useParams();
   const [products] = useContext(productsContext);
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const isLTR = i18n.language === "en";
 
   const [sortOption, setSortOption] = useState("default");

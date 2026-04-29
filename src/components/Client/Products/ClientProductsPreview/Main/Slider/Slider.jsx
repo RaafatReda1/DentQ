@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 
 const Slider = ({ CatId }) => {
   const [products] = useContext(productsContext);
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const sliderRef = useRef(null);
 
   const category = products?.CategoriesList?.find((c) => c.id === CatId);

@@ -5,6 +5,8 @@ import Header from './Header/Header';
 import useUserData from '../../Storage/UserDataStorage';
 import { useTranslation } from 'react-i18next';
 import styles from './AdminLayout.module.css';
+import { ReactLenis } from 'lenis/react';
+
 
 const AdminLayout = () => {
     const { user } = useUserData();
@@ -33,9 +35,10 @@ const AdminLayout = () => {
             <Sidebar />
             <div className={styles.mainContainer}>
                 <Header />
-                <main className={styles.contentArea}>
+                <ReactLenis className={styles.contentArea}>
                     <Outlet />
-                </main>
+                </ReactLenis>
+
             </div>
         </div>
     );
