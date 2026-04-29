@@ -72,6 +72,7 @@ const LegalEditor = () => {
       saveLabel={`Save ${activeLabel.toLowerCase()}`}
       onSave={() => save(current)}
       onDiscard={handleDiscard}
+      onResetToDefault={handleResetToDefault}
       saving={saving}
       isDirty={isDirty}
     >
@@ -88,9 +89,6 @@ const LegalEditor = () => {
             </button>
           ))}
         </div>
-        <button className={styles.resetBtn} onClick={handleResetToDefault} title={`Reset ${activeLabel.toLowerCase()} to default`}>
-          <RotateCcw size={13} /> Reset to defaults
-        </button>
       </div>
 
       <div className={styles.editorGrid}>

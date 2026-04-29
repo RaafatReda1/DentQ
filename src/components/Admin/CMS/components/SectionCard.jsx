@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./SectionCard.module.css";
 import { Save, RotateCcw, Loader2 } from "lucide-react";
 
-const SectionCard = ({ id, title, subtitle, saveLabel = "Save changes", onSave, onDiscard, saving, isDirty, children }) => (
+const SectionCard = ({ id, title, subtitle, saveLabel = "Save changes", onSave, onDiscard, onResetToDefault, saving, isDirty, children }) => (
   <section className={styles.card} id={id}>
     <div className={styles.header}>
       <div>
@@ -10,6 +10,11 @@ const SectionCard = ({ id, title, subtitle, saveLabel = "Save changes", onSave, 
         {subtitle && <p className={styles.subtitle}>{subtitle}</p>}
       </div>
       <div className={styles.actions}>
+        {onResetToDefault && (
+          <button className={styles.globalResetBtn} onClick={onResetToDefault} disabled={saving} title="Reset this section to default configuration">
+            <RotateCcw size={14} /> Reset to default
+          </button>
+        )}
         {onDiscard && isDirty && (
           <button className={styles.discardBtn} onClick={onDiscard} disabled={saving}>
             <RotateCcw size={14} /> Discard

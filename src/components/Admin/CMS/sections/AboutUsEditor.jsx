@@ -74,13 +74,9 @@ const AboutUsEditor = () => {
       saveLabel="Save about us"
       onSave={handleSave}
       onDiscard={handleDiscard}
+      onResetToDefault={handleResetToDefault}
       saving={saving}
       isDirty={isDirty}
-      headerAction={
-        <button className={styles.globalResetBtn} onClick={handleResetToDefault} title="Reset all settings to defaults">
-          <RotateCcw size={13} /> Reset to defaults
-        </button>
-      }
     >
       {/* ── Stats Bar ─────────────────────────────────────────────── */}
       <div className={styles.block}>

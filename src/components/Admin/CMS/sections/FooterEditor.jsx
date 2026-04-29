@@ -128,6 +128,7 @@ const FooterEditor = () => {
       saveLabel="Save footer"
       onSave={handleSave}
       onDiscard={handleDiscard}
+      onResetToDefault={handleResetToDefault}
       saving={saving}
       isDirty={isDirty}
     >
@@ -152,9 +153,6 @@ const FooterEditor = () => {
             <span className={styles.label}>SOCIAL MEDIA LINKS</span>
             <span className={styles.autoBadge}>Auto-detects icon from URL</span>
           </div>
-          <button className={styles.resetBtn} onClick={handleResetToDefault} title="Reset to default footer settings">
-            <RotateCcw size={13} /> Reset to defaults
-          </button>
         </div>
 
         <div className={styles.linksList}>

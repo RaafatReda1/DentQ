@@ -86,6 +86,12 @@ const NavigationEditor = () => {
   };
 
   const handleDiscard = () => setItems(remote);
+  
+  const handleResetToDefault = () => {
+    if (window.confirm("Are you sure you want to delete all navigation links? This will reset the footer columns.")) {
+      setItems([]);
+    }
+  };
 
   return (
     <SectionCard
@@ -95,6 +101,7 @@ const NavigationEditor = () => {
       saveLabel="Save navigation"
       onSave={handleSave}
       onDiscard={handleDiscard}
+      onResetToDefault={handleResetToDefault}
       saving={saving}
       isDirty={isDirty}
     >
