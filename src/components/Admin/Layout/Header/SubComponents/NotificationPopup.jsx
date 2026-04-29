@@ -1,10 +1,12 @@
 import React, { useRef, useEffect } from 'react';
 import { Truck, User, AlertCircle, Clock, CheckCircle } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
+import { useTranslation } from 'react-i18next';
 import { useNotifications } from './useNotifications';
 import styles from './NotificationPopup.module.css';
 
 const NotificationPopup = ({ onClose }) => {
+    const { t } = useTranslation();
     const { data, isLoading } = useNotifications();
     const popupRef = useRef(null);
 
@@ -29,14 +31,14 @@ const NotificationPopup = ({ onClose }) => {
     return (
         <div className={styles.popupWrapper} ref={popupRef}>
             <div className={styles.popupHeader}>
-                <h3 className={styles.popupTitle}>Notifications</h3>
+                <h3 className={styles.popupTitle}>{t('admin.header.notifications', 'Notifications')}</h3>
             </div>
             
             <div className={styles.popupBody}>
                 {isLoading ? (
-                    <div className={styles.loading}>Loading recent activity...</div>
+                    <div className={styles.loading}>{t('admin.header.loading_activity', 'Loading recent activity...')}</div>
                 ) : !data || Object.keys(data.groupedEvents).length === 0 ? (
-                    <div className={styles.empty}>No recent notifications.</div>
+                    <div className={styles.empty}>{t('admin.header.no_notifications', 'No recent notifications.')}</div>
                 ) : (
                     Object.entries(data.groupedEvents).map(([day, events]) => (
                         <div key={day} className={styles.dayGroup}>

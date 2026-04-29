@@ -2,11 +2,13 @@ import React from 'react';
 import { Plus, Edit2, Trash2, Copy } from 'lucide-react';
 import styles from './CatalogRowActions.module.css';
 import toast from 'react-hot-toast';
+import { useTranslation } from "react-i18next";
 
 /**
  * Action buttons for the CatalogRow (Add Sub, Edit, Delete).
  */
 const CatalogRowActions = ({ node, canAddSub, onAddSub, onEdit, onDelete, tp }) => {
+  const { t } = useTranslation();
     const handleCopyId = () => {
         navigator.clipboard.writeText(node.id);
         toast.success(tp('id_copied') || 'ID Copied!');
@@ -23,7 +25,7 @@ const CatalogRowActions = ({ node, canAddSub, onAddSub, onEdit, onDelete, tp }) 
                     <Plus size={16} />
                 </button>
             )}
-            <button className={styles.actionBtn} onClick={handleCopyId} title="Copy ID">
+            <button className={styles.actionBtn} onClick={handleCopyId} title={t("admin.catalog.copy_id", "Copy ID")}>
                 <Copy size={16} />
             </button>
             <button className={styles.actionBtn} onClick={() => onEdit(node)} title={tp('edit')}>

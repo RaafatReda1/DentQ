@@ -61,7 +61,7 @@ const FooterPreview = ({ draft, navItems, logoUrl }) => {
 
           {/* Nav Column 3 (Static Contact) */}
           <div className={styles.previewCol}>
-            <h3 className={styles.previewColTitle}>Contact us</h3>
+            <h3 className={styles.previewColTitle}>{t('admin.cms.contact_us', 'Contact us')}</h3>
             <div className={styles.previewLinks}>
               <span className={styles.previewLink}>hello@dentq.com</span>
               <span className={styles.previewLink}>+20 100 123 4567</span>

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React from 'react';
 import { useCheckout } from './hooks/useCheckout';
 import OwnerData from './SubComponents/OwnerData/OwnerData';
@@ -31,7 +32,7 @@ function CheckOutPage() {
   if (loading) {
     return (
       <div className={styles.checkoutContainer}>
-        <div className={styles.loader}>Loading...</div>
+        <div className={styles.loader}>{t("admin.layout.loading", "Loading...")}</div>
       </div>
     );
   }

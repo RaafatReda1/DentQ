@@ -2,8 +2,10 @@ import React from 'react';
 import MDEditor from '@uiw/react-md-editor';
 import sharedStyles from '../Shared/Shared.module.css';
 import styles from './ReviewDashboard.module.css';
+import { useTranslation } from "react-i18next";
 
 const ReviewDashboard = ({ form, tp }) => {
+  const { t } = useTranslation();
     return (
         <div className={styles.dashboardSection}>
             <section className={sharedStyles.section}>
@@ -15,7 +17,7 @@ const ReviewDashboard = ({ form, tp }) => {
                 <div className={styles.visualGrid}>
                     <div className={styles.visualPane}>
                         <div className={styles.visualHeader}>
-                            <h4 className={styles.visualLabel}>English Visualization</h4>
+                            <h4 className={styles.visualLabel}>{t("admin.catalog.english_vis", "English Visualization")}</h4>
                             <span className={styles.viewMeta}>Global Standard (LTR)</span>
                         </div>
                         <div className={styles.previewContent} data-color-mode="light">
@@ -25,7 +27,7 @@ const ReviewDashboard = ({ form, tp }) => {
                     <div className={`${styles.visualPane} ${styles.rtlPane}`}>
                         <div className={styles.visualHeader}>
                             <h4 className={styles.visualLabel}>معاينة المحتوى العربي</h4>
-                            <span className={styles.viewMeta}>RTL Directional Mockup</span>
+                            <span className={styles.viewMeta}>{t("admin.catalog.rtl_mockup", "RTL Directional Mockup")}</span>
                         </div>
                         <div className={`${styles.previewContent} ${styles.rtlContent}`} data-color-mode="light">
                             <MDEditor.Markdown source={form.fullDescriptionAr} />

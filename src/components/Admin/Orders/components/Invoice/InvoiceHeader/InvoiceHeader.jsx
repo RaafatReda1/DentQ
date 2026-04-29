@@ -1,7 +1,9 @@
+import { useTranslation } from "react-i18next";
 import React from "react";
 import styles from "./InvoiceHeader.module.css";
 import { useLogo } from "../../../../../../utils/LogoContext";
 const InvoiceHeader = ({ order }) => {
+  const { t } = useTranslation();
   const { logoUrl } = useLogo();
   const mySvgTriangle = (
     <svg
@@ -28,7 +30,7 @@ const InvoiceHeader = ({ order }) => {
           <img src={logoUrl || '/logo.png'} alt="logo" className={styles.logo} />
         </div>
         <span className={styles.outerBorder}></span>
-        <h1 className={styles.invoiceTitle}>Invoice</h1>
+        <h1 className={styles.invoiceTitle}>{t("admin.orders.invoice.title", "Invoice")}</h1>
       </header>
 
       <section className={styles.invoiceInfo}>

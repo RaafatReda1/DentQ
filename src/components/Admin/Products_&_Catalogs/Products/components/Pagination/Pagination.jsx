@@ -1,6 +1,7 @@
 import React from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import styles from './Pagination.module.css';
+import { useTranslation } from "react-i18next";
 
 /**
  * Pagination — Shared page controls used by Table and Grid views.
@@ -12,6 +13,7 @@ import styles from './Pagination.module.css';
  *   - onPageChange(pageIndex) callback
  */
 const Pagination = ({ currentPage, totalCount, pageSize, onPageChange }) => {
+  const { t } = useTranslation();
     const totalPages = Math.ceil(totalCount / pageSize);
     const from = currentPage * pageSize + 1;
     const to = Math.min((currentPage + 1) * pageSize, totalCount);
@@ -49,7 +51,7 @@ const Pagination = ({ currentPage, totalCount, pageSize, onPageChange }) => {
                     disabled={currentPage === 0}
                 >
                     <ChevronLeft size={16} />
-                    <span>Prev</span>
+                    <span>{t("admin.orders.ui.prev", "Prev")}</span>
                 </button>
 
                 {getPageNumbers().map((page) => (
@@ -67,7 +69,7 @@ const Pagination = ({ currentPage, totalCount, pageSize, onPageChange }) => {
                     onClick={() => onPageChange(currentPage + 1)}
                     disabled={currentPage >= totalPages - 1}
                 >
-                    <span>Next</span>
+                    <span>{t("admin.orders.ui.next", "Next")}</span>
                     <ChevronRight size={16} />
                 </button>
             </div>

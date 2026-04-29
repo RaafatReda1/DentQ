@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useEffect, useState, useMemo } from "react";
 import HeroSection from "../HeroSection/HeroSection";
 import Slider from "../Slider/Slider";
@@ -7,6 +8,7 @@ import DefaultHeroSection from "../HeroSection/DefaultHeroSection";
 import { Loader2 } from "lucide-react";
 
 const MainViewer = () => {
+  const { t } = useTranslation();
   const [banners, setBanners] = useState([]);
   const [categories, setCategories] = useState([]);
   const [error, setError] = useState(null);

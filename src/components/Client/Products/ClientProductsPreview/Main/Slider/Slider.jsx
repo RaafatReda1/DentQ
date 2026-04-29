@@ -56,7 +56,7 @@ const Slider = ({ CatId }) => {
         <button
           className={styles.arrowButton}
           onClick={() => scroll("left")}
-          aria-label="Scroll left"
+          aria-label={t("client.product.scroll_left", "Scroll left")}
         >
           &#10094;
         </button>
@@ -70,7 +70,7 @@ const Slider = ({ CatId }) => {
         <button
           className={styles.arrowButton}
           onClick={() => scroll("right")}
-          aria-label="Scroll right"
+          aria-label={t("client.product.scroll_right", "Scroll right")}
         >
           &#10095;
         </button>

@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { useOrdersStore } from '../../store/useOrdersStore';
 import { useOrderMutations } from '../../hooks/useOrderMutations';
 import styles from './BulkActionsBar.module.css';
+import { useTranslation } from "react-i18next";
 
 const BulkActionsBar = () => {
+  const { t } = useTranslation();
     const { selectedIds, clearSelection } = useOrdersStore();
     const { mutate: updateStatus, isLoading } = useOrderMutations();
     const [targetStatus, setTargetStatus] = useState('');
@@ -26,11 +28,11 @@ const BulkActionsBar = () => {
                 onChange={(e) => setTargetStatus(e.target.value)}
                 className={styles.select}
             >
-                <option value="">Move to...</option>
-                <option value="pending">Pending</option>
-                <option value="paid">Paid</option>
-                <option value="shipped">Shipped</option>
-                <option value="delivered">Delivered</option>
+                <option value="">{t("admin.orders.ui.move_to", "Move to...")}</option>
+                <option value="pending">{t("admin.orders.ui.pending", "Pending")}</option>
+                <option value="paid">{t("admin.orders.ui.paid", "Paid")}</option>
+                <option value="shipped">{t("admin.orders.ui.shipped", "Shipped")}</option>
+                <option value="delivered">{t("admin.orders.ui.delivered", "Delivered")}</option>
             </select>
             <button
                 disabled={!targetStatus || isLoading}

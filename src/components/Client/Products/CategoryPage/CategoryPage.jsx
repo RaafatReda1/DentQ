@@ -72,11 +72,11 @@ const CategoryPage = () => {
 
   // Loading and Error check fallbacks
   if (!products?.CategoriesList?.length) {
-    return <div className={styles.loading}>Loading...</div>;
+    return <div className={styles.loading}>{t("admin.layout.loading", "Loading...")}</div>;
   }
 
   if (!currentCategory) {
-    return <div className={styles.notFound}>Category not found</div>;
+    return <div className={styles.notFound}>{t("client.product.not_found", "Category not found")}</div>;
   }
 
   // Orchestrate layout utilizing the extracted sub-components

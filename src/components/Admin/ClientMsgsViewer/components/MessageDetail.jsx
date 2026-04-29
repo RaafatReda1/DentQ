@@ -32,7 +32,7 @@ const MessageDetail = ({
             <button 
               className={`${styles.actionBtn} ${message.mark ? styles.starBtnActive : ""}`}
               onClick={() => setMarkerMenuOpen(!markerMenuOpen)}
-              title="Set Status Marker"
+              title={t('admin.messages.set_status_marker', 'Set Status Marker')}
             >
               {(() => {
                 const marker = markers.find(m => m.id === message.mark);
@@ -44,7 +44,7 @@ const MessageDetail = ({
             {markerMenuOpen && (
               <div className={styles.markerMenu}>
                 <button className={`${styles.markerOption} ${!message.mark ? styles.activeMarker : ""}`} onClick={() => onSetMarker(message.id, null)}>
-                  <Check size={14} /> No Marker
+                  <Check size={14} /> {t('admin.messages.no_marker', 'No Marker')}
                 </button>
                 {markers.map(m => {
                   const MIcon = m.icon;

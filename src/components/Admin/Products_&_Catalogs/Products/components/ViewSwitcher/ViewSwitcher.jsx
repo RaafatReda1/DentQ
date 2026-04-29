@@ -1,6 +1,7 @@
 import React from 'react';
 import { List, LayoutGrid, PanelRightOpen } from 'lucide-react';
 import styles from './ViewSwitcher.module.css';
+import { useTranslation } from "react-i18next";
 
 /**
  * ViewSwitcher — 3-button segmented control to pick between Table / Grid / Detail views.
@@ -17,9 +18,10 @@ const VIEW_OPTIONS = [
 ];
 
 const ViewSwitcher = ({ activeView, onViewChange }) => {
+  const { t } = useTranslation();
     return (
         <div className={styles.switcher}>
-            <span className={styles.label}>View:</span>
+            <span className={styles.label}>{t("admin.catalog.view", "View:")}</span>
             <div className={styles.buttonGroup}>
                 {VIEW_OPTIONS.map(({ key, label, icon: Icon }) => (
                     <button

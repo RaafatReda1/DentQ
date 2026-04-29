@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { useOrdersStore } from '../../store/useOrdersStore';
 import styles from './StatsBar.module.css';
+import { useTranslation } from "react-i18next";
 
 const StatsCard = ({ label, value, type, onClick }) => (
     <div onClick={onClick} className={styles.card}>
@@ -10,6 +11,7 @@ const StatsCard = ({ label, value, type, onClick }) => (
 );
 
 const StatsBar = ({ orders = [] }) => {
+  const { t } = useTranslation();
     const setFilter = useOrdersStore(state => state.setFilter);
 
     const stats = useMemo(() => {

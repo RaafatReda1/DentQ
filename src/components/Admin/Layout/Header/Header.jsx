@@ -42,7 +42,7 @@ const Header = () => {
                     <button className={styles.iconBtn} onClick={toggleLanguage} style={{fontWeight: 800, fontSize: '14px', color:'var(--primary-hover)'}}>
                         {i18n.language === 'ar' ? 'EN' : 'AR'}
                     </button>
-                    <button className={styles.iconBtn} onClick={() => navigate('/admin/messages')} title="Messages">
+                    <button className={styles.iconBtn} onClick={() => navigate('/admin/messages')} title={t('admin.header.messages', 'Messages')}>
                         <MessageSquare size={20} />
                         {unreadMsgs > 0 && <span className={styles.badge}>{unreadMsgs}</span>}
                     </button>
@@ -50,7 +50,7 @@ const Header = () => {
                         <button 
                             className={styles.iconBtn} 
                             onClick={(e) => { e.stopPropagation(); setShowNotifications(!showNotifications); }}
-                            title="Notifications"
+                            title={t('admin.header.notifications', 'Notifications')}
                         >
                             <Bell size={20} />
                             {unreadNotifs > 0 && <span className={`${styles.badge} ${styles.alert}`}>{unreadNotifs}</span>}

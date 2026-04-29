@@ -55,7 +55,8 @@
             "desc": "هل تود كتابة تعليق لمساعدة الآخرين؟",
             "write_review": "اكتب تعليق",
             "later": "لاحقاً"
-        }
+        },
+        "save_rating_failed": "فشل حفظ التقييم"
     },
     "comments": {
         "title": "التعليقات",
@@ -117,7 +118,11 @@
         "upload_success": "تم رفع الصورة بنجاح!",
         "upload_error": "فشل في رفع الصورة",
         "governorate": "محافظة",
-        "select_governorate": "اختر المحافظة"
+        "select_governorate": "اختر المحافظة",
+        "contact_info": "معلومات الاتصال",
+        "shipping_details": "تفاصيل الشحن",
+        "guest_title": "أنت تتصفح كزائر",
+        "guest_desc": "سجّل دخولك للوصول إلى ملفك الشخصي"
     },
     "checkout": {
         "shipping_info": "معلومات الشحن",
@@ -144,7 +149,12 @@
         "confirm_order": "تأكيد الطلب",
         "fill_all_fields": "الرجاء ملء جميع الحقول المطلوبة",
         "order_confirmed": "تم تأكيد الطلب بنجاح!",
-        "applying": "جاري تطبيق الخصم..."
+        "applying": "جاري تطبيق الخصم...",
+        "promo_removed": "تم إزالة كود الخصم",
+        "error_generic": "حدث خطأ ما",
+        "discount": "خصم",
+        "processing": "جاري المعالجة...",
+        "remove": "إزالة"
     },
     "guest_warning": {
         "title": "⚠️ حساب ضيف - قد تُفقد بياناتك",
@@ -179,7 +189,8 @@
         "resetSuccess": "تمت إعادة تعيين كلمة المرور بنجاح!",
         "resetPassword": "إعادة تعيين كلمة المرور",
         "enterNewPassword": "أدخل كلمة المرور الجديدة أدناه",
-        "submitReset": "تحديث كلمة المرور"
+        "submitReset": "تحديث كلمة المرور",
+        "sign_out": "تسجيل الخروج"
     },
     "orders": {
         "no_orders": "لا توجد طلبات بعد",
@@ -575,7 +586,8 @@
             "orders": "الطلبات",
             "marketing": "التسويق",
             "catalogs": "التصنيفات",
-            "cms": "إعدادات النظام"
+            "cms": "إعدادات النظام",
+            "logout": "تسجيل الخروج"
         },
         "cms": {
             "icon_picker": {
@@ -598,7 +610,8 @@
                 "remove": "إزالة",
                 "loading": "جاري التحميل...",
                 "english": "EN",
-                "arabic": "AR"
+                "arabic": "AR",
+                "to": "إلى"
             },
             "main": {
                 "title": "إعدادات المحتوى",
@@ -720,15 +733,22 @@
                 "sent_at": "أرسلت في",
                 "phone": "الهاتف",
                 "email": "البريد الإلكتروني",
-                "empty_selection": "اختر رسالة لعرض التفاصيل"
-            }
+                "empty_selection": "اختر رسالة لعرض التفاصيل",
+                "delete_title": "حذف الرسالة"
+            },
+            "contact_us": "تواصل معنا",
+            "remove_link": "إزالة الرابط"
         },
         "search": {
             "placeholder": "ابحث عن إعدادات، طلبات، مستخدمين...",
             "no_results": "لا توجد نتائج."
         },
         "header": {
-            "super_admin": "مدير النظام"
+            "super_admin": "مدير النظام",
+            "messages": "الرسائل",
+            "notifications": "الإشعارات",
+            "loading_activity": "جاري تحميل النشاط الأخير...",
+            "no_notifications": "لا توجد إشعارات حديثة."
         },
         "products": {
             "title": "المنتجات",
@@ -874,7 +894,13 @@
             "toast_bulk_activated": "منتجات تم تفعيلها",
             "toast_bulk_deactivated": "منتجات تم إلغاء تفعيلها",
             "toast_csv_exported": "تم تصدير CSV!",
-            "toast_no_export": "لا يوجد منتجات للتصدير"
+            "toast_no_export": "لا يوجد منتجات للتصدير",
+            "metrics": {
+                "performance": "الأداء",
+                "rating": "التقييم",
+                "stock": "المخزون",
+                "engagement": "التفاعل"
+            }
         },
         "catalogs": {
             "menu_title": "متصفح الكتالوجات",
@@ -924,13 +950,14 @@
             "filters": {
                 "status": "كل الحالات",
                 "payment": "كل طرق الدفع",
-                "gov": "كل المحافظات"
+                "gov": "كل المحافظات",
+                "reset": "إعادة تعيين الفلاتر"
             },
             "table": {
                 "view_detail": "عرض التفاصيل"
             },
             "kanban": {
-                "advance": "تمييز كـ",
+                "advance": "تقديم الحالة",
                 "view_order": "عرض الطلب",
                 "view_products": "عرض المنتجات"
             },
@@ -946,7 +973,67 @@
                 "print": "طباعة",
                 "cancel": "إلغاء",
                 "customer_title": "معلومات العميل"
-            }
+            },
+            "invoice": {
+                "edit_branding": "تعديل العلامة التجارية",
+                "title": "الفاتورة",
+                "recepient_data": "بيانات المستلم",
+                "brand_settings": "إعدادات العلامة التجارية",
+                "phone_number": "رقم الهاتف",
+                "email_address": "البريد الإلكتروني",
+                "accent_color": "لون تمييز الفاتورة",
+                "customize_desc": "تخصيص العناوين والألوان والأشكال.",
+                "cancel": "إلغاء",
+                "eg_beheira": "مصر، البحيرة",
+                "qty": "الكمية",
+                "product": "المنتج",
+                "description": "الوصف",
+                "price": "السعر",
+                "total": "الإجمالي",
+                "color": "اللون",
+                "size": "المقاس",
+                "subtotal": "المجموع الجزئي",
+                "shipping": "الشحن",
+                "free": "مجاني",
+                "product_discount": "خصم المنتج",
+                "promo_discount": "خصم الكوبون",
+                "final_total": "الإجمالي النهائي"
+            },
+            "carts": {
+                "guest": "زائر",
+                "registered": "مسجل",
+                "egp": "ج.م",
+                "loading": "جاري تحميل السلات...",
+                "live_abandoned": "السلات المتروكة المباشرة",
+                "no_active": "لم يتم العثور على سلات نشطة."
+            },
+            "ui": {
+                "close": "إغلاق",
+                "order_contents": "محتويات الطلب",
+                "click_to_see": "انقر لرؤية التفاصيل الكاملة",
+                "cancelled_msg": "تم إلغاء هذا الطلب",
+                "total_orders": "إجمالي الطلبات",
+                "revenue": "الإيرادات",
+                "pending": "قيد الانتظار",
+                "shipped": "تم الشحن",
+                "delivered": "تم التوصيل",
+                "paid": "مدفوع",
+                "cancelled": "ملغى",
+                "prev": "السابق",
+                "next": "التالي",
+                "move_to": "نقل إلى...",
+                "clear": "مسح",
+                "no_orders": "لم يتم العثور على طلبات تطابق الفلاتر الخاصة بك.",
+                "showing": "عرض {{count}} من {{total}}"
+            },
+            "id": "رقم الطلب",
+            "customer": "العميل",
+            "total": "الإجمالي",
+            "status": "الحالة",
+            "date": "التاريخ",
+            "payment": "طريقة الدفع",
+            "governorate": "المحافظة",
+            "actions": "الإجراءات"
         },
         "carts": {
             "title": "إدارة السلال",
@@ -963,10 +1050,20 @@
             "modal_client_title": "ملف العميل",
             "containing": "يحتوي على:",
             "recover": "متابعة",
-            "inspect": "التفاصيل",
+            "inspect": "فحص",
             "items_count": "المنتجات",
             "view_details": "التفاصيل",
-            "modal_title": "محتويات السلة"
+            "modal_title": "محتويات السلة",
+            "filters": {
+                "sort": "ترتيب",
+                "type": "النوع",
+                "min_value": "أدنى قيمة للسلة"
+            },
+            "type": {
+                "all": "الكل",
+                "guest": "زائر",
+                "registered": "مسجل"
+            }
         },
         "dashboard": {
             "title": "نظرة عامة على العمل",
@@ -1055,7 +1152,30 @@
                 "orders": "طلب",
                 "units": "وحدة",
                 "no_activity": "لا يوجد نشاط حديث."
-            }
+            },
+            "orders_by_gov": "الطلبات حسب المحافظة",
+            "top7_shipping": "أفضل 7 وجهات شحن في هذه الفترة",
+            "orders_label": "طلبات",
+            "top_categories": "أفضل الفئات",
+            "revenue_share": "حصة الإيرادات حسب الفئة",
+            "top_by_revenue": "أفضل المنتجات من حيث الإيرادات",
+            "top_by_units": "أفضل المنتجات من حيث الوحدات المباعة",
+            "units_label": "وحدات",
+            "recent_activity": "النشاط الأخير",
+            "abandoned_carts": "السلات المتروكة",
+            "abandoned_carts_sub": "جلسات نشطة تحتوي على منتجات",
+            "potential_revenue": "الإيرادات المحتملة",
+            "potential_revenue_sub": "قيمة جميع السلات المتروكة",
+            "recoverable": "قابل للاسترداد",
+            "recoverable_sub": "تقدير الاسترداد مع المتابعة",
+            "user_ratio": "نسبة المستخدمين",
+            "user_ratio_sub": "المسجلون مقابل الزوار",
+            "total_volume": "الحجم الكلي",
+            "total_volume_sub": "إجمالي الطلبات المقدمة",
+            "total_revenue": "إجمالي الإيرادات",
+            "total_revenue_sub": "من الطلبات المسلمة",
+            "success_rate": "معدل النجاح",
+            "success_rate_sub": "المسلمة / إجمالي الطلبات"
         },
         "marketing": {
             "title": "التسويق",
@@ -1137,7 +1257,7 @@
             "banners": {
                 "title": "البانرات",
                 "new_banner": "+ بانر جديد",
-                "select_hint": "اختر بانراً أو أنشئ واحداً جديداً",
+                "select_hint": "اختر بانراً لتعديله",
                 "editor": {
                     "live_preview": "معاينة مباشرة",
                     "online": "متصل",
@@ -1169,8 +1289,32 @@
                     "active_label": "نشط على المتجر",
                     "save": "حفظ البانر",
                     "choose": "اختر..."
-                }
+                },
+                "confirm_delete": "هل أنت متأكد من حذف هذا البانر؟",
+                "err_load": "فشل تحميل البانرات",
+                "empty": "لا توجد بانرات بعد. أنشئ أول بانر!"
             }
+        },
+        "layout": {
+            "loading": "جاري التحميل..."
+        },
+        "messages": {
+            "no_marker": "بدون علامة",
+            "set_status_marker": "تعيين علامة الحالة",
+            "sort_by": "ترتيب حسب:",
+            "newest_first": "الأحدث أولاً",
+            "oldest_first": "الأقدم أولاً",
+            "sender_name": "اسم المرسل",
+            "marker_category": "فئة العلامة",
+            "unread_first": "غير المقروء أولاً"
+        },
+        "catalog": {
+            "copy_id": "نسخ المعرف",
+            "add_root": "إضافة فئة رئيسية",
+            "description": "الوصف",
+            "english_vis": "العرض باللغة الإنجليزية",
+            "rtl_mockup": "نموذج اتجاه من اليمين لليسار",
+            "view": "عرض:"
         }
     },
     "common": {
@@ -1181,6 +1325,33 @@
         "in_stock": "في المخزن",
         "unknown_item": "عنصر غير معروف",
         "units": "وحدات",
-        "id_copied": "تم نسخ المعرف إلى الحافظة!"
+        "id_copied": "تم نسخ المعرف إلى الحافظة!",
+        "delete": "حذف",
+        "cancel": "إلغاء",
+        "upload_success": "تم الرفع بنجاح",
+        "upload_error": "فشل الرفع",
+        "save": "حفظ",
+        "add": "إضافة",
+        "edit": "تعديل",
+        "more": "المزيد",
+        "close": "إغلاق"
+    },
+    "client": {
+        "product": {
+            "not_found": "الفئة غير موجودة",
+            "retry": "إعادة المحاولة",
+            "scroll_left": "التمرير لليسار",
+            "scroll_right": "التمرير لليمين",
+            "add_to_cart": "أضف إلى السلة",
+            "decrease": "تقليل الكمية",
+            "increase": "زيادة الكمية"
+        },
+        "profile": {
+            "view_full": "انقر لعرض الحجم الكامل",
+            "close_preview": "إغلاق المعاينة"
+        },
+        "cart": {
+            "remove": "إزالة"
+        }
     }
 }

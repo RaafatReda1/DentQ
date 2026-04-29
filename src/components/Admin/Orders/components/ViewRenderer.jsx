@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React from 'react';
 import { useOrdersStore } from '../store/useOrdersStore';
 import TableView from './TableView/TableView';
@@ -13,6 +14,7 @@ import styles from './ViewRenderer.module.css';
  * Switcher component for the four main order management views.
  */
 const ViewRenderer = ({ orders = [], isLoading }) => {
+  const { t } = useTranslation();
     const activeView = useOrdersStore(state => state.activeView);
 
     if (isLoading) {
@@ -24,7 +26,7 @@ const ViewRenderer = ({ orders = [], isLoading }) => {
     if (orders.length === 0 && activeView !== 'carts') {
         return (
             <div className={styles.empty}>
-                <p className={styles.emptyText}>No orders matching your filters were found.</p>
+                <p className={styles.emptyText}>{t("admin.orders.ui.no_orders", "No orders matching your filters were found.")}</p>
             </div>
         );
     }

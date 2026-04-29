@@ -8,6 +8,7 @@ import Footer from "./InvoiceFooter/InvoiceFooter";
 import StoreSettingsEditor from "./StoreSettingsEditor";
 import { Settings } from "lucide-react";
 import { useStoreSettings } from "../../hooks/useStoreSettings";
+import { useTranslation } from "react-i18next";
 
 const Invoice = React.forwardRef(({ order }, ref) => {
   const { data: storeSettings } = useStoreSettings();

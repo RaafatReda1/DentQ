@@ -1,13 +1,16 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { formatDistanceToNow } from "date-fns";
 import styles from "../Dashboard.module.css";
 
 const ListsSection = ({ stats }) => {
+  const { t } = useTranslation();
+
   return (
     <div className={styles.secondaryGrid}>
       {/* Top Products by Revenue */}
       <div className={styles.card}>
-        <h3 className={styles.cardTitle}>Top products by revenue</h3>
+        <h3 className={styles.cardTitle}>{t('admin.dashboard.top_by_revenue', 'Top products by revenue')}</h3>
         <div className={styles.rankList}>
           {stats?.topProductsByRevenue.map((p, i) => (
             <div key={p.id} className={styles.rankItem}>
@@ -23,7 +26,7 @@ const ListsSection = ({ stats }) => {
 
       {/* Top Products by Units */}
       <div className={styles.card}>
-        <h3 className={styles.cardTitle}>Top products by units sold</h3>
+        <h3 className={styles.cardTitle}>{t('admin.dashboard.top_by_units', 'Top products by units sold')}</h3>
         <div className={styles.rankList}>
           {stats?.topProductsByUnits.map((p, i) => (
             <div key={p.id} className={styles.rankItem}>
@@ -31,7 +34,7 @@ const ListsSection = ({ stats }) => {
                 <span className={styles.rankNum}>{i + 1}</span>
                 <span className={styles.rankName}>{p.name}</span>
               </div>
-              <span className={styles.rankVal}>{p.units} units</span>
+              <span className={styles.rankVal}>{p.units} {t('admin.dashboard.units_label', 'units')}</span>
             </div>
           ))}
         </div>
@@ -39,7 +42,7 @@ const ListsSection = ({ stats }) => {
 
       {/* Recent Activity */}
       <div className={styles.card}>
-        <h3 className={styles.cardTitle}>Recent activity</h3>
+        <h3 className={styles.cardTitle}>{t('admin.dashboard.recent_activity', 'Recent Activity')}</h3>
         <div className={styles.activityList}>
           {stats?.recentActivity.map((item, i) => (
             <div key={i} className={styles.activityItem}>

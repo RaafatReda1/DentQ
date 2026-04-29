@@ -158,7 +158,7 @@ const NavigationEditor = () => {
                     </div>
                   </div>
 
-                  <button className={styles.removeBtn} onClick={() => removeItem(item)} title="Remove link">
+                  <button className={styles.removeBtn} onClick={() => removeItem(item)} title={t('admin.cms.remove_link', 'Remove link')}>
                     <X size={15} />
                   </button>
                 </div>

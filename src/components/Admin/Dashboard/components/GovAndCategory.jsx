@@ -1,24 +1,26 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import styles from "../Dashboard.module.css";
 
 const COLORS = ['#3b82f6', '#10b981', '#a855f7', '#f59e0b', '#ef4444', '#06b6d4', '#ec4899'];
 
 const GovAndCategory = ({ stats }) => {
+  const { t } = useTranslation();
   const maxGov = Math.max(...stats?.govData.map(g => g.count) || [1]);
 
   return (
     <div className={styles.mainGrid}>
       {/* Orders by Governorate */}
       <div className={styles.card}>
-        <h3 className={styles.cardTitle}>Orders by governorate</h3>
-        <span className={styles.cardSubtitle}>Top 7 shipping destinations this period</span>
+        <h3 className={styles.cardTitle}>{t('admin.dashboard.orders_by_gov', 'Orders by Governorate')}</h3>
+        <span className={styles.cardSubtitle}>{t('admin.dashboard.top7_shipping', 'Top 7 shipping destinations this period')}</span>
         <div style={{ marginTop: 24 }}>
           {stats?.govData.map((gov, i) => (
             <div key={i} className={styles.progressRow}>
               <div className={styles.progressLabel}>
                 <span>{gov.name}</span>
-                <span>{gov.count} orders</span>
+                <span>{gov.count} {t('admin.dashboard.orders_label', 'orders')}</span>
               </div>
               <div className={styles.progressBarBg}>
                 <div className={styles.progressBarFill} style={{ width: `${(gov.count / maxGov) * 100}%`, background: COLORS[i % COLORS.length] }} />
@@ -30,8 +32,8 @@ const GovAndCategory = ({ stats }) => {
 
       {/* Top Categories by Revenue Share */}
       <div className={styles.card}>
-        <h3 className={styles.cardTitle}>Top categories</h3>
-        <span className={styles.cardSubtitle}>Revenue share by category</span>
+        <h3 className={styles.cardTitle}>{t('admin.dashboard.top_categories', 'Top Categories')}</h3>
+        <span className={styles.cardSubtitle}>{t('admin.dashboard.revenue_share', 'Revenue share by category')}</span>
         <div style={{ width: '100%', height: 250 }}>
           <ResponsiveContainer>
             <PieChart>

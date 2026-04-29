@@ -39,13 +39,13 @@ const SidebarHeader = ({ search, setSearch, filter, setFilter, sortBy, setSortBy
 
       <div className={styles.sortWrapper}>
         <ArrowUpDown size={12} className={styles.sortLabelIcon} />
-        <span className={styles.sortLabel}>SORT BY:</span>
+        <span className={styles.sortLabel}>{t('admin.messages.sort_by', 'SORT BY:')}</span>
         <select className={styles.sortSelect} value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-          <option value="newest">Newest First</option>
-          <option value="oldest">Oldest First</option>
-          <option value="name">Sender Name</option>
-          <option value="marker">Marker Category</option>
-          <option value="unread">Unread First</option>
+          <option value="newest">{t('admin.messages.newest_first', 'Newest First')}</option>
+          <option value="oldest">{t('admin.messages.oldest_first', 'Oldest First')}</option>
+          <option value="name">{t('admin.messages.sender_name', 'Sender Name')}</option>
+          <option value="marker">{t('admin.messages.marker_category', 'Marker Category')}</option>
+          <option value="unread">{t('admin.messages.unread_first', 'Unread First')}</option>
         </select>
       </div>
     </>

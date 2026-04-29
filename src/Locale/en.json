@@ -55,7 +55,8 @@
             "desc": "Would you like to write a review to help others?",
             "write_review": "Write a Review",
             "later": "Later"
-        }
+        },
+        "save_rating_failed": "Failed to save rating"
     },
     "comments": {
         "title": "Comments",
@@ -117,7 +118,11 @@
         "upload_success": "Photo uploaded successfully!",
         "upload_error": "Failed to upload photo",
         "governorate": "Governorate",
-        "select_governorate": "Select Governorate"
+        "select_governorate": "Select Governorate",
+        "contact_info": "Contact Info",
+        "shipping_details": "Shipping Details",
+        "guest_title": "You're browsing as a guest",
+        "guest_desc": "Sign in to access your profile"
     },
     "checkout": {
         "shipping_info": "Shipping Information",
@@ -144,7 +149,12 @@
         "confirm_order": "Confirm Order",
         "fill_all_fields": "Please fill all required fields",
         "order_confirmed": "Order confirmed successfully!",
-        "applying": "Applying promo code..."
+        "applying": "Applying promo code...",
+        "promo_removed": "Promo code removed",
+        "error_generic": "Something went wrong",
+        "discount": "Discount",
+        "processing": "Processing...",
+        "remove": "Remove"
     },
     "guest_warning": {
         "title": "⚠️ Guest Account - Data May Be Lost",
@@ -179,7 +189,8 @@
         "resetSuccess": "Password has been successfully reset!",
         "resetPassword": "Reset Password",
         "enterNewPassword": "Enter your new password below",
-        "submitReset": "Update Password"
+        "submitReset": "Update Password",
+        "sign_out": "Sign Out"
     },
     "orders": {
         "no_orders": "No orders yet",
@@ -575,7 +586,8 @@
             "orders": "Orders",
             "marketing": "Marketing",
             "catalogs": "Catalogs",
-            "cms": "CMS Settings"
+            "cms": "CMS Settings",
+            "logout": "Logout"
         },
         "cms": {
             "icon_picker": {
@@ -598,7 +610,8 @@
                 "remove": "Remove",
                 "loading": "Loading...",
                 "english": "EN",
-                "arabic": "AR"
+                "arabic": "AR",
+                "to": "to"
             },
             "main": {
                 "title": "CMS Settings",
@@ -720,15 +733,22 @@
                 "sent_at": "Sent at",
                 "phone": "Phone",
                 "email": "Email",
-                "empty_selection": "Select a message to view details"
-            }
+                "empty_selection": "Select a message to view details",
+                "delete_title": "Delete message"
+            },
+            "contact_us": "Contact us",
+            "remove_link": "Remove link"
         },
         "search": {
             "placeholder": "Search settings, orders, users...",
             "no_results": "No records found."
         },
         "header": {
-            "super_admin": "Super Admin"
+            "super_admin": "Super Admin",
+            "messages": "Messages",
+            "notifications": "Notifications",
+            "loading_activity": "Loading recent activity...",
+            "no_notifications": "No recent notifications."
         },
         "products": {
             "title": "Products",
@@ -874,7 +894,13 @@
             "toast_bulk_activated": "products activated",
             "toast_bulk_deactivated": "products deactivated",
             "toast_csv_exported": "CSV exported!",
-            "toast_no_export": "No products to export"
+            "toast_no_export": "No products to export",
+            "metrics": {
+                "performance": "Performance",
+                "rating": "Rating",
+                "stock": "Stock",
+                "engagement": "Engagement"
+            }
         },
         "orders": {
             "modal_title": "Order Breakdown",
@@ -889,7 +915,82 @@
                 "print": "Print",
                 "cancel": "Cancel",
                 "customer_title": "Customer info"
-            }
+            },
+            "invoice": {
+                "edit_branding": "Edit Branding",
+                "title": "Invoice",
+                "recepient_data": "Recepient Data",
+                "brand_settings": "Brand Settings",
+                "phone_number": "Phone Number",
+                "email_address": "Email Address",
+                "accent_color": "Invoice Accent Color",
+                "customize_desc": "Customizes headers, accents, and shapes.",
+                "cancel": "Cancel",
+                "eg_beheira": "EG, Beheira",
+                "qty": "QTY",
+                "product": "Product",
+                "description": "Description",
+                "price": "Price",
+                "total": "Total",
+                "color": "Color",
+                "size": "Size",
+                "subtotal": "Subtotal",
+                "shipping": "Shipping",
+                "free": "FREE",
+                "product_discount": "Product Discount",
+                "promo_discount": "Promo Discount",
+                "final_total": "Final Total"
+            },
+            "carts": {
+                "guest": "GUEST",
+                "registered": "REGISTERED",
+                "egp": "EGP",
+                "loading": "Loading carts...",
+                "live_abandoned": "Live Abandoned Carts",
+                "no_active": "No active carts found."
+            },
+            "ui": {
+                "close": "Close",
+                "order_contents": "Order Contents",
+                "click_to_see": "Click to see full breakdown",
+                "cancelled_msg": "This order has been CANCELLED",
+                "total_orders": "Total Orders",
+                "revenue": "Revenue",
+                "pending": "Pending",
+                "shipped": "Shipped",
+                "delivered": "Delivered",
+                "paid": "Paid",
+                "cancelled": "Cancelled",
+                "prev": "Prev",
+                "next": "Next",
+                "move_to": "Move to...",
+                "clear": "Clear",
+                "no_orders": "No orders matching your filters were found.",
+                "showing": "Showing {{count}} of {{total}}"
+            },
+            "id": "Order ID",
+            "customer": "Customer",
+            "total": "Total",
+            "status": "Status",
+            "date": "Date",
+            "payment": "Payment",
+            "governorate": "Governorate",
+            "actions": "Actions",
+            "filters": {
+                "reset": "Reset filters",
+                "status": "All Statuses",
+                "payment": "All Payment Methods",
+                "gov": "All Governorates"
+            },
+            "kanban": {
+                "advance": "Advance status",
+                "view_order": "View order",
+                "view_products": "View products"
+            },
+            "table": {
+                "view_detail": "View detail"
+            },
+            "title": "Orders Management"
         },
         "catalogs": {
             "menu_title": "Catalogs Navigator",
@@ -951,7 +1052,18 @@
             "guest": "Guest User",
             "items_count": "Items",
             "view_details": "Details",
-            "modal_title": "Cart Contents"
+            "modal_title": "Cart Contents",
+            "inspect": "Inspect",
+            "filters": {
+                "sort": "Sort",
+                "type": "Type",
+                "min_value": "Min. cart value"
+            },
+            "type": {
+                "all": "All",
+                "guest": "Guest",
+                "registered": "Registered"
+            }
         },
         "dashboard": {
             "title": "Business Overview",
@@ -1040,7 +1152,30 @@
                 "orders": "orders",
                 "units": "units",
                 "no_activity": "No recent activity."
-            }
+            },
+            "orders_by_gov": "Orders by Governorate",
+            "top7_shipping": "Top 7 shipping destinations this period",
+            "orders_label": "orders",
+            "top_categories": "Top Categories",
+            "revenue_share": "Revenue share by category",
+            "top_by_revenue": "Top products by revenue",
+            "top_by_units": "Top products by units sold",
+            "units_label": "units",
+            "recent_activity": "Recent Activity",
+            "abandoned_carts": "Abandoned Carts",
+            "abandoned_carts_sub": "Active sessions with items",
+            "potential_revenue": "Potential Revenue",
+            "potential_revenue_sub": "Value of all abandoned carts",
+            "recoverable": "Recoverable",
+            "recoverable_sub": "Est. recovery with follow-up",
+            "user_ratio": "User Ratio",
+            "user_ratio_sub": "Registered vs guest sessions",
+            "total_volume": "Total Volume",
+            "total_volume_sub": "Total orders placed",
+            "total_revenue": "Total Revenue",
+            "total_revenue_sub": "From delivered orders",
+            "success_rate": "Success Rate",
+            "success_rate_sub": "Delivered / total orders"
         },
         "marketing": {
             "title": "Marketing",
@@ -1154,8 +1289,33 @@
                     "save": "Save Banner",
                     "choose": "Choose...",
                     "delete": "Delete this banner"
-                }
+                },
+                "confirm_delete": "Are you sure you want to delete this banner?",
+                "err_load": "Failed to load banners",
+                "empty": "No banners yet. Create your first one!",
+                "select_hint": "Select a banner to edit it"
             }
+        },
+        "layout": {
+            "loading": "Loading..."
+        },
+        "messages": {
+            "no_marker": "No Marker",
+            "set_status_marker": "Set Status Marker",
+            "sort_by": "SORT BY:",
+            "newest_first": "Newest First",
+            "oldest_first": "Oldest First",
+            "sender_name": "Sender Name",
+            "marker_category": "Marker Category",
+            "unread_first": "Unread First"
+        },
+        "catalog": {
+            "copy_id": "Copy ID",
+            "add_root": "Add Root Category",
+            "description": "DESCRIPTION",
+            "english_vis": "English Visualization",
+            "rtl_mockup": "RTL Directional Mockup",
+            "view": "View:"
         }
     },
     "common": {
@@ -1166,6 +1326,33 @@
         "in_stock": "in stock",
         "unknown_item": "Unknown Item",
         "units": "units",
-        "id_copied": "ID Copied to clipboard!"
+        "id_copied": "ID Copied to clipboard!",
+        "delete": "Delete",
+        "cancel": "Cancel",
+        "upload_success": "Uploaded successfully",
+        "upload_error": "Upload failed",
+        "save": "Save",
+        "add": "Add",
+        "edit": "Edit",
+        "more": "More",
+        "close": "Close"
+    },
+    "client": {
+        "product": {
+            "not_found": "Category not found",
+            "retry": "Retry",
+            "scroll_left": "Scroll left",
+            "scroll_right": "Scroll right",
+            "add_to_cart": "Add to Cart",
+            "decrease": "Decrease quantity",
+            "increase": "Increase quantity"
+        },
+        "profile": {
+            "view_full": "Click to view full size",
+            "close_preview": "Close preview"
+        },
+        "cart": {
+            "remove": "Remove"
+        }
     }
 }

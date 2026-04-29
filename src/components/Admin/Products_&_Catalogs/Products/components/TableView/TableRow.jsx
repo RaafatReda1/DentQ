@@ -107,7 +107,7 @@ const TableRow = ({
             {/* Actions */}
             <td className={styles.actionCell}>
                 <div className={styles.actionGroup}>
-                    <button className={styles.actionBtn} onClick={handleCopyId} title="Copy ID">
+                    <button className={styles.actionBtn} onClick={handleCopyId} title={t("admin.catalog.copy_id", "Copy ID")}>
                         <Copy size={14} />
                     </button>
                     <button className={styles.actionBtn} onClick={() => onEdit(product)} title={tp('btn_edit')}>

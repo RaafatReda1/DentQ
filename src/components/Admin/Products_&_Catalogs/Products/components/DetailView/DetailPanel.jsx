@@ -70,7 +70,7 @@ const DetailPanel = ({
 
                 {/* Description */}
                 <div className={styles.descriptionRow}>
-                    <h4 className={styles.cardTitle}>DESCRIPTION</h4>
+                    <h4 className={styles.cardTitle}>{t("admin.catalog.description", "DESCRIPTION")}</h4>
                     <p className={styles.description}>
                         {description || 'No description provided.'}
                     </p>

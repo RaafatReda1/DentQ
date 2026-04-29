@@ -8,7 +8,7 @@ import styles from './AdminLayout.module.css';
 
 const AdminLayout = () => {
     const { user } = useUserData();
-    const { i18n } = useTranslation();
+    const { t, i18n } = useTranslation();
 
     // Enforce LTR globally for the Admin panel (important for Modals/Portals)
     useEffect(() => {
@@ -21,7 +21,7 @@ const AdminLayout = () => {
         };
     }, [i18n.language]);
 
-    if (user.loadingState) return <div>Loading...</div>;
+    if (user.loadingState) return <div>{t('admin.layout.loading', 'Loading...')}</div>;
     
     // Security layer 
     if (user.type !== 'admin') {

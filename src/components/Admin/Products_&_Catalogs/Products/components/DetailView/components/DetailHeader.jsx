@@ -2,6 +2,7 @@ import React from 'react';
 import { Edit3, Trash2, Copy } from 'lucide-react';
 import styles from './DetailHeader.module.css';
 import toast from 'react-hot-toast';
+import { useTranslation } from "react-i18next";
 
 /**
  * DetailHeader component for Product Detail view.
@@ -17,6 +18,7 @@ const DetailHeader = ({
     product,
     tp 
 }) => {
+  const { t } = useTranslation();
     const handleCopyId = () => {
         navigator.clipboard.writeText(product.id);
         toast.success(tp('id_copied') || 'ID Copied!');
@@ -39,7 +41,7 @@ const DetailHeader = ({
             </div>
             
             <div className={styles.mainActions}>
-                <button className={styles.editBtn} onClick={handleCopyId} title="Copy ID">
+                <button className={styles.editBtn} onClick={handleCopyId} title={t("admin.catalog.copy_id", "Copy ID")}>
                     <Copy size={18} />
                 </button>
                 <button className={styles.editBtn} onClick={() => onEdit(product)}>

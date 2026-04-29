@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useContext, useCallback } from "react";
 import toast from "react-hot-toast";
 import { supabase } from "../SupabaseClient";
@@ -9,6 +10,7 @@ import { isSameVariant } from "../isSameVariant";
    Hook: Get Owner Info (client_id / guest_id)
 ========================= */
 const useOwnerInfo = () => {
+  const { t } = useTranslation();
   const [user] = useContext(userContext);
   console.log("DEBUG: UserContext value:", user); // Debug log
 

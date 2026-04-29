@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React from "react";
 import styles from "../RecepientData/RecepientData.module.css";
 import {
@@ -10,9 +11,10 @@ import {
   User,
 } from "lucide-react";
 const RecepientData = ({ order }) => {
+  const { t } = useTranslation();
   return (
     <section className= {styles.recepientSection}>
-      <h2>Recepient Data</h2>
+      <h2>{t("admin.orders.invoice.recepient_data", "Recepient Data")}</h2>
       <section className={styles.recepientDataContainer}>
         <div className={styles.personalData}>
           <div className={`${styles.recepientDataField} ${styles.Name}`}>

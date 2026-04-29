@@ -17,7 +17,7 @@ const ProfileHeader = ({
                 <div
                     className={styles.avatarWrapper}
                     onClick={() => currentDisplayAvatar && setShowModal(true)}
-                    title="Click to view full size"
+                    title={t("client.profile.view_full", "Click to view full size")}
                 >
                     {currentDisplayAvatar ? (
                         <img src={currentDisplayAvatar} alt="Avatar" className={styles.avatar} />

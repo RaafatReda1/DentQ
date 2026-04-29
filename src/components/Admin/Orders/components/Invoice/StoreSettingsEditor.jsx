@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import styles from "./StoreSettingsEditor.module.css";
 import { X, Save, Palette, Phone, MapPin, Mail } from "lucide-react";
 import { useStoreSettings, useUpdateStoreSettings } from "../../hooks/useStoreSettings";
+import { useTranslation } from "react-i18next";
 
 const StoreSettingsEditor = ({ isOpen, onClose }) => {
+  const { t } = useTranslation();
   const { data: storeSettings } = useStoreSettings();
   const { mutate: updateSettings, isPending } = useUpdateStoreSettings();
 
@@ -49,7 +51,7 @@ const StoreSettingsEditor = ({ isOpen, onClose }) => {
     <div className={styles.overlay}>
       <div className={styles.drawer}>
         <div className={styles.header}>
-          <h2>Brand Settings</h2>
+          <h2>{t("admin.orders.invoice.brand_settings", "Brand Settings")}</h2>
           <button className={styles.closeBtn} onClick={onClose}>
             <X size={20} />
           </button>
@@ -108,7 +110,7 @@ const StoreSettingsEditor = ({ isOpen, onClose }) => {
               name="address_en"
               value={formData.address_en}
               onChange={handleChange}
-              placeholder="EG, Beheira"
+              placeholder={t("admin.orders.invoice.eg_beheira", "EG, Beheira")}
               dir="ltr"
             />
           </div>

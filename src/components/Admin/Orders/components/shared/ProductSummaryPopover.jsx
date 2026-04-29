@@ -19,7 +19,7 @@ const ProductSummaryPopover = ({ items = [], visible, onClick }) => {
             onClick={(e) => { e.stopPropagation(); onClick?.(); }}
         >
             <div className={styles.title}>
-                <span>Order Contents</span>
+                <span>{t("admin.orders.ui.order_contents", "Order Contents")}</span>
                 <span>{items.length} items</span>
             </div>
 
@@ -42,7 +42,7 @@ const ProductSummaryPopover = ({ items = [], visible, onClick }) => {
 
             <div className={styles.footer}>
                 {moreCount > 0 && <p>+ {moreCount} additional items</p>}
-                <p className={styles.hint}>Click to see full breakdown</p>
+                <p className={styles.hint}>{t("admin.orders.ui.click_to_see", "Click to see full breakdown")}</p>
             </div>
         </div>
     );

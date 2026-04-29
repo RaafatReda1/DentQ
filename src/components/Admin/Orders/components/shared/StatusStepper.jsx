@@ -2,16 +2,18 @@ import React from 'react';
 import { ORDER_STATUSES } from '../../constants/orderStatuses';
 import { Check } from 'lucide-react';
 import styles from './StatusStepper.module.css';
+import { useTranslation } from "react-i18next";
 
 /**
  * Visual pipeline stepper using CSS Modules.
  */
 const StatusStepper = ({ currentStatus, onStatusClick }) => {
+  const { t } = useTranslation();
     const steps = ORDER_STATUSES.filter(s => s.id !== 'cancelled');
     const currentIndex = steps.findIndex(s => s.id === currentStatus);
     const isCancelled = currentStatus === 'cancelled';
 
-    if (isCancelled) return <div className={styles.cancelledMsg}>This order has been CANCELLED</div>;
+    if (isCancelled) return <div className={styles.cancelledMsg}>{t("admin.orders.ui.cancelled_msg", "This order has been CANCELLED")}</div>;
 
     return (
         <div className={styles.stepper}>

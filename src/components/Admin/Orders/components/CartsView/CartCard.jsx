@@ -35,7 +35,7 @@ const CartCard = ({ cart }) => {
                 <div className={styles.userMeta} onClick={(e) => { e.stopPropagation(); setShowClient(true); }}>
                     <div className={styles.nameRow}>
                         <p className={styles.userName}>{client.fullName || t('admin.carts.guest', 'Guest User')}</p>
-                        {isGuest && <span className={styles.guestBadge}>GUEST</span>}
+                        {isGuest && <span className={styles.guestBadge}>{t("admin.orders.carts.guest", "GUEST")}</span>}
                     </div>
                     {client.email && <p className={styles.email}><Mail size={10} /> {client.email}</p>}
                 </div>

@@ -100,7 +100,7 @@ const Actions = ({ product, selectedSize, selectedColor, qty, setQty }) => {
                     <button
                         className={styles.qtyBtn}
                         onClick={handleDecrement}
-                        aria-label="Decrease quantity"
+                        aria-label={t("client.product.decrease", "Decrease quantity")}
                     >
                         <Minus size={18} />
                     </button>
@@ -116,7 +116,7 @@ const Actions = ({ product, selectedSize, selectedColor, qty, setQty }) => {
                     <button
                         className={styles.qtyBtn}
                         onClick={handleIncrement}
-                        aria-label="Increase quantity"
+                        aria-label={t("client.product.increase", "Increase quantity")}
                     >
                         <Plus size={18} />
                     </button>
@@ -124,7 +124,7 @@ const Actions = ({ product, selectedSize, selectedColor, qty, setQty }) => {
 
                 <button className={styles.confirmBtn} onClick={handleAddToCartConfirm}>
                     <ShoppingCart size={20} />
-                    <span>Add to Cart</span>
+                    <span>{t("client.product.add_to_cart", "Add to Cart")}</span>
                 </button>
             </div>
         </div>

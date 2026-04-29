@@ -43,7 +43,7 @@ const TableView = ({ orders = [] }) => {
 
       <div className={styles.footer}>
         <span>
-          Showing {paginated.length} of {orders.length}
+          {t('admin.orders.ui.showing', { count: paginated.length, total: orders.length, defaultValue: `Showing ${paginated.length} of ${orders.length}` })}
         </span>
         <div className={styles.pagination}>
           <button
@@ -51,7 +51,7 @@ const TableView = ({ orders = [] }) => {
             onClick={() => setPage((p) => p - 1)}
             className={styles.pageBtn}
           >
-            Prev
+            {t('admin.orders.ui.prev', 'Prev')}
           </button>
           <span className={styles.pageNum}>{page + 1}</span>
           <button
@@ -59,7 +59,7 @@ const TableView = ({ orders = [] }) => {
             onClick={() => setPage((p) => p + 1)}
             className={styles.pageBtn}
           >
-            Next
+            {t('admin.orders.ui.next', 'Next')}
           </button>
         </div>
       </div>
