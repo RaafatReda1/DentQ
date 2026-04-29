@@ -697,6 +697,30 @@
                     "terms": "Terms of Use",
                     "privacy": "Privacy Policy"
                 }
+            },
+            "messages": {
+                "title": "Client Messages",
+                "subtitle": "Review and respond to client inquiries and contact forms.",
+                "search_ph": "Search by name, email or message...",
+                "no_messages": "No messages found.",
+                "all": "All Messages",
+                "unread": "Unread",
+                "important": "Important",
+                "urgent": "Urgent",
+                "follow_up": "Follow-up",
+                "resolved": "Resolved",
+                "junk": "Junk",
+                "mark_read": "Mark as read",
+                "mark_unread": "Mark as unread",
+                "mark_important": "Mark as important",
+                "remove_important": "Remove important",
+                "reply": "Reply via Email",
+                "delete_confirm": "Are you sure you want to delete this message?",
+                "sender_info": "Sender Information",
+                "sent_at": "Sent at",
+                "phone": "Phone",
+                "email": "Email",
+                "empty_selection": "Select a message to view details"
             }
         },
         "search": {

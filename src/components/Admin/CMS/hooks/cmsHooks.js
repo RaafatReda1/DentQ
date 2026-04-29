@@ -7,6 +7,7 @@ import {
   getLegalPages, upsertLegalPage,
   getNavItems, upsertNavItems, deleteNavItem,
   getCategoriesForNav, getProductsForNav,
+  getContactMessages, updateMessage, deleteMessage,
 } from "../api/cmsApi";
 
 
@@ -102,4 +103,27 @@ export const useNavCategories = () =>
 
 export const useNavProducts = () =>
   useQuery({ queryKey: ["cms-nav-prods"], queryFn: getProductsForNav, staleTime: 10 * 60 * 1000 });
+// ─── Contact Messages ────────────────────────────────────────────────────────
+export const useContactMessages = () =>
+  useQuery({ queryKey: ["cms-messages"], queryFn: getContactMessages });
 
+export const useUpdateMessage = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, payload }) => updateMessage(id, payload),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["cms-messages"] }),
+    onError: (e) => toast.error(e.message),
+  });
+};
+
+export const useDeleteMessage = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: deleteMessage,
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["cms-messages"] });
+      toast.success("Message deleted");
+    },
+    onError: (e) => toast.error(e.message),
+  });
+};

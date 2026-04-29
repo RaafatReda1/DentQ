@@ -10,6 +10,7 @@ import { queryClient } from './Orders/lib/queryClient';
 import Invoice from './Orders/components/Invoice/Invoice';
 import Marketing from "./Marketing/Marketing";
 import CMS from "./CMS/CMS";
+import ClientMsgsViewer from "./ClientMsgsViewer/ClientMsgsViewer";
 const Admin = () => {
   return (
     <QueryClientProvider client={queryClient}>
@@ -38,6 +39,7 @@ const Admin = () => {
 
           <Route path="orders" element={<Orders />} />
           <Route path="marketing" element={<Marketing />} />
+          <Route path="messages" element={<ClientMsgsViewer />} />
           <Route path="cms" element={<CMS />} />
         </Route>
         {/* Catch-all redirect */}

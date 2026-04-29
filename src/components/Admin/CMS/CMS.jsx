@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Store, Layout, Info, FileText, Navigation } from "lucide-react";
+import { Store, Layout, Info, FileText } from "lucide-react";
 import StoreIdentity from "./sections/StoreIdentity";
 import FooterEditor from "./sections/FooterEditor";
 import AboutUsEditor from "./sections/AboutUsEditor";

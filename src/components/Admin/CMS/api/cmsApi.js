@@ -155,6 +155,32 @@ export const deleteNavItem = async (id) => {
   if (error) throw error;
 };
 
+// ─── Contact Messages (ContactForm) ──────────────────────────────────────────
+export const getContactMessages = async () => {
+  const { data, error } = await supabase
+    .from("ContactForm")
+    .select("*, client:client(*)")
+    .order("created_at", { ascending: false });
+  if (error) throw error;
+  return data || [];
+};
+
+export const updateMessage = async (id, payload) => {
+  const { data, error } = await supabase
+    .from("ContactForm")
+    .update(payload)
+    .eq("id", id)
+    .select()
+    .single();
+  if (error) throw error;
+  return data;
+};
+
+export const deleteMessage = async (id) => {
+  const { error } = await supabase.from("ContactForm").delete().eq("id", id);
+  if (error) throw error;
+};
+
 // ─── Link picker helpers ──────────────────────────────────────────────────────
 export const getCategoriesForNav = async () => {
   const { data, error } = await supabase

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { LayoutDashboard, ShoppingBag, Truck, PieChart, Settings, Home, ChevronLeft, Boxes } from 'lucide-react';
+import { LayoutDashboard, ShoppingBag, Truck, PieChart, Settings, Home, ChevronLeft, Boxes, Mail } from 'lucide-react';
 import styles from './Sidebar.module.css';
 import { useLogo } from '../../../../utils/LogoContext';
 
@@ -16,6 +16,7 @@ const Sidebar = () => {
         { path: '/admin/catalogs', icon: <Boxes size={22} />, label: t('admin.sidebar.catalogs'), end: false },
         { path: '/admin/orders', icon: <Truck size={22} />, label: t('admin.sidebar.orders'), end: false },
         { path: '/admin/marketing', icon: <PieChart size={22} />, label: t('admin.sidebar.marketing'), end: false },
+        { path: '/admin/messages', icon: <Mail size={22} />, label: t('admin.cms.messages.title'), end: false },
         { path: '/admin/cms', icon: <Settings size={22} />, label: t('admin.sidebar.cms'), end: false },
     ];
 
