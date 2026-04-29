@@ -1,0 +1,25 @@
+.pageWrapper {
+  padding: 0 20px 20px;
+}
+
+.pageHeader {
+  padding: 24px 0;
+}
+
+.container {
+  display: flex;
+  height: 650px;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+}
+
+.sidebar {
+  width: 320px;
+  border-right: 1px solid #f1f5f9;
+}
+
+.detailView {
+  flex: 1;
+}

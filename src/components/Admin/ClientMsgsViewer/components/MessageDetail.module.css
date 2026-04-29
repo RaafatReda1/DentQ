@@ -1,0 +1,144 @@
+.detailHeader {
+  padding: 32px;
+  border-bottom: 1px solid #f1f5f9;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  background: white;
+}
+
+.senderTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 8px 0;
+}
+
+.senderMeta {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.detailActions {
+  display: flex;
+  gap: 8px;
+}
+
+.actionBtn {
+  padding: 8px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  background: white;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+}
+
+.actionBtn:hover {
+  background: #f8fafc;
+  color: #0f172a;
+  border-color: #cbd5e1;
+}
+
+.deleteBtn:hover {
+  background: #fef2f2;
+  color: #ef4444;
+  border-color: #fecaca;
+}
+
+.markerDropdown {
+  position: relative;
+}
+
+.markerMenu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0;
+  padding: 8px;
+  min-width: 180px;
+  z-index: 100;
+  animation: slideDown 0.2s ease-out;
+}
+
+.markerOption {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #475569;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.markerOption:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.activeMarker {
+  background: #f1f5f9;
+  color: #3b82f6 !important;
+}
+
+.messageBody {
+  padding: 32px;
+  font-size: 15px;
+  line-height: 1.7;
+  color: #334155;
+  white-space: pre-wrap;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.replyArea {
+  padding: 24px 32px;
+  background: #f8fafc;
+  border-top: 1px solid #f1f5f9;
+}
+
+.replyBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: #0f172a;
+  color: white;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s;
+  box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.1);
+}
+
+.replyBtn:hover {
+  background: #1e293b;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.2);
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

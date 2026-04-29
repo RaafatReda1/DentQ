@@ -1,219 +1,61 @@
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
+import { useTranslation } from "react-i18next";
+import { Skeleton } from "@mui/material";
 import SectionCard from "../components/SectionCard";
 import BilingualField from "../components/BilingualField";
-import { useStoreSettings, useUpsertStoreSettings } from "../hooks/cmsHooks";
-import { uploadLogo } from "../api/cmsApi";
-import { DEFAULT_STORE } from "../config/defaults";
-import { Skeleton } from "@mui/material";
-import { useTranslation } from "react-i18next";
-import { useLogo } from "../../../../utils/LogoContext";
+import LogoManager from "../components/LogoManager";
+import { useStoreIdentity } from "../hooks/useStoreIdentity";
 import styles from "./StoreIdentity.module.css";
-import { Upload, RotateCcw, Loader2 } from "lucide-react";
-import toast from "react-hot-toast";
 
 const StoreIdentity = () => {
   const { t } = useTranslation();
-  const { data: remote } = useStoreSettings();
-  const { mutate: save, isPending: saving } = useUpsertStoreSettings();
-  const { setLogoUrl } = useLogo();
-  const [draft, setDraft] = useState(null);
-  const [uploading, setUploading] = useState(false);
-  const fileRef = useRef();
+  const { draft, remote, saving, uploading, fileRef, set, handleSave, handleDiscard, handleUpload, handleResetLogo, handleResetToDefault } = useStoreIdentity();
 
-  useEffect(() => {
-    if (remote) {
-      setDraft(remote);
-    } else {
-      setDraft(DEFAULT_STORE);
-    }
-  }, [remote]);
-
-  if (!draft) {
-    return (
-      <div className={styles.skeletonWrap} style={{ padding: "20px", display: "flex", flexDirection: "column", gap: "15px" }}>
-        <Skeleton variant="rectangular" width="100%" height={100} style={{ borderRadius: 12 }} />
-        <Skeleton variant="text" width="50%" height={30} />
-        <Skeleton variant="rectangular" width="100%" height={80} style={{ borderRadius: 8 }} />
-      </div>
-    );
-  }
-
-  const set = (key, val) => setDraft((p) => ({ ...p, [key]: val }));
+  if (!draft) return <IdentitySkeleton styles={styles} />;
   const isDirty = JSON.stringify(draft) !== JSON.stringify(remote);
 
-  const handleSave = () => save(draft, { onSuccess: () => {} });
-  const handleDiscard = () => setDraft(remote);
-
-  const handleUpload = async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    if (file.size > 2 * 1024 * 1024) { toast.error("Logo must be under 2 MB"); return; }
-    const allowed = ["image/png", "image/svg+xml", "image/webp"];
-    if (!allowed.includes(file.type)) { toast.error("PNG, SVG or WEBP only"); return; }
-
-    try {
-      setUploading(true);
-      const { publicUrl, storagePath } = await uploadLogo(file, draft.logo_storage_path);
-      set("logo_url", publicUrl);
-      set("logo_storage_path", storagePath);
-      setLogoUrl(publicUrl); // update global context immediately
-      toast.success("Logo uploaded — click Save to persist.");
-    } catch (err) {
-      toast.error("Upload failed: " + err.message);
-    } finally {
-      setUploading(false);
-      e.target.value = "";
-    }
-  };
-
-  const handleResetLogo = () => {
-    set("logo_url", null);
-    set("logo_storage_path", null);
-    setLogoUrl(null); // revert context to /logo.png fallback immediately
-    toast.success("Logo reset to default — click Save to persist.");
-  };
-
-  const handleResetToDefault = () => {
-    setDraft({
-      ...draft, // keep ID if it exists
-      logo_url: null,
-      logo_storage_path: null,
-      accent_color: "#1a1a2e",
-      phone: "",
-      email: "",
-      address_en: "",
-      address_ar: "",
-    });
-    setLogoUrl(null);
-    toast.success("Store identity reset to defaults — click Save to persist.");
-  };
-
-  const logoPreview = draft.logo_url || "/logo.png";
-
   return (
-    <SectionCard
-      id="store-identity"
-      title={t("admin.cms.store_identity.title", "Store identity & contact info")}
-      subtitle={t("admin.cms.store_identity.subtitle", "Core contact details used across checkout, invoices, and the storefront")}
-      saveLabel={t("admin.cms.common.save", "Save changes")}
-      onSave={handleSave}
-      onDiscard={handleDiscard}
-      onResetToDefault={handleResetToDefault}
-      saving={saving}
-      isDirty={isDirty}
-    >
-      {/* Addresses */}
-      <BilingualField
-        label={t("admin.cms.store_identity.address", "Address")}
-        valueEn={draft.address_en}
-        valueAr={draft.address_ar}
-        onChangeEn={(v) => set("address_en", v)}
-        onChangeAr={(v) => set("address_ar", v)}
-        placeholderEn={t("admin.cms.store_identity.address_en_ph", "123 Dental St., New Cairo, Egypt")}
-        placeholderAr={t("admin.cms.store_identity.address_ar_ph", "١٢٣ شارع طب الأسنان، القاهرة الجديدة")}
-        hint={t("admin.cms.store_identity.address_hint", "Used on invoices and the storefront contact page")}
-      />
+    <SectionCard id="store-identity" title={t("admin.cms.store_identity.title")} subtitle={t("admin.cms.store_identity.subtitle")}
+      saveLabel={t("admin.cms.common.save")} onSave={handleSave} onDiscard={handleDiscard} onResetToDefault={handleResetToDefault}
+      saving={saving} isDirty={isDirty}>
+      <BilingualField label={t("admin.cms.store_identity.address")} valueEn={draft.address_en} valueAr={draft.address_ar}
+        onChangeEn={(v) => set("address_en", v)} onChangeAr={(v) => set("address_ar", v)}
+        placeholderEn={t("admin.cms.store_identity.address_en_ph")} placeholderAr={t("admin.cms.store_identity.address_ar_ph")} />
 
-      {/* Phone + Email */}
       <div className={styles.row}>
-        <div className={styles.fieldGroup}>
-          <label className={styles.label} htmlFor="store-phone">
-            {t("admin.cms.store_identity.phone", "PHONE NUMBER")}
-          </label>
-          <input
-            id="store-phone"
-            className={styles.input}
-            value={draft.phone ?? ""}
-            onChange={(e) => set("phone", e.target.value)}
-            placeholder="+20 100 123 4567"
-            dir="ltr"
-          />
-          <p className={styles.hint}>{t("admin.cms.store_identity.phone_hint", "Maps to StoreSettings.phone")}</p>
-        </div>
-        <div className={styles.fieldGroup}>
-          <label className={styles.label} htmlFor="store-email">
-            {t("admin.cms.store_identity.email", "EMAIL")}
-          </label>
-          <input
-            id="store-email"
-            className={styles.input}
-            type="email"
-            value={draft.email ?? ""}
-            onChange={(e) => set("email", e.target.value)}
-            placeholder="hello@dentq.com"
-            dir="ltr"
-          />
-          <p className={styles.hint}>{t("admin.cms.store_identity.email_hint", "Maps to StoreSettings.email")}</p>
-        </div>
+        <ContactField id="store-phone" label={t("admin.cms.store_identity.phone")} value={draft.phone} onChange={(v) => set("phone", v)} hint={t("admin.cms.store_identity.phone_hint")} styles={styles} />
+        <ContactField id="store-email" label={t("admin.cms.store_identity.email")} value={draft.email} onChange={(v) => set("email", v)} hint={t("admin.cms.store_identity.email_hint")} styles={styles} type="email" />
       </div>
-
       <hr className={styles.divider} />
-
-      {/* Brand Color + Logo */}
       <div className={styles.row}>
-        {/* Accent Color */}
         <div className={styles.fieldGroup}>
-          <label className={styles.label}>{t("admin.cms.store_identity.accent_color", "BRAND ACCENT COLOR")}</label>
+          <label className={styles.label}>{t("admin.cms.store_identity.accent_color")}</label>
           <div className={styles.colorRow}>
-            <div
-              className={styles.swatch}
-              style={{ background: draft.accent_color || "#1e293b" }}
-              onClick={() => document.getElementById("color-picker").click()}
-              title="Click to pick color"
-            />
-            <input
-              id="color-picker"
-              type="color"
-              value={draft.accent_color || "#1e293b"}
-              onChange={(e) => set("accent_color", e.target.value)}
-              style={{ position: "absolute", opacity: 0, pointerEvents: "none" }}
-            />
-            <input
-              className={styles.input}
-              value={draft.accent_color || ""}
-              onChange={(e) => set("accent_color", e.target.value)}
-              placeholder="#1e293b"
-              maxLength={7}
-            />
+            <div className={styles.swatch} style={{ background: draft.accent_color || "#1e293b" }} onClick={() => document.getElementById("color-picker").click()} />
+            <input id="color-picker" type="color" value={draft.accent_color || "#1e293b"} onChange={(e) => set("accent_color", e.target.value)} style={{ position: "absolute", opacity: 0, pointerEvents: "none" }} />
+            <input className={styles.input} value={draft.accent_color || ""} onChange={(e) => set("accent_color", e.target.value)} placeholder="#1e293b" maxLength={7} />
           </div>
-          <p className={styles.hint}>{t("admin.cms.store_identity.accent_hint", "Used on invoice headers, buttons, and UI highlights.")}</p>
+          <p className={styles.hint}>{t("admin.cms.store_identity.accent_hint")}</p>
         </div>
-
-        {/* Logo */}
-        <div className={styles.fieldGroup}>
-          <label className={styles.label}>{t("admin.cms.store_identity.logo", "STORE LOGO")}</label>
-          <div className={styles.logoRow}>
-            <div className={styles.logoPreview}>
-              <img src={logoPreview} alt="Store logo" className={styles.logoImg} />
-            </div>
-            <div className={styles.logoButtons}>
-              <input
-                ref={fileRef}
-                type="file"
-                accept=".png,.svg,.webp,image/png,image/svg+xml,image/webp"
-                onChange={handleUpload}
-                style={{ display: "none" }}
-              />
-              <button
-                className={styles.uploadBtn}
-                onClick={() => fileRef.current?.click()}
-                disabled={uploading}
-              >
-                {uploading ? <Loader2 size={14} className={styles.spin} /> : <Upload size={14} />}
-                {uploading ? t("admin.cms.store_identity.uploading", "Uploading…") : t("admin.cms.store_identity.upload_logo", "Upload new logo")}
-              </button>
-              {draft.logo_url && (
-                <button className={styles.resetBtn} onClick={handleResetLogo} title={t("admin.cms.store_identity.reset_logo", "Reset to default")}>
-                  <RotateCcw size={13} /> {t("admin.cms.store_identity.reset_logo", "Reset to default")}
-                </button>
-              )}
-            </div>
-          </div>
-          <p className={styles.hint}>{t("admin.cms.store_identity.logo_hint", "PNG, SVG, WEBP · max 2 MB · stored in Banners/LOGO/")}</p>
-        </div>
+        <LogoManager draft={draft} uploading={uploading} fileRef={fileRef} handleUpload={handleUpload} handleResetLogo={handleResetLogo} styles={styles} t={t} />
       </div>
     </SectionCard>
   );
 };
+
+const ContactField = ({ id, label, value, onChange, hint, styles, type = "text" }) => (
+  <div className={styles.fieldGroup}>
+    <label className={styles.label} htmlFor={id}>{label}</label>
+    <input id={id} className={styles.input} type={type} value={value ?? ""} onChange={(e) => onChange(e.target.value)} dir="ltr" />
+    <p className={styles.hint}>{hint}</p>
+  </div>
+);
+
+const IdentitySkeleton = ({ styles }) => (
+  <div className={styles.skeletonWrap} style={{ padding: "20px", display: "flex", flexDirection: "column", gap: "15px" }}>
+    <Skeleton variant="rectangular" width="100%" height={100} style={{ borderRadius: 12 }} /><Skeleton variant="text" width="50%" height={30} />
+    <Skeleton variant="rectangular" width="100%" height={80} style={{ borderRadius: 8 }} />
+  </div>
+);
 
 export default StoreIdentity;
