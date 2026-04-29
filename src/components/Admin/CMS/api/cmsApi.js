@@ -63,13 +63,24 @@ export const getFooter = async () => {
 };
 
 export const upsertFooter = async (payload) => {
-  const { data, error } = await supabase
-    .from("Footer")
-    .upsert({ slug_name: "main", ...payload }, { onConflict: "slug_name" })
-    .select()
-    .single();
-  if (error) throw error;
-  return data;
+  if (payload.id) {
+    const { data, error } = await supabase
+      .from("Footer")
+      .update({ ...payload })
+      .eq("id", payload.id)
+      .select()
+      .single();
+    if (error) throw error;
+    return data;
+  } else {
+    const { data, error } = await supabase
+      .from("Footer")
+      .insert([{ slug_name: "main", ...payload }])
+      .select()
+      .single();
+    if (error) throw error;
+    return data;
+  }
 };
 
 // ─── About Us ────────────────────────────────────────────────────────────────

@@ -3,6 +3,7 @@ import styles from "./Footer.module.css";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { fetchFooterData, getSocialIcon } from "./FooterActions";
+import { getIconByKey } from "../../../../../utils/IconRegistry";
 import { useLogo } from '../../../../../utils/LogoContext';
 
 const Footer = () => {
@@ -48,7 +49,7 @@ const Footer = () => {
             {socialLinks.length > 0 && (
               <div className={styles.socials}>
                 {socialLinks.map((linkObj, index) => {
-                  const IconComponent = getSocialIcon(linkObj.url);
+                  const IconComponent = getIconByKey(linkObj.iconKey) || getSocialIcon(linkObj.url);
                   return (
                     <a
                       key={index}

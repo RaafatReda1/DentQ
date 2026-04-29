@@ -186,6 +186,17 @@
   flex-shrink: 0;
   background: #f1f5f9;
   color: #43D7B5;
+  border: none;
+}
+
+.clickablePill {
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.clickablePill:hover {
+  background: #e2e8f0;
+  transform: scale(1.05);
 }
 
 .resetBtn {

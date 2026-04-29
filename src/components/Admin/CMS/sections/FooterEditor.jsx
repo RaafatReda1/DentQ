@@ -4,7 +4,9 @@ import BilingualField from "../components/BilingualField";
 import { useFooter, useUpsertFooter, useNavItems } from "../hooks/cmsHooks";
 import { useLogo } from "../../../../utils/LogoContext";
 import { getSocialIcon } from "../../../Client/Products/ClientProductsPreview/Footer/FooterActions";
+import { getIconByKey } from "../../../../utils/IconRegistry";
 import { DEFAULT_FOOTER } from "../config/defaults";
+import IconPickerModal from "../components/IconPickerModal";
 import styles from "./FooterEditor.module.css";
 import { Plus, X, Eye, RotateCcw } from "lucide-react";
 
@@ -35,7 +37,7 @@ const FooterPreview = ({ draft, navItems, logoUrl }) => {
             <p className={styles.previewSlogan}>{draft.slogan_en || "Egypt's trusted dental supply platform"}</p>
             <div className={styles.previewSocials}>
               {draft.Links.map((link, i) => {
-                const Icon = getSocialIcon(link.url);
+                const Icon = getIconByKey(link.iconKey) || getSocialIcon(link.url);
                 return (
                   <div key={i} className={styles.previewSocialIcon}>
                     <Icon size={16} />
@@ -82,6 +84,7 @@ const FooterEditor = () => {
   const { logoUrl } = useLogo();
   const { mutate: save, isPending: saving } = useUpsertFooter();
   const [draft, setDraft] = useState(null);
+  const [pickerOpenFor, setPickerOpenFor] = useState(null);
 
   useEffect(() => {
     if (!isLoading) {
@@ -112,13 +115,13 @@ const FooterEditor = () => {
     setDraft({ ...DEFAULT_FOOTER });
   };
 
-  const updateLink = (i, url) => {
+  const updateLink = (i, field, value) => {
     const links = [...draft.Links];
-    links[i] = { url, platform: "link" };
+    links[i] = { ...links[i], [field]: value };
     set("Links", links);
   };
   const removeLink = (i) => set("Links", draft.Links.filter((_, idx) => idx !== i));
-  const addLink = () => set("Links", [...draft.Links, { url: "", platform: "link" }]);
+  const addLink = () => set("Links", [...draft.Links, { url: "", platform: "link", iconKey: null }]);
 
   return (
     <SectionCard
@@ -157,16 +160,20 @@ const FooterEditor = () => {
 
         <div className={styles.linksList}>
           {draft.Links.map((link, i) => {
-            const Icon = getSocialIcon(link.url);
+            const Icon = getIconByKey(link.iconKey) || getSocialIcon(link.url);
             return (
               <div key={i} className={styles.linkRow}>
-                <div className={styles.platformPill} title="Social Link">
+                <button
+                  className={`${styles.platformPill} ${styles.clickablePill}`}
+                  onClick={() => setPickerOpenFor(i)}
+                  title="Click to select specific icon"
+                >
                   <Icon size={15} />
-                </div>
+                </button>
                 <input
                   className={styles.linkInput}
                   value={link.url}
-                  onChange={(e) => updateLink(i, e.target.value)}
+                  onChange={(e) => updateLink(i, "url", e.target.value)}
                   placeholder="https://..."
                   dir="ltr"
                 />
@@ -182,6 +189,15 @@ const FooterEditor = () => {
           <Plus size={14} /> Add new social profile
         </button>
       </div>
+
+      {pickerOpenFor !== null && (
+        <IconPickerModal
+          isOpen={true}
+          onClose={() => setPickerOpenFor(null)}
+          selectedKey={draft.Links[pickerOpenFor]?.iconKey}
+          onSelect={(key) => updateLink(pickerOpenFor, "iconKey", key)}
+        />
+      )}
     </SectionCard>
   );
 };
