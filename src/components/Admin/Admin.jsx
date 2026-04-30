@@ -17,7 +17,7 @@ const Admin = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <Routes>
-        <Route path="/*" element={<AdminLayout />}>
+        <Route path="/admin/*" element={<AdminLayout />}>
           {/* Default route inside /admin */}
           <Route index element={<Dashboard />} />
 
