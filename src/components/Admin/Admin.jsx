@@ -17,7 +17,7 @@ const Admin = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <Routes>
-        <Route path="/admin/*" element={<AdminLayout />}>
+        <Route path="/*" element={<AdminLayout />}>
           {/* Default route inside /admin */}
           <Route index element={<Dashboard />} />
 
@@ -31,7 +31,6 @@ const Admin = () => {
           <Route path="cms" element={<CMS />} />
         </Route>
         {/* Catch-all redirect */}
-        <Route path="*" element={<Navigate to="/admin" />} replace/>
       </Routes>
     </QueryClientProvider>
   );

@@ -36,6 +36,7 @@ function App() {
                   </>
                 )}
               </Routes>
+              
             </CartProvider>
           </productsContext.Provider>
         </userContext.Provider>
