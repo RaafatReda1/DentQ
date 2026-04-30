@@ -23,7 +23,6 @@ const AdminLayout = () => {
         };
     }, [i18n.language]);
 
-    if (user.loadingState) return <div>{t('admin.layout.loading', 'Loading...')}</div>;
     
     // Security layer 
     if (user.type !== 'admin') {

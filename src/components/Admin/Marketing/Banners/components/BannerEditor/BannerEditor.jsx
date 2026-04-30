@@ -72,7 +72,7 @@ const BannerEditor = ({ banner, isCreating, isSaving, onSave, onDelete }) => {
     const l = form.cta_link || "";
     if (l === "/" || l === "/all-products" || l === "/cart") return l;
     if (l.includes("/dp/")) return "product";
-    return "/";
+    return "category";
   };
   const linkType = getLinkType();
 
@@ -81,20 +81,20 @@ const BannerEditor = ({ banner, isCreating, isSaving, onSave, onDelete }) => {
       set("cta_link", null);
       set("related_cat_id", value);
     } else if (type === "product") {
-       set("related_cat_id", null);
-       const prod = products.find(p => p.id === value);
-       if (prod) set("cta_link", `${slugify(prod.nameEn)}/dp/${prod.id}`);
-       else set("cta_link", `/dp/${value}`);
+      set("related_cat_id", null);
+      const prod = products.find(p => p.id === value);
+      if (prod) set("cta_link", `${slugify(prod.nameEn)}/dp/${prod.id}`);
+      else set("cta_link", `/dp/${value}`);
     } else {
-       set("cta_link", type);
-       set("related_cat_id", null);
+      set("cta_link", type);
+      set("related_cat_id", null);
     }
   };
 
   // --- Validation Logic ---
   const isLinkValid = useMemo(() => {
     if (form.related_cat_id) {
-       return categories.some(c => c.id.toString() === form.related_cat_id.toString());
+      return categories.some(c => c.id.toString() === form.related_cat_id.toString());
     }
     const l = form.cta_link || "";
     if (l === "/" || l === "/all-products" || l === "/cart") return true;
@@ -121,24 +121,24 @@ const BannerEditor = ({ banner, isCreating, isSaving, onSave, onDelete }) => {
 
       <div className={styles.scrollArea}>
         <EditorContent form={form} set={set} tp={tp} />
-        
-        <EditorMedia 
-          form={form} set={set} tp={tp} 
-          colors={colors} gradient={gradient} 
-          isUploading={isUploading} 
-          handleImageUpload={handleImageUpload} 
-          fileInputRef={fileInputRef} 
+
+        <EditorMedia
+          form={form} set={set} tp={tp}
+          colors={colors} gradient={gradient}
+          isUploading={isUploading}
+          handleImageUpload={handleImageUpload}
+          fileInputRef={fileInputRef}
         />
 
-        <EditorLinks 
-          form={form} set={set} tp={tp} t={t} lang={lang} 
-          linkType={linkType} 
-          handleLinkPartChange={handleLinkPartChange} 
-          isManualInput={isManualInput} 
-          setIsManualInput={setIsManualInput} 
-          categoryOptions={categoryOptions} 
-          products={products} 
-          isLinkValid={isLinkValid} 
+        <EditorLinks
+          form={form} set={set} tp={tp} t={t} lang={lang}
+          linkType={linkType}
+          handleLinkPartChange={handleLinkPartChange}
+          isManualInput={isManualInput}
+          setIsManualInput={setIsManualInput}
+          categoryOptions={categoryOptions}
+          products={products}
+          isLinkValid={isLinkValid}
         />
 
         <EditorSettings form={form} set={set} tp={tp} />

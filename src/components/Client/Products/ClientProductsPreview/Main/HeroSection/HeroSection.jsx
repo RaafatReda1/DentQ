@@ -38,9 +38,10 @@ function HeroSection({ Banner }) {
   };
 
   return (
-    <div className={styles.heroSection} style={heroStyle} dir={lang === 'en' ? 'ltr' : 'rtl'}>
+    <div className={`${styles.heroSection} ${banner?.image && styles.HeroImage}`} style={heroStyle} dir={lang === 'en' ? 'ltr' : 'rtl'}>
       <div className={styles.overlay}></div>
       <div className={styles.contentWrapper}>
+        
         <h2 className={styles.Title} style={{ color: banner?.title_color || '#ffffff' }}>
           {bannerTitle}
         </h2>

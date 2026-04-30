@@ -19,26 +19,26 @@ function App() {
   return (
     <ReactLenis root>
       <LogoProvider>
-    <userContext.Provider value={[user, setUser]}>
-      <productsContext.Provider value={[products, setProducts]}>
-        <CartProvider>
-          <Toaster position="top-center" reverseOrder={false} />
+        <userContext.Provider value={[user, setUser]}>
+          <productsContext.Provider value={[products, setProducts]}>
+            <CartProvider>
+              <Toaster position="top-center" reverseOrder={false} />
 
-          <Routes>
-            {!user.loadingState && (
-              <>
-                {(user.type === "client" || user.type === "guest") && (
-                  <Route path="*" element={<Client />} />
+              <Routes>
+                {!user.loadingState && (
+                  <>
+                    {(user.type === "client" || user.type === "guest") && (
+                      <Route path="*" element={<Client />} />
+                    )}
+                    {user.type === "admin" && (
+                      <Route path="*" element={<Admin />} />
+                    )}
+                  </>
                 )}
-                {user.type === "admin" && (
-                  <Route path="*" element={<Admin />} />
-                )}
-              </>
-            )}
-          </Routes>
-        </CartProvider>
-      </productsContext.Provider>
-    </userContext.Provider>
+              </Routes>
+            </CartProvider>
+          </productsContext.Provider>
+        </userContext.Provider>
       </LogoProvider>
     </ReactLenis>
   );
