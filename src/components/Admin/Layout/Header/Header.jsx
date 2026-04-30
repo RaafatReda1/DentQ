@@ -4,7 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import SearchBar from './SubComponents/SearchBar';
 import NotificationPopup from './SubComponents/NotificationPopup';
-import useUserData  from '../../../Storage/UserDataStorage';
+import { userContext } from '../../../../utils/AppContexts';
+import { useContext } from 'react';
 import { useNotifications } from './SubComponents/useNotifications';
 import { useContactMessages } from '../../CMS/hooks/cmsHooks';
 import styles from './Header.module.css';
@@ -12,7 +13,7 @@ import styles from './Header.module.css';
 const Header = () => {
     const { t, i18n } = useTranslation();
     const navigate = useNavigate();
-    const { user } = useUserData(); // Extract for avatar loading
+    const [user] = useContext(userContext); // Extract for avatar loading
     
     const [showNotifications, setShowNotifications] = useState(false);
     

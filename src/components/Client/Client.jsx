@@ -3,7 +3,7 @@ import { userContext } from "../../utils/AppContexts";
 import Header from "./ClientHeader/Header/Header";
 import ProdcutsParent from "./Products/ClientProductsPreview/ProdcutsParent/ProdcutsParent";
 import ProfilePage from "./Profile/ProfilePage";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import CartPage from "./Cart/CartPage";
 import ProductPage from "./Products/ProductPage/ProductPage";
 import CheckOut from "./CheckOut/CheckOutPage";
@@ -42,6 +42,8 @@ const Client = () => {
         <Route path="/signup" element={<SignUpForm />} />
         <Route path="/forgot-password" element={<ForgotPasswordForm />} />
         <Route path="/reset-password" element={<ResetPasswordForm />} />
+        {/* Catch-all redirect to home */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <Footer />
     </>

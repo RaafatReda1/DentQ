@@ -29,8 +29,12 @@ const Admin = () => {
           <Route path="marketing" element={<Marketing />} />
           <Route path="messages" element={<ClientMsgsViewer />} />
           <Route path="cms" element={<CMS />} />
+          
+          {/* Nested catch-all: redirect invalid /admin/ sub-paths to /admin */}
+          <Route path="*" element={<Navigate to="/admin" replace />} />
         </Route>
-        {/* Catch-all redirect */}
+        {/* Catch-all redirect to admin dashboard */}
+        <Route path="*" element={<Navigate to="/admin" replace />} />
       </Routes>
     </QueryClientProvider>
   );

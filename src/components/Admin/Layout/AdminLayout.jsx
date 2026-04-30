@@ -2,14 +2,14 @@ import React, { useEffect } from 'react';
 import { Outlet, Navigate } from 'react-router-dom';
 import Sidebar from './Sidebar/Sidebar';
 import Header from './Header/Header';
-import useUserData from '../../Storage/UserDataStorage';
+import { userContext } from '../../../utils/AppContexts';
 import { useTranslation } from 'react-i18next';
 import styles from './AdminLayout.module.css';
 import { ReactLenis } from 'lenis/react';
 
 
 const AdminLayout = () => {
-    const { user } = useUserData();
+    const [user] = React.useContext(userContext);
     const { t, i18n } = useTranslation();
 
     // Enforce LTR globally for the Admin panel (important for Modals/Portals)

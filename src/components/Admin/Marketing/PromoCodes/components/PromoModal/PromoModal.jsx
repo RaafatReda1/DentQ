@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useTranslation } from "react-i18next";
-import useUserData from "../../../../../Storage/UserDataStorage";
+import { userContext } from "../../../../../../utils/AppContexts";
 import styles from "./PromoModal.module.css";
 
 // Sub-components
@@ -18,7 +18,7 @@ const EMPTY = {
 
 const PromoModal = ({ editData, onClose, onCreate, onUpdate, isCreating, isUpdating }) => {
   const { t } = useTranslation();
-  const { user } = useUserData();
+  const [user] = useContext(userContext);
   const isEditing = !!editData;
 
   const [form, setForm] = useState(EMPTY);

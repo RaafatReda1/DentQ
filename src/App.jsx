@@ -2,7 +2,7 @@ import "./App.css";
 import Client from "./components/Client/Client";
 import Admin from "./components/Admin/Admin";
 import GoogleBtn from "./components/Auth/GoogleBtn/GoogleBtn";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import useUserData from "./components/Storage/UserDataStorage.jsx";
 import useProductsData from "./components/Storage/ProductsDataStorage.jsx";
 // eslint-disable-next-line no-unused-vars
